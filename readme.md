@@ -1,4 +1,5 @@
 # JavaScript Lista ToDo
+## Aplikacja w trakcie budowy
 [ONLINE](https://michalwr88.github.io/ToDoList_js/)
 * Aplikacjia ToDo LIst napisana w czystym JavaScrip-cie
 
