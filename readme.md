@@ -1,7 +1,9 @@
 # JavaScript Lista ToDo
-## Aplikacja w trakcie budowy
+
+## Aplikacja w trakcie pisania !!!
+
 [ONLINE](https://michalwr88.github.io/ToDoList_js/)
-* Aplikacjia ToDo LIst napisana w czystym JavaScrip-cie
+*
 
 - [ ] dodawanie nowych list do zrobienia
 - [ ] mozliwosc usuwania tasków
