@@ -6,63 +6,55 @@
     <meta charset="utf-8">
     <!-- RWD-->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- description page-->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- slowa kluczowe-->
-    <meta name="keywords" content="">
     <link href="https://fonts.googleapis.com/css?family=Catamaran" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <form action="" class="AddList" >
+    <main class="page__main">
+        <h1 class="app__name">ToDo List vanilla.js</h1>
+    <div class="toDoList" id='list1'>
+        <header class="toDoList__header">
+            <label>Name List<input class="toDoList__name"  type="text" name="" value="name"></label>
+            <input class="toDoList__newTask" type="text" placeholder="add your task">
+            <button class="ion-plus-round btn toDoList__add " title="button add item"></button>
+        </header>
+        <!-- Tasks list -->
+        <ul class="toDoList__container">
+
+                        <li class="toDoList__task">
+                <button class="ion-checkmark-round btn task__check"></button>
+                <h3 contenteditable="true" class="task__name">text listy</h3>
+                <label class="task__label">
+                    priority
+                    <select class="task_priority" name="priority">
+                        <option value="default" hidden>0</option>
+                        <option value="5">5</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                    </select>
+                </label>
+                <p class="task__date">create: 12.08.2017</p>
+                <button class="ion-close-round btn red task__delete"></button>
+            </li>
+        </ul>
+    </div>
+    </main>
+    <footer>
+    </footer>
+    <!--     <form action="" class="AddList" >
         <p class="AddList__header">Add New ToDoList</p>
         <input id="taskInput" class="AddList__input" placeholder="Place your name list here">
         <button class="AddList__addBtn" type="button"></button>
         <p class="AddList__info--countList">counter list</p>
         <p class="AddList__info--countTask">counter task</p>
-    </form>
+    </form> -->
     <!-- draggable="true"  -->
-    <div class="toDoList">
-        <header class="toDoList__header">
-            <nav class="toDoList__nav">
-                <button class="header__btn-menu"></button>
-                <ul class="nav__menu">
-                    <li>export</li>
-                    <li>removeFinishedTasks</li>
-                    <li>delete List</li>
-                </ul>
-            </nav>
-            <h2 class="toDoList__name">nazwa</h2>
-            <input class="toDoList__newTask" type="text" placeholder="add your task">
-            <button class="header__btn-add" title="button add item"></button>
-        </header>
-        <!-- Tasks list -->
-        <ul class="toDoList__container">
-            <li class="list__elem">
-                <button class="elem__finish">ok</button>
-                <h3 contenteditable="true" class="elem__name">text listy</h3>
-                <p class="elem__date">create: 12.08.2017</p>
-                <button class="elem__del">X</button>
-            </li>
-            <li class="list__elem">
-                <button class="elem__finish">ok</button>
-                <h3 contenteditable="true" class="elem__name">text listy</h3>
-                <p class="elem__date">create: 12.08.2017</p>
-                <button class="elem__del">X</button>
-            </li>
-            <li class="list__elem">
-                <button class="elem__finish">ok</button>
-                <h3 contenteditable="true" class="elem__name">text listy</h3>
-                <p class="elem__date">create: 12.08.2017</p>
-                <button class="elem__del">X</button>
-            </li>
-        </ul>
-    </div>
-    <script src="js/app.js"></script>
+    <script src="js/out.js"></script>
 </body>
 
 </html>
