@@ -84,11 +84,18 @@ var ToDoList = function () {
     function ToDoList(id) {
         _classCallCheck(this, ToDoList);
 
+        this.box = document.getElementById(id);
+        this.nameInp = this.box.getElementsByClassName('toDoList__name')[0];
+        this.newTaskInp = this.box.querySelector('.toDoList__newTask');
+        this.addBtn = this.box.querySelector('.toDoList__add');
+        this.listNode = this.box.querySelector('.toDoList__container');
+        this.countAll = this.box.querySelector('.toDoList__allCount');
+        // -----------------------------------
         this.id = id;
-        this.name = '';
         this.list = [];
-        this.countTask = null;
+        this.countTask = 0;
         this.checked = null;
+        this.name = this.nameInp.value;
         //------------------
         this.initList();
         this.initLocalStorage();
@@ -104,25 +111,11 @@ var ToDoList = function () {
     _createClass(ToDoList, [{
         key: 'initList',
         value: function initList() {
-            var box = this.box,
-                nameInp = this.nameInp,
-                newTaskInp = this.newTaskInp,
-                addBtn = this.addBtn,
-                listNode = this.listNode;
-            //---------------------------
-            box = document.getElementById(this.id);
-            console.log(box);
-            nameInp = box.getElementsByClassName('toDoList__name')[0];
-            newTaskInp = box.querySelector('.toDoList__newTask');
-            addBtn = box.querySelector('.toDoList__add');
-            listNode = box.querySelector('.toDoList__container');
-            this.name = nameInp.value;
+            this.countAll.innerHTML = this.countTask;
         }
     }, {
         key: 'initLocalStorage',
         value: function initLocalStorage() {
-            var _this = this;
-
             var local = JSON.parse(localStorage.getItem(this.id));
             if (local === null) {
                 this.list = [];
@@ -132,7 +125,7 @@ var ToDoList = function () {
                 console.log(this.prop.list);
 
                 this.prop.list.forEach(function (elem, index) {
-                    _this.initTask(elem.text);
+                    console.log(elem);
                 });
             }
         }
@@ -143,6 +136,7 @@ var ToDoList = function () {
                 day = date.getDate(),
                 month = date.getMonth(),
                 year = date.getFullYear();
+
             // ----------------------------------------------------------
             var lik = document.createElement('li');
             lik.className = 'toDoList__task';
@@ -150,9 +144,8 @@ var ToDoList = function () {
             var checkBtn = document.createElement('button');
             checkBtn.className = 'ion-checkmark-round btn task__check';
             checkBtn.addEventListener('click', function (e) {
-                if (Task.checked === false) {
-                    Task.chekced = true;
-                }
+                console.log(e.target.parentNode);
+                e.target.parentNode.style = 'backgroundColor', 'red';
             }, false);
             // ---------------------------------------------------------------
             var priority = document.createElement('select');
@@ -165,11 +158,12 @@ var ToDoList = function () {
             }
 
             // -----------------------------------------------------------------
-            // 
+
             var nameInp = document.createElement('h3');
             nameInp.className = 'task__name';
             nameInp.setAttribute("contenteditable", "true");
-
+            nameInp.textContent = this.newTaskInp.value;
+            this.newTaskInp.value = '';
             // -------------------------------------------------------------------
             var labelP = document.createElement('label');
             labelP.className = 'task__label';
@@ -185,23 +179,22 @@ var ToDoList = function () {
                 e.target.parentNode.remove(e.target.parentNode);
             }, false);
             // ---------------------------------------------------------------------------
-            var Count = this.prop.list.length + 1;
-            // create object with task prop
-            var Task = {
-                id: Count,
-                text: name,
-                checked: false,
-                priority: 0,
-                date: day + '.' + (month + 1) + '.' + year
-            };
+            /*  let count = this.list.length + 1;
+              // create object with task prop
+              let Task = {
+                  id: count,
+                  text: name,
+                  checked: false,
+                  priority: 0,
+                  date: `${day}.${month+1}.${year}`
+              };*/
             labelP.append(priority);
-            nameInp.textContent = name;
             lik.append(checkBtn);
             lik.append(nameInp);
             lik.append(delBtn);
             lik.append(labelP);
             lik.append(dateTask);
-            return { Task: Task, lik: lik };
+            return lik;
         }
     }, {
         key: 'initTask',
@@ -215,25 +208,25 @@ var ToDoList = function () {
             // ------------------------------------------------------------------
 
             this.listNode.appendChild(lik);
-            this.newTask.value = '';
         }
     }, {
         key: 'initEvent',
         value: function initEvent() {
-            var _this2 = this;
+            var _this = this;
 
             // change input name List
-            this.name.addEventListener('change', function (e) {
-                _this2.prop.name = e.target.value;
+            this.nameInp.addEventListener('blur', function (e) {
+                _this.name = e.target.value;
+                console.log(_this);
             }, false);
+
             // add Task
             this.addBtn.addEventListener("click", function () {
-                // this.initTask(this.newTask.value);
+                _this.listNode.appendChild(_this.createLik('name'));
+                _this.countTask++;
+                _this.countAll.innerHTML = _this.countTask;
             }, false);
             // ===================================================
-            // this.listNode.addEventListener("click", (e) => {
-
-            // }, false);
         }
     }]);
 

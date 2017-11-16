@@ -8,13 +8,20 @@ let add = document.querySelector('.AddList__addBtn'),
 
 class ToDoList {
     constructor(id) {
+        this.box = document.getElementById(id);
+        this.nameInp = this.box.getElementsByClassName('toDoList__name')[0];
+        this.newTaskInp = this.box.querySelector('.toDoList__newTask');
+        this.addBtn = this.box.querySelector('.toDoList__add');
+        this.listNode = this.box.querySelector('.toDoList__container');
+        this.countAll = this.box.querySelector('.toDoList__allCount');
+        // -----------------------------------
         this.id = id;
-        this.name = '';
         this.list = [];
-        this.countTask = null;
+        this.countTask = 0;
         this.checked = null;
+        this.name = this.nameInp.value;
         //------------------
-        this.initList();
+        this.initList()
         this.initLocalStorage();
         this.initEvent();
         // if(this.prop.list === null){
@@ -27,22 +34,11 @@ class ToDoList {
     }
 
     initList() {
-        let box = this.box,
-        	nameInp = this.nameInp,
-        	newTaskInp = this.newTaskInp,
-        	addBtn = this.addBtn,
-        	listNode = this.listNode;
-        	//---------------------------
-        	box = document.getElementById(this.id);
-        	console.log(box);
-        	nameInp = box.getElementsByClassName('toDoList__name')[0];
-        	newTaskInp = box.querySelector('.toDoList__newTask');
-        	addBtn = box.querySelector('.toDoList__add');
-        	listNode = box.querySelector('.toDoList__container');
-        	this.name = nameInp.value;
+          this.countAll.innerHTML = this.countTask;
+
     };
     initLocalStorage() {
-        const local = JSON.parse(localStorage.getItem(this.id))
+        const local = JSON.parse(localStorage.getItem(this.id));
         if (local === null) {
             this.list = []
             console.log(this);
@@ -51,7 +47,7 @@ class ToDoList {
             console.log(this.prop.list);
 
             this.prop.list.forEach((elem, index) => {
-                this.initTask(elem.text);
+                console.log(elem);
             });
         }
 
@@ -64,16 +60,16 @@ let date = new Date(),
             day = date.getDate(),
             month = date.getMonth(),
             year = date.getFullYear();
+
         // ----------------------------------------------------------
-        let lik = document.createElement('li');
+        const lik = document.createElement('li');
         lik.className = 'toDoList__task';
         // --------------------------------------------------------------
         let checkBtn = document.createElement('button');
         checkBtn.className = 'ion-checkmark-round btn task__check';
         checkBtn.addEventListener('click', (e) => {
-            if (Task.checked === false) {
-                Task.chekced = true;
-            }
+            console.log(e.target.parentNode);
+           e.target.parentNode.style = 'backgroundColor','red'
         }, false);
         // ---------------------------------------------------------------
         let priority = document.createElement('select');
@@ -86,11 +82,12 @@ let date = new Date(),
         }
 
         // -----------------------------------------------------------------
-        // 
+        
         let nameInp = document.createElement('h3');
         nameInp.className = 'task__name';
         nameInp.setAttribute("contenteditable", "true");
-
+        nameInp.textContent = this.newTaskInp.value;
+        this.newTaskInp.value =  '';
         // -------------------------------------------------------------------
         let labelP = document.createElement('label');
         labelP.className = 'task__label';
@@ -106,24 +103,24 @@ let date = new Date(),
             e.target.parentNode.remove(e.target.parentNode);
         }, false);
         // ---------------------------------------------------------------------------
-        let Count = this.prop.list.length + 1;
+      /*  let count = this.list.length + 1;
         // create object with task prop
         let Task = {
-            id: Count,
+            id: count,
             text: name,
             checked: false,
             priority: 0,
             date: `${day}.${month+1}.${year}`
-        };
+        };*/
         labelP.append(priority);
-        nameInp.textContent = name;
         lik.append(checkBtn);
         lik.append(nameInp);
         lik.append(delBtn);
         lik.append(labelP);
         lik.append(dateTask);
-        return {Task,lik}
+        return lik
     }
+
     initTask(name) {
         createLik(name);
         this.prop.list.push(Task);
@@ -134,7 +131,6 @@ let date = new Date(),
         // ------------------------------------------------------------------
 
         this.listNode.appendChild(lik);
-        this.newTask.value = '';
     }
 
 
@@ -143,17 +139,19 @@ let date = new Date(),
 
     initEvent() {
     	// change input name List
-        this.name.addEventListener('change', (e) => {
-            this.prop.name = e.target.value;
+        this.nameInp.addEventListener('blur', (e) => {
+            this.name = e.target.value;
+            console.log(this);
         }, false);
+
         // add Task
         this.addBtn.addEventListener("click", () => {
-            // this.initTask(this.newTask.value);
+            this.listNode.appendChild(this.createLik('name'));
+            this.countTask++;
+            this.countAll.innerHTML = this.countTask;
         }, false);
         // ===================================================
-        // this.listNode.addEventListener("click", (e) => {
 
-        // }, false);
     }
 }
 
