@@ -72,8 +72,6 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _task = __webpack_require__(1);
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var add = document.querySelector('.AddList__addBtn'),
@@ -116,22 +114,27 @@ var ToDoList = function () {
     }, {
         key: 'initLocalStorage',
         value: function initLocalStorage() {
+            var _this = this;
+
             var local = JSON.parse(localStorage.getItem(this.id));
             if (local === null) {
-                this.list = [];
-                console.log(this);
+                localStorage.setItem(this.id, JSON.stringify(this.list));
             } else {
-                this.prop.list = JSON.parse(localStorage.getItem(this.id));
-                console.log(this.prop.list);
-
-                this.prop.list.forEach(function (elem, index) {
-                    console.log(elem);
+                this.list = JSON.parse(localStorage.getItem(this.id));
+                console.log(this.list);
+                this.countTask = this.list.length;
+                this.countAll.innerHTML = this.countTask;
+                this.list.forEach(function (elem, index) {
+                    var Task = _this.createLik(elem.text);
+                    _this.listNode.appendChild(Task.lik);
                 });
             }
         }
     }, {
         key: 'createLik',
         value: function createLik(name) {
+            var _this2 = this;
+
             var date = new Date(),
                 day = date.getDate(),
                 month = date.getMonth(),
@@ -140,13 +143,7 @@ var ToDoList = function () {
             // ----------------------------------------------------------
             var lik = document.createElement('li');
             lik.className = 'toDoList__task';
-            // --------------------------------------------------------------
-            var checkBtn = document.createElement('button');
-            checkBtn.className = 'ion-checkmark-round btn task__check';
-            checkBtn.addEventListener('click', function (e) {
-                console.log(e.target.parentNode);
-                e.target.parentNode.style = 'backgroundColor', 'red';
-            }, false);
+
             // ---------------------------------------------------------------
             var priority = document.createElement('select');
             priority.className = 'task_priority';
@@ -162,8 +159,7 @@ var ToDoList = function () {
             var nameInp = document.createElement('h3');
             nameInp.className = 'task__name';
             nameInp.setAttribute("contenteditable", "true");
-            nameInp.textContent = this.newTaskInp.value;
-            this.newTaskInp.value = '';
+            nameInp.textContent = name;
             // -------------------------------------------------------------------
             var labelP = document.createElement('label');
             labelP.className = 'task__label';
@@ -177,54 +173,77 @@ var ToDoList = function () {
             delBtn.className = 'ion-close-round btn task__delete';
             delBtn.addEventListener('click', function (e) {
                 e.target.parentNode.remove(e.target.parentNode);
+                _this2.list = _this2.list.filter(function (elem) {
+                    if (elem.text !== name) {
+                        return elem;
+                    }
+                });
+                localStorage.setItem(_this2.id, JSON.stringify(_this2.list));
+                _this2.countTask = _this2.list.length;
+                _this2.countAll.innerHTML = _this2.countTask;
+            }, false);
+            // --------------------------------------------------------------
+            var checkBtn = document.createElement('button');
+            checkBtn.className = 'ion-checkmark-round btn task__check';
+            checkBtn.addEventListener('click', function () {
+                labelP.classList.toggle('blured');
+                nameInp.classList.toggle('checked');
+                nameInp.setAttribute('disabled', true);
+                if (data.checked === false) {
+                    data.checked = true;
+                } else {
+                    data.checked = false;
+                }
             }, false);
             // ---------------------------------------------------------------------------
-            /*  let count = this.list.length + 1;
-              // create object with task prop
-              let Task = {
-                  id: count,
-                  text: name,
-                  checked: false,
-                  priority: 0,
-                  date: `${day}.${month+1}.${year}`
-              };*/
+            // 
+            var count = this.list.length + 1;
+            // create object with task prop
+            var data = {
+                id: count,
+                text: name,
+                checked: false,
+                priority: 0,
+                date: day + '.' + (month + 1) + '.' + year
+            };
             labelP.append(priority);
             lik.append(checkBtn);
             lik.append(nameInp);
             lik.append(delBtn);
             lik.append(labelP);
             lik.append(dateTask);
-            return lik;
+            return { lik: lik, data: data };
         }
     }, {
         key: 'initTask',
         value: function initTask(name) {
             createLik(name);
-            this.prop.list.push(_task.Task);
-            localStorage.setItem(this.id, JSON.stringify(this.prop.list));
+            this.list.push(Task.data);
+            localStorage.setItem(this.id, JSON.stringify(this.list));
 
             // var storedNames = JSON.parse(localStorage.getItem(this.id));
 
             // ------------------------------------------------------------------
-
-            this.listNode.appendChild(lik);
         }
     }, {
         key: 'initEvent',
         value: function initEvent() {
-            var _this = this;
+            var _this3 = this;
 
             // change input name List
             this.nameInp.addEventListener('blur', function (e) {
-                _this.name = e.target.value;
-                console.log(_this);
+                _this3.name = e.target.value;
             }, false);
 
             // add Task
             this.addBtn.addEventListener("click", function () {
-                _this.listNode.appendChild(_this.createLik('name'));
-                _this.countTask++;
-                _this.countAll.innerHTML = _this.countTask;
+                var Task = _this3.createLik(_this3.newTaskInp.value);
+                _this3.listNode.appendChild(Task.lik);
+                _this3.list.push(Task.data);
+                _this3.countTask++;
+                _this3.countAll.innerHTML = _this3.countTask;
+                localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
+                _this3.newTaskInp.value = '';
             }, false);
             // ===================================================
         }
@@ -234,165 +253,6 @@ var ToDoList = function () {
 }();
 
 var list1 = new ToDoList('list1');
-
-// class ToDoList {
-// 	constructor(name) {
-// 		this.index = indexList;
-// 		this.elem = document.createElement("div");
-// 		this.header = document.createElement("header");
-// 		this.nav = document.createElement("nav");
-// 		this.hbtn = document.createElement("button");
-// 		this.name = document.createElement("h2");
-// 		this.menu = document.createElement("ul");
-// 		this.submenu = [];
-// 		this.inputTask = document.createElement("input");
-// 		this.remoe
-// 		this.name.textContent = name;
-// 		this.nbtn = document.createElement("button");
-
-// 	this.elem.classList.add('toDoList');
-// 	this.header.classList.add('toDoList__header');
-// 	this.nav.classList.add('toDoList__nav');
-// 	this.name.classList.add('toDoList__name');
-// 	this.hbtn.classList.add('header__btn-menu');
-// 	this.menu.classList.add('nav__menu');
-// 	this.inputTask.classList.add('toDoList__newTask');
-// 	this.inputTask.setAttribute("placeholder", "add your task");
-// 	this.nbtn.classList.add("header__btn-add");
-
-// 	this.nav.appendChild(this.hbtn);
-// 	this.nav.appendChild(this.menu);
-// 	this.header.appendChild(this.nav);
-// 	this.header.appendChild(this.name);
-// 	this.header.appendChild(this.inputTask);
-// 	this.header.appendChild(this.nbtn);
-// 	this.elem.appendChild(this.header);
-
-
-// 	this.nbtn.addEventListener("click", ()=>{
-
-
-// 	}, false)
-// 	}
-
-
-// }
-
-// class listTask {
-// 	constructor() {
-// 		this.elem = document.createElement("ul");
-
-// 		this.elem.classList.add('toDoList__container');
-// 	}
-
-
-// 	// methods
-
-// }
-
-
-// add.addEventListener("click", function(e){
-// 	let input = document.getElementById("taskInput");
-// 	let listNew = new ToDoList(input.value);
-// 	let tasknew = new listTask;
-// 	// listNew.elem.appendChild(tasknew.elem);
-// 	// console.log(listNew);
-// 	body.appendChild(listNew.elem);
-// 	indexList++;
-// }, false);
-// /**
-//  * Created by Jacek on 2015-12-16.
-//  */
-
-//  var todo = document.getElementById("taskList"),
-//  	input = document.getElementById("taskInput"),
-//  	add = document.getElementById("addTaskButton"),
-//  	removeAll = document.getElementById("removeFinishedTasksButton");
-
-// /*------------    FUNKCJE    ------------*/
-// function createDell(parent){
-// 	var btn = document.createElement("button");
-// 		btn.textContent = "X";
-// 		btn.classList.add("delete");
-
-// 	btn.addEventListener("click", function(){
-// 		parent.parentNode.removeChild(parent);
-// 	}, false)
-
-// 	return btn
-// };
-
-// function createComplete(parent){
-// 	var btn = document.createElement("button");
-// 		btn.textContent = "Complete";
-
-// 	btn.addEventListener("click", function(){
-// 		parent.firstElementChild.classList.toggle("complete")
-// 	}, false)
-
-// 	return btn
-// };
-
-// function removeComplete(elem){
-// 	console.log(elem);
-// 	elem.forEach( function(element) {
-// 		var father = element.parentNode;
-// 		father.parentNode.removeChild(father);
-
-
-// 	});
-
-// };
-
-// function checkValue(elem){
-// 	if(elem.value.length<5 || elem.value.length >100){
-// 		var info = "Zadanie powinno miec od 5 do 100 znaków";
-// 		return false
-// 	} else{
-// 		return true
-// 	}
-
-
-// };
-
-
-// /*------------    EVENTY    ------------*/
-
-// add.addEventListener("click", function(){
-// if(	checkValue(input)){
-// var lik = document.createElement("li");
-// 	task = document.createElement("h1");
-// 	task.textContent = input.value;
-// 	task.setAttribute("contenteditable", true);
-// 	btnDell = createDell(lik);
-// 	btnComplete = createComplete(lik);
-// 	lik.appendChild(task);
-// 	lik.appendChild(btnDell);
-// 	lik.appendChild(btnComplete);
-// 	todo.appendChild(lik);
-// 	input.value ="";
-
-// }
-// }, false)
-
-
-// removeAll.addEventListener("click",function(){
-// 	removeComplete(document.querySelectorAll(".complete"));
-// }, false);
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var Task = [1, 2, 3];
-
-exports.Task = Task;
 
 /***/ })
 /******/ ]);
