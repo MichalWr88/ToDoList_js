@@ -1,4 +1,3 @@
-
 let add = document.querySelector('.AddList__addBtn'),
     body = document.querySelector("body"),
     indexList = 1;
@@ -22,8 +21,8 @@ class ToDoList {
         this.initLocalStorage();
         this.initEvent();
         // if(this.prop.list === null){
-        // 	this.propery.list = localStorage.setItem(this.id,[]);
-        // 	localStorage.setItem(this.id, JSON.stringify(this.prop.list));
+        //  this.propery.list = localStorage.setItem(this.id,[]);
+        //  localStorage.setItem(this.id, JSON.stringify(this.prop.list));
         // };
         // this.taskcount = this.prop.list.length;
         // localStorage.getItem(this.id, JSON.stringify(this.prop.list));
@@ -31,7 +30,7 @@ class ToDoList {
     }
 
     initList() {
-          this.countAll.innerHTML = this.countTask;
+        this.countAll.innerHTML = this.countTask;
 
     };
     initLocalStorage() {
@@ -44,8 +43,8 @@ class ToDoList {
             this.countTask = this.list.length;
             this.countAll.innerHTML = this.countTask;
             this.list.forEach((elem, index) => {
-                 const Task = this.createLik(elem.text);
-            this.listNode.appendChild(Task.lik);
+                const Task = this.createLik(elem.text);
+                this.listNode.appendChild(Task.lik);
             });
         }
 
@@ -53,8 +52,8 @@ class ToDoList {
 
 
 
-    createLik(name){
-let date = new Date(),
+    createLik(name) {
+        let date = new Date(),
             day = date.getDate(),
             month = date.getMonth(),
             year = date.getFullYear();
@@ -74,7 +73,7 @@ let date = new Date(),
         }
 
         // -----------------------------------------------------------------
-        
+
         let nameInp = document.createElement('h3');
         nameInp.className = 'task__name';
         nameInp.setAttribute("contenteditable", "true");
@@ -93,25 +92,25 @@ let date = new Date(),
         delBtn.addEventListener('click', (e) => {
             e.target.parentNode.remove(e.target.parentNode);
             this.list = this.list.filter(function(elem) {
-                if(elem.text !== name){
+                if (elem.text !== name) {
                     return elem
                 }
             });
             localStorage.setItem(this.id, JSON.stringify(this.list));
             this.countTask = this.list.length;
             this.countAll.innerHTML = this.countTask;
-                
+
         }, false);
-                // --------------------------------------------------------------
+        // --------------------------------------------------------------
         let checkBtn = document.createElement('button');
         checkBtn.className = 'ion-checkmark-round btn task__check';
         checkBtn.addEventListener('click', () => {
             labelP.classList.toggle('blured');
             nameInp.classList.toggle('checked');
             nameInp.setAttribute('disabled', true);
-            if(data.checked === false){
+            if (data.checked === false) {
                 data.checked = true;
-            }else{
+            } else {
                 data.checked = false;
             }
 
@@ -133,7 +132,7 @@ let date = new Date(),
         lik.append(delBtn);
         lik.append(labelP);
         lik.append(dateTask);
-        return {lik, data}
+        return { lik, data }
     }
 
     initTask(name) {
@@ -152,10 +151,10 @@ let date = new Date(),
 
 
     initEvent() {
-    	// change input name List
+        // change input name List
         this.nameInp.addEventListener('blur', (e) => {
             this.name = e.target.value;
-            
+
         }, false);
 
         // add Task
@@ -166,7 +165,7 @@ let date = new Date(),
             this.countTask++;
             this.countAll.innerHTML = this.countTask;
             localStorage.setItem(this.id, JSON.stringify(this.list))
-            this.newTaskInp.value =  '';
+            this.newTaskInp.value = '';
         }, false);
         // ===================================================
 
@@ -174,4 +173,3 @@ let date = new Date(),
 }
 
 let list1 = new ToDoList('list1');
-
