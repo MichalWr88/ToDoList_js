@@ -53,7 +53,7 @@ class ToDoList {
 
 
     createLik(name) {
-        let date = new Date(),
+        const date = new Date(),
             day = date.getDate(),
             month = date.getMonth(),
             year = date.getFullYear();

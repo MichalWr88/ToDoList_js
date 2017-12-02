@@ -99,8 +99,8 @@ var ToDoList = function () {
         this.initLocalStorage();
         this.initEvent();
         // if(this.prop.list === null){
-        // 	this.propery.list = localStorage.setItem(this.id,[]);
-        // 	localStorage.setItem(this.id, JSON.stringify(this.prop.list));
+        //  this.propery.list = localStorage.setItem(this.id,[]);
+        //  localStorage.setItem(this.id, JSON.stringify(this.prop.list));
         // };
         // this.taskcount = this.prop.list.length;
         // localStorage.getItem(this.id, JSON.stringify(this.prop.list));
