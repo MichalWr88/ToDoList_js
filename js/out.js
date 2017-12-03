@@ -88,6 +88,7 @@ var ToDoList = function () {
         this.addBtn = this.box.querySelector('.toDoList__add');
         this.listNode = this.box.querySelector('.toDoList__container');
         this.countAll = this.box.querySelector('.toDoList__allCount');
+        this.countChecked = this.box.querySelector('.toDoList__chekedCount');
         // -----------------------------------
         this.id = id;
         this.list = [];
@@ -98,12 +99,6 @@ var ToDoList = function () {
         this.initList();
         this.initLocalStorage();
         this.initEvent();
-        // if(this.prop.list === null){
-        //  this.propery.list = localStorage.setItem(this.id,[]);
-        //  localStorage.setItem(this.id, JSON.stringify(this.prop.list));
-        // };
-        // this.taskcount = this.prop.list.length;
-        // localStorage.getItem(this.id, JSON.stringify(this.prop.list));
     }
 
     _createClass(ToDoList, [{
@@ -125,20 +120,51 @@ var ToDoList = function () {
                 this.countTask = this.list.length;
                 this.countAll.innerHTML = this.countTask;
                 this.list.forEach(function (elem, index) {
-                    var Task = _this.createLik(elem.text);
+                    var Task = _this.createLik(elem.text, elem.date, elem.checked);
                     _this.listNode.appendChild(Task.lik);
                 });
             }
         }
     }, {
+        key: 'updateCheckedTask',
+        value: function updateCheckedTask() {
+            var count = 0;
+            var array = this.list.filter(function (elem) {
+                return elem.checked === true;
+            });
+            this.checked = array.length;
+            this.countChecked.textContent = this.checked;
+        }
+    }, {
+        key: 'sortList',
+        value: function sortList() {
+            this.list.sort(function (a, b) {
+                var AA = a.checked === true ? 1 : 0;
+                console.log(AA);
+                var BB = b.checked === true ? 1 : 0;
+                // console.log(BB);
+
+                return AA - BB;
+            });
+            localStorage.setItem(this.id, JSON.stringify(this.list));
+        }
+    }, {
         key: 'createLik',
-        value: function createLik(name) {
+        value: function createLik(name, dat, check) {
             var _this2 = this;
 
-            var date = new Date(),
-                day = date.getDate(),
-                month = date.getMonth(),
-                year = date.getFullYear();
+            var date = '',
+                day = '',
+                month = '',
+                year = '';
+            if (dat === undefined) {
+                date = new Date(), day = date.getDate(), month = date.getMonth() + 1, year = date.getFullYear();
+                console.log(date);
+            } else {
+                var txt = dat.split('.');
+                console.log(txt);
+                day = txt[0], month = txt[1], year = txt[2];
+            }
 
             // ----------------------------------------------------------
             var lik = document.createElement('li');
@@ -164,10 +190,10 @@ var ToDoList = function () {
             var labelP = document.createElement('label');
             labelP.className = 'task__label';
             labelP.textContent = 'priority';
-
+            console.log(day);
             var dateTask = document.createElement('p');
             dateTask.className = 'task__date';
-            dateTask.textContent = 'create: ' + day + '.' + (month + 1) + '.' + year;
+            dateTask.textContent = 'create: ' + day + '.' + month + '.' + year;
 
             var delBtn = document.createElement('button');
             delBtn.className = 'ion-close-round btn task__delete';
@@ -191,9 +217,25 @@ var ToDoList = function () {
                 nameInp.setAttribute('disabled', true);
                 if (data.checked === false) {
                     data.checked = true;
+                    _this2.list.map(function (elem) {
+                        if (elem.text === data.text) {
+                            elem.checked = true;
+                        }
+                    });
+                    // this.list.push(Task.data);
+                    localStorage.setItem(_this2.id, JSON.stringify(_this2.list));
                 } else {
                     data.checked = false;
+                    _this2.list.map(function (elem) {
+                        if (elem.text === data.text) {
+                            elem.checked = false;
+                        }
+                    });
+                    // this.list.push(Task.data);
+                    localStorage.setItem(_this2.id, JSON.stringify(_this2.list));
                 }
+                _this2.updateCheckedTask();
+                _this2.sortList();
             }, false);
             // ---------------------------------------------------------------------------
             // 
@@ -202,16 +244,28 @@ var ToDoList = function () {
             var data = {
                 id: count,
                 text: name,
-                checked: false,
+                checked: '',
                 priority: 0,
-                date: day + '.' + (month + 1) + '.' + year
+                date: day + '.' + month + '.' + year
             };
+            if (check === undefined) {
+                data.checked = false;
+            } else {
+                data.checked = check;
+            }
             labelP.append(priority);
             lik.append(checkBtn);
             lik.append(nameInp);
             lik.append(delBtn);
             lik.append(labelP);
             lik.append(dateTask);
+            console.log(data.checked);
+            if (data.checked === true) {
+                labelP.classList.toggle('blured');
+                nameInp.classList.toggle('checked');
+                nameInp.setAttribute('disabled', true);
+            }
+            this.updateCheckedTask();
             return { lik: lik, data: data };
         }
     }, {
@@ -232,18 +286,30 @@ var ToDoList = function () {
 
             // change input name List
             this.nameInp.addEventListener('blur', function (e) {
-                _this3.name = e.target.value;
+                _this3.name = e.target.value.trim();
             }, false);
 
             // add Task
             this.addBtn.addEventListener("click", function () {
-                var Task = _this3.createLik(_this3.newTaskInp.value);
+                var Task = _this3.createLik(_this3.newTaskInp.value.trim());
                 _this3.listNode.appendChild(Task.lik);
                 _this3.list.push(Task.data);
                 _this3.countTask++;
                 _this3.countAll.innerHTML = _this3.countTask;
                 localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
                 _this3.newTaskInp.value = '';
+            }, false);
+            // ===================================================
+            this.newTaskInp.addEventListener("keydown", function (e) {
+                if (e.keyCode === 13) {
+                    var _Task = _this3.createLik(_this3.newTaskInp.value.trim());
+                    _this3.listNode.appendChild(_Task.lik);
+                    _this3.list.push(_Task.data);
+                    _this3.countTask++;
+                    _this3.countAll.innerHTML = _this3.countTask;
+                    localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
+                    _this3.newTaskInp.value = '';
+                }
             }, false);
             // ===================================================
         }

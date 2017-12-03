@@ -10,6 +10,7 @@ class ToDoList {
         this.addBtn = this.box.querySelector('.toDoList__add');
         this.listNode = this.box.querySelector('.toDoList__container');
         this.countAll = this.box.querySelector('.toDoList__allCount');
+        this.countChecked = this.box.querySelector('.toDoList__chekedCount');
         // -----------------------------------
         this.id = id;
         this.list = [];
@@ -20,12 +21,7 @@ class ToDoList {
         this.initList()
         this.initLocalStorage();
         this.initEvent();
-        // if(this.prop.list === null){
-        //  this.propery.list = localStorage.setItem(this.id,[]);
-        //  localStorage.setItem(this.id, JSON.stringify(this.prop.list));
-        // };
-        // this.taskcount = this.prop.list.length;
-        // localStorage.getItem(this.id, JSON.stringify(this.prop.list));
+
 
     }
 
@@ -43,20 +39,51 @@ class ToDoList {
             this.countTask = this.list.length;
             this.countAll.innerHTML = this.countTask;
             this.list.forEach((elem, index) => {
-                const Task = this.createLik(elem.text);
+                const Task = this.createLik(elem.text, elem.date, elem.checked);
                 this.listNode.appendChild(Task.lik);
             });
         }
 
     }
+    updateCheckedTask() {
+        const count = 0;
+        const array = this.list.filter(elem => { return elem.checked === true });
+        this.checked = array.length;
+        this.countChecked.textContent = this.checked;
+    }
+    sortList() {
+        this.list.sort((a, b) => {
+            let AA = a.checked === true ? 1 : 0;
+            console.log(AA);
+            let BB = b.checked === true ? 1 : 0;
+            // console.log(BB);
+
+            return AA - BB
+
+        })
+        localStorage.setItem(this.id, JSON.stringify(this.list));
+    }
 
 
+    createLik(name, dat, check) {
+        let date = '',
+            day = '',
+            month = '',
+            year = '';
+        if (dat === undefined) {
+            date = new Date(),
+                day = date.getDate(),
+                month = (date.getMonth()) + 1,
+                year = date.getFullYear();
+            console.log(date);
+        } else {
+            const txt = dat.split('.');
+            console.log(txt);
+            day = txt[0],
+                month = txt[1],
+                year = txt[2];
+        }
 
-    createLik(name) {
-        const date = new Date(),
-            day = date.getDate(),
-            month = date.getMonth(),
-            year = date.getFullYear();
 
         // ----------------------------------------------------------
         const lik = document.createElement('li');
@@ -82,10 +109,10 @@ class ToDoList {
         let labelP = document.createElement('label');
         labelP.className = 'task__label';
         labelP.textContent = 'priority';
-
+        console.log(day);
         let dateTask = document.createElement('p');
         dateTask.className = 'task__date';
-        dateTask.textContent = `create: ${day}.${month+1}.${year}`;
+        dateTask.textContent = `create: ${day}.${month}.${year}`;
 
         let delBtn = document.createElement('button');
         delBtn.className = 'ion-close-round btn task__delete';
@@ -110,10 +137,25 @@ class ToDoList {
             nameInp.setAttribute('disabled', true);
             if (data.checked === false) {
                 data.checked = true;
+                this.list.map(elem => {
+                    if (elem.text === data.text) {
+                        elem.checked = true;
+                    }
+                })
+                // this.list.push(Task.data);
+                localStorage.setItem(this.id, JSON.stringify(this.list));
             } else {
                 data.checked = false;
+                this.list.map(elem => {
+                    if (elem.text === data.text) {
+                        elem.checked = false;
+                    }
+                })
+                // this.list.push(Task.data);
+                localStorage.setItem(this.id, JSON.stringify(this.list));
             }
-
+            this.updateCheckedTask();
+            this.sortList();
         }, false);
         // ---------------------------------------------------------------------------
         // 
@@ -122,16 +164,28 @@ class ToDoList {
         let data = {
             id: count,
             text: name,
-            checked: false,
+            checked: '',
             priority: 0,
-            date: `${day}.${month+1}.${year}`
+            date: `${day}.${month}.${year}`
         };
+        if (check === undefined) {
+            data.checked = false;
+        } else {
+            data.checked = check;
+        }
         labelP.append(priority);
         lik.append(checkBtn);
         lik.append(nameInp);
         lik.append(delBtn);
         lik.append(labelP);
         lik.append(dateTask);
+        console.log(data.checked);
+        if (data.checked === true) {
+            labelP.classList.toggle('blured');
+            nameInp.classList.toggle('checked');
+            nameInp.setAttribute('disabled', true);
+        }
+        this.updateCheckedTask()
         return { lik, data }
     }
 
@@ -149,23 +203,34 @@ class ToDoList {
 
 
 
-
     initEvent() {
         // change input name List
         this.nameInp.addEventListener('blur', (e) => {
-            this.name = e.target.value;
+            this.name = e.target.value.trim();
 
         }, false);
 
         // add Task
         this.addBtn.addEventListener("click", () => {
-            const Task = this.createLik(this.newTaskInp.value);
+            const Task = this.createLik(this.newTaskInp.value.trim());
             this.listNode.appendChild(Task.lik);
             this.list.push(Task.data);
             this.countTask++;
             this.countAll.innerHTML = this.countTask;
             localStorage.setItem(this.id, JSON.stringify(this.list))
             this.newTaskInp.value = '';
+        }, false);
+        // ===================================================
+        this.newTaskInp.addEventListener("keydown", (e) => {
+            if (e.keyCode === 13) {
+                const Task = this.createLik(this.newTaskInp.value.trim());
+                this.listNode.appendChild(Task.lik);
+                this.list.push(Task.data);
+                this.countTask++;
+                this.countAll.innerHTML = this.countTask;
+                localStorage.setItem(this.id, JSON.stringify(this.list))
+                this.newTaskInp.value = '';
+            }
         }, false);
         // ===================================================
 
