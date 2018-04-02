@@ -1,351 +1,414 @@
 @import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
+
+/* clolors */
+/* black  #232730*/
+/* lightgrey #B1B4B5 */
+/* green #41DB4D */
+
 body {
-    min-height: 100vh;
-    background: #B90094;
-    background: -webkit-gradient(linear, left top, left bottom, from(#333399), to(#B90094));
-    background: linear-gradient(to bottom, #333399, #B90094);
-    background-repeat: no-repeat;
-    background-size: cover;
-    font-family: 'Catamaran', sans-serif;
-    margin: 0 auto;
+  height: 100vh;
+  background: #5c6873;
+  /* background: -webkit-gradient(linear, left top, left bottom, from(#333399), to(#B90094));
+    background: linear-gradient(to bottom, #333399, #B90094); */
+  overflow: hidden;
+  background-size: cover;
+  font-family: 'Catamaran', sans-serif;
+  margin: 0 auto;
+  /* padding:10px; */
+  background: #5077be;
+  background: -moz-linear-gradient(
+    45deg,
+    #5077be 0%,
+    #5980c0 49%,
+    #4d679e 50%,
+    #8fcff5 51%,
+    #7ebde2 100%
+  );
+  background: -webkit-gradient(
+    left bottom,
+    right top,
+    color-stop(0%, #5077be),
+    color-stop(49%, #5980c0),
+    color-stop(50%, #4d679e),
+    color-stop(51%, #8fcff5),
+    color-stop(100%, #7ebde2)
+  );
+  background: -webkit-linear-gradient(
+    45deg,
+    #7a9cdb 0%,
+    #5980c0 49%,
+    #4d679e 50%,
+    #8fcff5 51%,
+    #7ebde2 100%
+  );
+  background: -o-linear-gradient(
+    45deg,
+    #5077be 0%,
+    #5980c0 49%,
+    #4d679e 50%,
+    #8fcff5 51%,
+    #7ebde2 100%
+  );
+  background: -ms-linear-gradient(
+    45deg,
+    #5077be 0%,
+    #5980c0 49%,
+    #4d679e 50%,
+    #8fcff5 51%,
+    #7ebde2 100%
+  );
+  background: linear-gradient(
+    45deg,
+    #5077be 0%,
+    #5980c0 49%,
+    #4d679e 50%,
+    #8fcff5 51%,
+    #7ebde2 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5077be', endColorstr='#7ebde2', GradientType=1 );
+  background-repeat: no-repeat;
 }
-
-
-
-/*GLOBAL*/
-
+/* GLOBAL */
 .btn {
-    position: relative;
-    font-size: 30px;
-    cursor: pointer;
-    color: #ffffff;
-    background-color: transparent;
-    width: 40px;
-    margin: 10px;
-    height: 40px;
-    line-height: 40px;
-    display: inline-block;
-    text-align: center;
-    border-radius: 50%;
-    -webkit-transition: all 0.5s;
-    transition: all 0.5s;
+  position: relative;
+  font-size: 25px;
+  cursor: pointer;
+  color: #b1b4b5;
+  background-color: transparent;
+  border: none;
+  width: 40px;
+  margin: 10px;
+  height: 40px;
+  display: inline-block;
+  border-radius: 20px;
+  padding: 5px 10px;
+}
+.btn__content {
+  margin-left: 5px;
+  padding: 0;
+  text-transform: capitalize;
+  font-size: 25px;
+}
+.btn-text {
+  border: 2px solid #b1b4b5;
+  width: auto;
+}
+.lists-notype {
+  list-style-type: none;
+  padding: 0;
+}
+.input {
+  border-radius: 5px;
+  background-color: transparent;
+  border: 2px solid #b1b4b5;
+  padding: 5px 10px;
+}
+/* -------------------------------------------- */
+/* HEADER */
+.page__header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  background-color: #232730;
+  padding: 10px;
+  color: #b1b4b5;
+  box-shadow: 0px 20px 30px -2px rgba(0, 0, 0, 0.3);
+}
+/* NAV */
+.header__nav {
+  flex: 1;
+  position: relative;
+}
+.header__btn {
+}
+.header__listsName {
+  position: absolute;
+  top: 90%;
+  left: -10px;
+  height: 100%;
+  padding: 10px 20px;
+  background-color: #232730;
+  border-bottom-right-radius: 10px;
+}
+.listsName__elem {
+  padding: 5px 0;
 }
 
-.btn * {
-    -webkit-box-sizing: content-box;
-    box-sizing: content-box;
+/* add box list */
+.header__addListBox {
+  flex: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
-
-.btn:before {
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+.addList__label {
+  /* flex:1; */
+  flex-basis: 100%;
+  margin-left: 5px;
 }
-
-.btn:after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    content: '';
-    z-index: -1;
-    border-radius: 50%;
-    -webkit-transition: all 0.5s;
-    transition: all 0.5s;
-    -webkit-transform: scale(0.98);
-    transform: scale(0.98);
+.addList__input {
+  height: 25px;
+  color: white;
+  min-width: 300px;
 }
-
-.btn:hover,
-.btn .hover {
-    /*color: #000000;*/
+.btn-add {
+  color: #41db4d;
+  font-size: 30px;
+  padding: 0;
+  margin: 0;
 }
-
-.btn:hover:after,
-.btn .hover:after {
-    -webkit-transform: scale(0);
-    transform: scale(0);
-    opacity: 0;
+.btn-close {
+  color: #db4d41;
+  padding: 0;
+  margin: 0;
 }
-
-
-
-
+/* logo */
+.header__logo {
+  flex: 1;
+  text-align: center;
+}
+.header__appName {
+  margin: 0;
+  padding: 5px 0;
+  color: #5980c0;
+}
+.header__logoText {
+  margin: 0;
+  padding: 0;
+  color: #7ebde2;
+  letter-spacing: 1.5px;
+}
 /* ------------------------------------------------------------ */
-
 .page__main {
-    margin: 0 auto;
-    max-width: 1200px;
-    padding: 10px;
+  /* margin: 0 auto;
+  max-width: 1200px; */
+  height: 100%;
+  margin-top: 50px; /* padding: 10px; */
 }
-
-.app__name {
-    color: #D7C1DF;
-    text-align: center;
+.list__tasks {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
-
-
-
 /* --------------------------------- */
+/* ELEMENT TASK */
+.listToDo {
+  min-width: 300px; /* background-color: #7ebde2; */
+  box-shadow: 0px 10px 50px -5px rgba(0, 0, 0, 0.76);
+  padding: 10px;
+  border-radius: 10px;
+  background: #fafafa;
+   overflow: hidden;
+   margin:10px 30px;
+}
+.listToDo__header {
+  background-color: #dee0e4;
+  margin: -10px;
+  padding: 10px;
+  position: relative;
+  color: #dee0e4;
 
+  box-sizing: border-box; /* width:100%; */
+}
+.listToDo__name {
+  background-color: #4d679e;
+  position:absolute;
+  top:10px;
+  width: 100%;
+  height: 25px;
+  margin: -10px;
+  box-shadow: 0px 10px 5px -20px  rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 2px;
+}
+.listToDo__add {
+  background-color: #4d679e;
+  color: white;
+  position: absolute;
+  bottom: -10px;
+  transform: translatey(50%);
+  right: 20px;
+  box-shadow: 0px 8px 20px 2px rgba(0, 0, 0, 0.3);
+}
+.listToDo__container {
+  padding: 30px 0 0 0;
+  font-size: 25px; /* background-color:#6B4DF1; */
+}
+.listToDo__task {
+  background-color: #ffffff;
+  border-radius: 20px;
+  margin: 10px 0;
+  padding: 5px 10px;
+  color: #4d679e;
+  box-shadow: 0px 5px 30px -5px rgba(0, 0, 0, 0.3);
+}
+/* #4d679e #DEE0E4;
 .toDoList {
-    margin: 20px auto;
-    max-width: 400px;
-    min-height: auto;
-    overflow: hidden;
-    -webkit-box-shadow: 0px 10px 32px 10px rgba(0, 0, 0, 0.76);
-    box-shadow: 0px 10px 32px 10px rgba(0, 0, 0, 0.76);
-    -webkit-transition: all 0.5s;
-    transition: all 0.5s;
+  margin: 20px auto;
+  max-width: 400px;
+  min-height: auto;
+  overflow: hidden;
+  box-shadow: 0px 10px 50px -5px rgba(0, 0, 0, 0.76);
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
 }
 
 .toDoList__header {
-    height: auto;
-    background-color: #2C285F;
-    color: #00AFE4;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    padding: 20px;
+  height: auto;
+  background-color: #323e4a;
+  color: #00afe4;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 20px;
 }
 
 .toDoList__text {
-    width: 50%;
-    font-size: 1.2rem;
+  width: 50%;
+  font-size: 1.2rem;
 }
 
 .toDoList__name {
-    width: 100%;
-    margin: 5px 0px;
-    background-color: transparent;
-    color: #C1E400;
-    padding: 2px 20px;
-    border: none;
-    font-size: 1.5rem;
-    border: 1px solid white;
-    border-radius: 10px;
-    text-transform: uppercase;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+  width: 100%;
+  margin: 5px 0px;
+  background-color: transparent;
+  color: #c1e400;
+  padding: 2px 20px;
+  border: none;
+  font-size: 1.5rem;
+  border: 1px solid white;
+  border-radius: 10px;
+  text-transform: uppercase;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .toDoList__newTask {
-    background-color: #00AFE4;
-    color: white;
-    border-radius: 5px;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    padding: 5px;
-    border: 1px solid white;
+  background-color: #00afe4;
+  color: white;
+  border-radius: 5px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  padding: 5px;
+  border: 1px solid white;
 }
 
 .toDoList__add {
-    color: white;
-    border: 2px solid white;
-    margin-bottom: 0;
+  color: white;
+  border: 2px solid white;
+  margin-bottom: 0;
 }
 
 .toDoList__add:hover {
-    color: #037BE1;
-    border-color: #037BE1;
+  color: #037be1;
+  border-color: #037be1;
 }
 
 .toDoList__container {
-    padding: 10px;
-    -webkit-transition: all 0.5s;
-    transition: all 0.5s;
+  padding: 10px;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
 }
 
 .toDoList__task {
-    list-style-type: none;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-pack: stretch;
-    -ms-flex-pack: stretch;
-    justify-content: stretch;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    margin-bottom: 5px;
+  list-style-type: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: stretch;
+  -ms-flex-pack: stretch;
+  justify-content: stretch;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 5px;
 }
 
 .task__check {
-    color: lightgreen;
-    border: 2px solid lightgreen;
-    font-size: 20px;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    margin-left: 0;
+  color: lightgreen;
+  border: 2px solid lightgreen;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  margin-left: 0;
 }
 
 .task__name {
-    border: 1px solid black;
-    padding: 5px 10px;
-    margin: 2px 0;
-    width: 70%;
+  border: 1px solid black;
+  padding: 5px 10px;
+  margin: 2px 0;
+  width: 70%;
 }
 
 .task__label {
-    margin-left: 50px;
+  margin-left: 50px;
 }
 
 .task_priority {
-
-    font-weight: bold;
-    position: relative;
-    background-color: transparent;
-    border: none;
-    color: lightblue;
+  font-weight: bold;
+  position: relative;
+  background-color: transparent;
+  border: none;
+  color: lightblue;
 }
 
 .task__date {
-    margin: 0;
+  margin: 0;
 }
 
 .task__delete {
-    font-size: 15px;
-    width: 30px;
-    height: 30px;
-    line-height: 15px;
-    color: red;
-    border: none;
-    margin: 0;
-    padding: 0;
+  font-size: 15px;
+  width: 30px;
+  height: 30px;
+  line-height: 15px;
+  color: red;
+  border: none;
+  margin: 0;
+  padding: 0;
 }
 
 .checked {
-    position: relative;
-    pointer-events: none;
+  position: relative;
+  pointer-events: none;
 }
 
 .blured {
-    -webkit-filter: blur(2px);
-    filter: blur(2px);
-    pointer-events: none;
+  -webkit-filter: blur(2px);
+  filter: blur(2px);
+  pointer-events: none;
 }
 
 .checked:after {
-    position: absolute;
-    content: '';
-    background-color: grey;
-    top: 0;
-    left: 0px;
-    right: 0px;
-    bottom: 0;
-    opacity: 0.5;
+  position: absolute;
+  content: '';
+  background-color: grey;
+  top: 0;
+  left: 0px;
+  right: 0px;
+  bottom: 0;
+  opacity: 0.5;
 
-    -webkit-box-shadow: 0px 0px 40px 2px grey;
+  -webkit-box-shadow: 0px 0px 40px 2px grey;
 
-    box-shadow: 0px 0px 40px 2px grey;
-}
-
-
-/* add list */
-
-.AddList {
-    position: fixed;
-    top: 0;
-    left: 10px;
-    right: 10px;
-    min-width: 340px;
-    max-width: 440px;
-    padding: 10px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    color: #D7C1DF;
-    background-color: #71477F;
-    margin: 10px 0;
-    z-index: 2;
-}
-
-.AddList__header {
-    -ms-flex-preferred-size: 100%;
-    flex-basis: 100%;
-    -ms-flex-item-align: center;
-    -ms-grid-row-align: center;
-    align-self: center;
-    margin: 10px;
-    text-align: center;
-}
-
-.AddList__input {
-    font-size: 1.1em;
-    background-color: #00AFE4;
-    color: #f9f8fa;
-    border: 1px solid #f9f8fa;
-    padding: 2px;
-    border-radius: 5px;
-}
-
-.AddList__addBtn {
-    background-color: transparent;
-    border: none;
-    color: #00AFE4;
-    position: relative;
-    min-width: 35px;
-    height: 90%;
-}
-
-.AddList__addBtn:before {
-    content: "";
-    position: absolute;
-    top: -2px;
-    left: 5px;
-    right: 5px;
-    border: 2px solid #00AFE4;
-    border-radius: 5px;
-}
-
-.AddList__addBtn:after {
-    content: "";
-    position: absolute;
-    bottom: 0px;
-    left: 5px;
-    right: 5px;
-    border: 2px solid #00AFE4;
-    border-radius: 5px;
-    -webkit-transform: rotate(90deg);
-    transform: rotate(90deg);
-}
-
-.AddList__info--countList,
-.AddList__info--countTask {
-    -ms-flex-preferred-size: 50%;
-    flex-basis: 50%;
-    text-align: center;
-}
+  box-shadow: 0px 0px 40px 2px grey;
+} */

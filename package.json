@@ -5,16 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "webW": "webpack --watch"
+    "webW": "webpack --watch",
+    "startW":"webpack-dev-server"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "webpack": "^3.1.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
     "browser-sync": "^2.18.13",
-    "browser-sync-webpack-plugin": "^1.2.0"
+    "browser-sync-webpack-plugin": "^1.2.0",
+    "webpack-dev-server": "^1.9.0"
   }
 }

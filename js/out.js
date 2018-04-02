@@ -70,255 +70,290 @@
 "use strict";
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*jshint esversion: 6 */
+
+
+var _global = __webpack_require__(1);
+
+var _glob = _interopRequireWildcard(_global);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var addListBtn = _glob.cElem('.btn', true);
+console.log(addListBtn);
+
 var add = document.querySelector('.AddList__addBtn'),
-    body = document.querySelector("body"),
+    body = document.querySelector('body'),
     indexList = 1;
 
 var ToDoList = function () {
-    function ToDoList(id) {
-        _classCallCheck(this, ToDoList);
+  function ToDoList(id) {
+    _classCallCheck(this, ToDoList);
 
-        this.box = document.getElementById(id);
-        this.nameInp = this.box.getElementsByClassName('toDoList__name')[0];
-        this.newTaskInp = this.box.querySelector('.toDoList__newTask');
-        this.addBtn = this.box.querySelector('.toDoList__add');
-        this.listNode = this.box.querySelector('.toDoList__container');
-        this.countAll = this.box.querySelector('.toDoList__allCount');
-        this.countChecked = this.box.querySelector('.toDoList__chekedCount');
-        // -----------------------------------
-        this.id = id;
-        this.list = [];
-        this.countTask = 0;
-        this.checked = null;
-        this.name = this.nameInp.value;
-        //------------------
-        this.initList();
-        this.initLocalStorage();
-        this.initEvent();
+    this.box = document.getElementById(id);
+    this.nameInp = this.box.getElementsByClassName('toDoList__name')[0];
+    this.newTaskInp = this.box.querySelector('.toDoList__newTask');
+    this.addBtn = this.box.querySelector('.toDoList__add');
+    this.listNode = this.box.querySelector('.toDoList__container');
+    this.countAll = this.box.querySelector('.toDoList__allCount');
+    this.countChecked = this.box.querySelector('.toDoList__chekedCount');
+    // -----------------------------------
+    this.id = id;
+    this.list = [];
+    this.countTask = 0;
+    this.checked = null;
+    this.name = this.nameInp.value;
+    //------------------
+    this.initList();
+    this.initLocalStorage();
+    this.initEvent();
+  }
+
+  _createClass(ToDoList, [{
+    key: 'initList',
+    value: function initList() {
+      this.countAll.innerHTML = this.countTask;
     }
+  }, {
+    key: 'initLocalStorage',
+    value: function initLocalStorage() {
+      var _this = this;
 
-    _createClass(ToDoList, [{
-        key: 'initList',
-        value: function initList() {
-            this.countAll.innerHTML = this.countTask;
-        }
-    }, {
-        key: 'initLocalStorage',
-        value: function initLocalStorage() {
-            var _this = this;
+      var local = JSON.parse(localStorage.getItem(this.id));
+      if (local === null) {
+        localStorage.setItem(this.id, JSON.stringify(this.list));
+      } else {
+        this.list = JSON.parse(localStorage.getItem(this.id));
+        console.log(this.list);
+        this.countTask = this.list.length;
+        this.countAll.innerHTML = this.countTask;
+        this.list.forEach(function (elem, index) {
+          var Task = _this.createLik(elem.text, elem.date, elem.checked);
+          _this.listNode.appendChild(Task.lik);
+        });
+      }
+    }
+  }, {
+    key: 'updateCheckedTask',
+    value: function updateCheckedTask() {
+      var count = 0;
+      var array = this.list.filter(function (elem) {
+        return elem.checked === true;
+      });
+      this.checked = array.length;
+      this.countChecked.textContent = this.checked;
+    }
+  }, {
+    key: 'sortList',
+    value: function sortList() {
+      this.list.sort(function (a, b) {
+        var AA = a.checked === true ? 1 : 0;
+        console.log(AA);
+        var BB = b.checked === true ? 1 : 0;
+        // console.log(BB);
 
-            var local = JSON.parse(localStorage.getItem(this.id));
-            if (local === null) {
-                localStorage.setItem(this.id, JSON.stringify(this.list));
-            } else {
-                this.list = JSON.parse(localStorage.getItem(this.id));
-                console.log(this.list);
-                this.countTask = this.list.length;
-                this.countAll.innerHTML = this.countTask;
-                this.list.forEach(function (elem, index) {
-                    var Task = _this.createLik(elem.text, elem.date, elem.checked);
-                    _this.listNode.appendChild(Task.lik);
-                });
+        return AA - BB;
+      });
+      localStorage.setItem(this.id, JSON.stringify(this.list));
+    }
+  }, {
+    key: 'createLik',
+    value: function createLik(name, dat, check) {
+      var _this2 = this;
+
+      var date = '',
+          day = '',
+          month = '',
+          year = '';
+      if (dat === undefined) {
+        date = new Date(), day = date.getDate(), month = date.getMonth() + 1, year = date.getFullYear();
+        console.log(date);
+      } else {
+        var txt = dat.split('.');
+        console.log(txt);
+        day = txt[0], month = txt[1], year = txt[2];
+      }
+
+      // ----------------------------------------------------------
+      var lik = document.createElement('li');
+      lik.className = 'toDoList__task';
+
+      // ---------------------------------------------------------------
+      var priority = document.createElement('select');
+      priority.className = 'task_priority';
+      for (var i = 0; i <= 5; i++) {
+        var opt = document.createElement('option');
+        opt.value = i;
+        opt.innerHTML = i;
+        priority.appendChild(opt);
+      }
+
+      // -----------------------------------------------------------------
+
+      var nameInp = document.createElement('h3');
+      nameInp.className = 'task__name';
+      nameInp.setAttribute('contenteditable', 'true');
+      nameInp.textContent = name;
+      // -------------------------------------------------------------------
+      var labelP = document.createElement('label');
+      labelP.className = 'task__label';
+      labelP.textContent = 'priority';
+      console.log(day);
+      var dateTask = document.createElement('p');
+      dateTask.className = 'task__date';
+      dateTask.textContent = 'create: ' + day + '.' + month + '.' + year;
+
+      var delBtn = document.createElement('button');
+      delBtn.className = 'ion-close-round btn task__delete';
+      delBtn.addEventListener('click', function (e) {
+        e.target.parentNode.remove(e.target.parentNode);
+        _this2.list = _this2.list.filter(function (elem) {
+          if (elem.text !== name) {
+            return elem;
+          }
+        });
+        localStorage.setItem(_this2.id, JSON.stringify(_this2.list));
+        _this2.countTask = _this2.list.length;
+        _this2.countAll.innerHTML = _this2.countTask;
+      }, false);
+      // --------------------------------------------------------------
+      var checkBtn = document.createElement('button');
+      checkBtn.className = 'ion-checkmark-round btn task__check';
+      checkBtn.addEventListener('click', function () {
+        labelP.classList.toggle('blured');
+        nameInp.classList.toggle('checked');
+        nameInp.setAttribute('disabled', true);
+        if (data.checked === false) {
+          data.checked = true;
+          _this2.list.map(function (elem) {
+            if (elem.text === data.text) {
+              elem.checked = true;
             }
-        }
-    }, {
-        key: 'updateCheckedTask',
-        value: function updateCheckedTask() {
-            var count = 0;
-            var array = this.list.filter(function (elem) {
-                return elem.checked === true;
-            });
-            this.checked = array.length;
-            this.countChecked.textContent = this.checked;
-        }
-    }, {
-        key: 'sortList',
-        value: function sortList() {
-            this.list.sort(function (a, b) {
-                var AA = a.checked === true ? 1 : 0;
-                console.log(AA);
-                var BB = b.checked === true ? 1 : 0;
-                // console.log(BB);
-
-                return AA - BB;
-            });
-            localStorage.setItem(this.id, JSON.stringify(this.list));
-        }
-    }, {
-        key: 'createLik',
-        value: function createLik(name, dat, check) {
-            var _this2 = this;
-
-            var date = '',
-                day = '',
-                month = '',
-                year = '';
-            if (dat === undefined) {
-                date = new Date(), day = date.getDate(), month = date.getMonth() + 1, year = date.getFullYear();
-                console.log(date);
-            } else {
-                var txt = dat.split('.');
-                console.log(txt);
-                day = txt[0], month = txt[1], year = txt[2];
+          });
+          // this.list.push(Task.data);
+          localStorage.setItem(_this2.id, JSON.stringify(_this2.list));
+        } else {
+          data.checked = false;
+          _this2.list.map(function (elem) {
+            if (elem.text === data.text) {
+              elem.checked = false;
             }
-
-            // ----------------------------------------------------------
-            var lik = document.createElement('li');
-            lik.className = 'toDoList__task';
-
-            // ---------------------------------------------------------------
-            var priority = document.createElement('select');
-            priority.className = 'task_priority';
-            for (var i = 0; i <= 5; i++) {
-                var opt = document.createElement('option');
-                opt.value = i;
-                opt.innerHTML = i;
-                priority.appendChild(opt);
-            }
-
-            // -----------------------------------------------------------------
-
-            var nameInp = document.createElement('h3');
-            nameInp.className = 'task__name';
-            nameInp.setAttribute("contenteditable", "true");
-            nameInp.textContent = name;
-            // -------------------------------------------------------------------
-            var labelP = document.createElement('label');
-            labelP.className = 'task__label';
-            labelP.textContent = 'priority';
-            console.log(day);
-            var dateTask = document.createElement('p');
-            dateTask.className = 'task__date';
-            dateTask.textContent = 'create: ' + day + '.' + month + '.' + year;
-
-            var delBtn = document.createElement('button');
-            delBtn.className = 'ion-close-round btn task__delete';
-            delBtn.addEventListener('click', function (e) {
-                e.target.parentNode.remove(e.target.parentNode);
-                _this2.list = _this2.list.filter(function (elem) {
-                    if (elem.text !== name) {
-                        return elem;
-                    }
-                });
-                localStorage.setItem(_this2.id, JSON.stringify(_this2.list));
-                _this2.countTask = _this2.list.length;
-                _this2.countAll.innerHTML = _this2.countTask;
-            }, false);
-            // --------------------------------------------------------------
-            var checkBtn = document.createElement('button');
-            checkBtn.className = 'ion-checkmark-round btn task__check';
-            checkBtn.addEventListener('click', function () {
-                labelP.classList.toggle('blured');
-                nameInp.classList.toggle('checked');
-                nameInp.setAttribute('disabled', true);
-                if (data.checked === false) {
-                    data.checked = true;
-                    _this2.list.map(function (elem) {
-                        if (elem.text === data.text) {
-                            elem.checked = true;
-                        }
-                    });
-                    // this.list.push(Task.data);
-                    localStorage.setItem(_this2.id, JSON.stringify(_this2.list));
-                } else {
-                    data.checked = false;
-                    _this2.list.map(function (elem) {
-                        if (elem.text === data.text) {
-                            elem.checked = false;
-                        }
-                    });
-                    // this.list.push(Task.data);
-                    localStorage.setItem(_this2.id, JSON.stringify(_this2.list));
-                }
-                _this2.updateCheckedTask();
-                _this2.sortList();
-            }, false);
-            // ---------------------------------------------------------------------------
-            // 
-            var count = this.list.length + 1;
-            // create object with task prop
-            var data = {
-                id: count,
-                text: name,
-                checked: '',
-                priority: 0,
-                date: day + '.' + month + '.' + year
-            };
-            if (check === undefined) {
-                data.checked = false;
-            } else {
-                data.checked = check;
-            }
-            labelP.append(priority);
-            lik.append(checkBtn);
-            lik.append(nameInp);
-            lik.append(delBtn);
-            lik.append(labelP);
-            lik.append(dateTask);
-            console.log(data.checked);
-            if (data.checked === true) {
-                labelP.classList.toggle('blured');
-                nameInp.classList.toggle('checked');
-                nameInp.setAttribute('disabled', true);
-            }
-            this.updateCheckedTask();
-            return { lik: lik, data: data };
+          });
+          // this.list.push(Task.data);
+          localStorage.setItem(_this2.id, JSON.stringify(_this2.list));
         }
-    }, {
-        key: 'initTask',
-        value: function initTask(name) {
-            createLik(name);
-            this.list.push(Task.data);
-            localStorage.setItem(this.id, JSON.stringify(this.list));
+        _this2.updateCheckedTask();
+        _this2.sortList();
+      }, false);
+      // ---------------------------------------------------------------------------
+      //
+      var count = this.list.length + 1;
+      // create object with task prop
+      var data = {
+        id: count,
+        text: name,
+        checked: '',
+        priority: 0,
+        date: day + '.' + month + '.' + year
+      };
+      if (check === undefined) {
+        data.checked = false;
+      } else {
+        data.checked = check;
+      }
+      labelP.append(priority);
+      lik.append(checkBtn);
+      lik.append(nameInp);
+      lik.append(delBtn);
+      lik.append(labelP);
+      lik.append(dateTask);
+      console.log(data.checked);
+      if (data.checked === true) {
+        labelP.classList.toggle('blured');
+        nameInp.classList.toggle('checked');
+        nameInp.setAttribute('disabled', true);
+      }
+      this.updateCheckedTask();
+      return { lik: lik, data: data };
+    }
+  }, {
+    key: 'initTask',
+    value: function initTask(name) {
+      createLik(name);
+      this.list.push(Task.data);
+      localStorage.setItem(this.id, JSON.stringify(this.list));
 
-            // var storedNames = JSON.parse(localStorage.getItem(this.id));
+      // var storedNames = JSON.parse(localStorage.getItem(this.id));
 
-            // ------------------------------------------------------------------
+      // ------------------------------------------------------------------
+    }
+  }, {
+    key: 'initEvent',
+    value: function initEvent() {
+      var _this3 = this;
+
+      // change input name List
+      this.nameInp.addEventListener('blur', function (e) {
+        _this3.name = e.target.value.trim();
+      }, false);
+
+      // add Task
+      this.addBtn.addEventListener('click', function () {
+        var Task = _this3.createLik(_this3.newTaskInp.value.trim());
+        _this3.listNode.appendChild(Task.lik);
+        _this3.list.push(Task.data);
+        _this3.countTask++;
+        _this3.countAll.innerHTML = _this3.countTask;
+        localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
+        _this3.newTaskInp.value = '';
+      }, false);
+      // ===================================================
+      this.newTaskInp.addEventListener('keydown', function (e) {
+        if (e.keyCode === 13) {
+          var _Task = _this3.createLik(_this3.newTaskInp.value.trim());
+          _this3.listNode.appendChild(_Task.lik);
+          _this3.list.push(_Task.data);
+          _this3.countTask++;
+          _this3.countAll.innerHTML = _this3.countTask;
+          localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
+          _this3.newTaskInp.value = '';
         }
-    }, {
-        key: 'initEvent',
-        value: function initEvent() {
-            var _this3 = this;
+      }, false);
+      // ===================================================
+    }
+  }]);
 
-            // change input name List
-            this.nameInp.addEventListener('blur', function (e) {
-                _this3.name = e.target.value.trim();
-            }, false);
-
-            // add Task
-            this.addBtn.addEventListener("click", function () {
-                var Task = _this3.createLik(_this3.newTaskInp.value.trim());
-                _this3.listNode.appendChild(Task.lik);
-                _this3.list.push(Task.data);
-                _this3.countTask++;
-                _this3.countAll.innerHTML = _this3.countTask;
-                localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
-                _this3.newTaskInp.value = '';
-            }, false);
-            // ===================================================
-            this.newTaskInp.addEventListener("keydown", function (e) {
-                if (e.keyCode === 13) {
-                    var _Task = _this3.createLik(_this3.newTaskInp.value.trim());
-                    _this3.listNode.appendChild(_Task.lik);
-                    _this3.list.push(_Task.data);
-                    _this3.countTask++;
-                    _this3.countAll.innerHTML = _this3.countTask;
-                    localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
-                    _this3.newTaskInp.value = '';
-                }
-            }, false);
-            // ===================================================
-        }
-    }]);
-
-    return ToDoList;
+  return ToDoList;
 }();
 
 var list1 = new ToDoList('list1');
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var cElem = exports.cElem = function cElem(elem) {
+  var all = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+  if (all !== false) {
+    var obj = [].concat(_toConsumableArray(document.querySelectorAll(elem)));
+    return obj;
+  } else {
+    var _obj = document.querySelector(elem);
+    return _obj;
+  }
+};
 
 /***/ })
 /******/ ]);

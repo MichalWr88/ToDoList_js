@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 const path = require("path"),
       BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 module.exports = {
@@ -37,8 +38,9 @@ module: {
       host: 'localhost',
       port: 3000,
       server: {
-        baseDir: ['']
-      }
+        baseDir: ['./']
+      },
+      
     })
   ],
  devtool: "source-map"
