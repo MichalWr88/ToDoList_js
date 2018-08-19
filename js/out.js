@@ -82,18 +82,56 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var addListBtn = _glob.cElem('.btn', true);
-console.log(addListBtn);
+// console.log(addListBtn);
 
-var add = document.querySelector('.AddList__addBtn'),
+var add = document.querySelector('.addList__addBtn'),
     body = document.querySelector('body'),
     indexList = 1;
+console.log(add);
+
+var Header = function () {
+  function Header(id) {
+    _classCallCheck(this, Header);
+
+    this.box = document.getElementById(id);
+    this.boardsBtn = _glob.cElem('#boardsBtn');
+    this.boardsList = _glob.cElem('#boardsList');
+    this.newToDoListName = _glob.cElem('#listName');
+    this.addNewListBtn = _glob.cElem('#addNewList');
+    this.clearListName = _glob.cElem('#clearListName');
+    this.initEvents();
+  }
+
+  _createClass(Header, [{
+    key: 'initEvents',
+    value: function initEvents() {
+      var _this = this;
+
+      this.boardsBtn.addEventListener('click', function (e) {
+        _this.boardsList.classList.toggle('h-0');
+      }, false);
+      this.newToDoListName.addEventListener('input', function () {
+        console.log(_this.newToDoListName.value);
+      }, false);
+      this.addNewListBtn.addEventListener('click', function () {}, false);
+      this.clearListName.addEventListener('click', function () {
+        _this.newToDoListName.value = '';
+      }, false);
+    }
+  }]);
+
+  return Header;
+}();
+
+var header = new Header('header');
+console.log(header);
 
 var ToDoList = function () {
   function ToDoList(id) {
     _classCallCheck(this, ToDoList);
 
     this.box = document.getElementById(id);
-    this.nameInp = this.box.getElementsByClassName('toDoList__name')[0];
+    this.nameInp = this.box.getElementsByClassName('listToDo__name')[0];
     this.newTaskInp = this.box.querySelector('.toDoList__newTask');
     this.addBtn = this.box.querySelector('.toDoList__add');
     this.listNode = this.box.querySelector('.toDoList__container');
@@ -104,11 +142,12 @@ var ToDoList = function () {
     this.list = [];
     this.countTask = 0;
     this.checked = null;
-    this.name = this.nameInp.value;
+    // this.name = this.nameInp.value;
+
     //------------------
     this.initList();
-    this.initLocalStorage();
-    this.initEvent();
+    // this.initLocalStorage();
+    // this.initEvent();
   }
 
   _createClass(ToDoList, [{
@@ -119,7 +158,7 @@ var ToDoList = function () {
   }, {
     key: 'initLocalStorage',
     value: function initLocalStorage() {
-      var _this = this;
+      var _this2 = this;
 
       var local = JSON.parse(localStorage.getItem(this.id));
       if (local === null) {
@@ -130,8 +169,8 @@ var ToDoList = function () {
         this.countTask = this.list.length;
         this.countAll.innerHTML = this.countTask;
         this.list.forEach(function (elem, index) {
-          var Task = _this.createLik(elem.text, elem.date, elem.checked);
-          _this.listNode.appendChild(Task.lik);
+          var Task = _this2.createLik(elem.text, elem.date, elem.checked);
+          _this2.listNode.appendChild(Task.lik);
         });
       }
     }
@@ -161,13 +200,13 @@ var ToDoList = function () {
   }, {
     key: 'createLik',
     value: function createLik(name, dat, check) {
-      var _this2 = this;
+      var _this3 = this;
 
       var date = '',
           day = '',
           month = '',
           year = '';
-      if (dat === undefined) {
+      if (!dat) {
         date = new Date(), day = date.getDate(), month = date.getMonth() + 1, year = date.getFullYear();
         console.log(date);
       } else {
@@ -209,14 +248,14 @@ var ToDoList = function () {
       delBtn.className = 'ion-close-round btn task__delete';
       delBtn.addEventListener('click', function (e) {
         e.target.parentNode.remove(e.target.parentNode);
-        _this2.list = _this2.list.filter(function (elem) {
+        _this3.list = _this3.list.filter(function (elem) {
           if (elem.text !== name) {
             return elem;
           }
         });
-        localStorage.setItem(_this2.id, JSON.stringify(_this2.list));
-        _this2.countTask = _this2.list.length;
-        _this2.countAll.innerHTML = _this2.countTask;
+        localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
+        _this3.countTask = _this3.list.length;
+        _this3.countAll.innerHTML = _this3.countTask;
       }, false);
       // --------------------------------------------------------------
       var checkBtn = document.createElement('button');
@@ -227,25 +266,25 @@ var ToDoList = function () {
         nameInp.setAttribute('disabled', true);
         if (data.checked === false) {
           data.checked = true;
-          _this2.list.map(function (elem) {
+          _this3.list.map(function (elem) {
             if (elem.text === data.text) {
               elem.checked = true;
             }
           });
           // this.list.push(Task.data);
-          localStorage.setItem(_this2.id, JSON.stringify(_this2.list));
+          localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
         } else {
           data.checked = false;
-          _this2.list.map(function (elem) {
+          _this3.list.map(function (elem) {
             if (elem.text === data.text) {
               elem.checked = false;
             }
           });
           // this.list.push(Task.data);
-          localStorage.setItem(_this2.id, JSON.stringify(_this2.list));
+          localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
         }
-        _this2.updateCheckedTask();
-        _this2.sortList();
+        _this3.updateCheckedTask();
+        _this3.sortList();
       }, false);
       // ---------------------------------------------------------------------------
       //
@@ -292,33 +331,33 @@ var ToDoList = function () {
   }, {
     key: 'initEvent',
     value: function initEvent() {
-      var _this3 = this;
+      var _this4 = this;
 
       // change input name List
       this.nameInp.addEventListener('blur', function (e) {
-        _this3.name = e.target.value.trim();
+        _this4.name = e.target.value.trim();
       }, false);
 
       // add Task
       this.addBtn.addEventListener('click', function () {
-        var Task = _this3.createLik(_this3.newTaskInp.value.trim());
-        _this3.listNode.appendChild(Task.lik);
-        _this3.list.push(Task.data);
-        _this3.countTask++;
-        _this3.countAll.innerHTML = _this3.countTask;
-        localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
-        _this3.newTaskInp.value = '';
+        var Task = _this4.createLik(_this4.newTaskInp.value.trim());
+        _this4.listNode.appendChild(Task.lik);
+        _this4.list.push(Task.data);
+        _this4.countTask++;
+        _this4.countAll.innerHTML = _this4.countTask;
+        localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
+        _this4.newTaskInp.value = '';
       }, false);
       // ===================================================
       this.newTaskInp.addEventListener('keydown', function (e) {
         if (e.keyCode === 13) {
-          var _Task = _this3.createLik(_this3.newTaskInp.value.trim());
-          _this3.listNode.appendChild(_Task.lik);
-          _this3.list.push(_Task.data);
-          _this3.countTask++;
-          _this3.countAll.innerHTML = _this3.countTask;
-          localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
-          _this3.newTaskInp.value = '';
+          var _Task = _this4.createLik(_this4.newTaskInp.value.trim());
+          _this4.listNode.appendChild(_Task.lik);
+          _this4.list.push(_Task.data);
+          _this4.countTask++;
+          _this4.countAll.innerHTML = _this4.countTask;
+          localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
+          _this4.newTaskInp.value = '';
         }
       }, false);
       // ===================================================
@@ -328,7 +367,7 @@ var ToDoList = function () {
   return ToDoList;
 }();
 
-var list1 = new ToDoList('list1');
+// let list1 = new ToDoList('list1');
 
 /***/ }),
 /* 1 */

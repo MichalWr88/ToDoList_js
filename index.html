@@ -12,12 +12,14 @@
 </head>
 
 <body>
-    <header class="page__header">
+    <!-- header -->
+    <header class="page__header" id="header">
+        <!-- dashbord -->
         <nav class="header__nav">
-            <button type="button" class="btn btn-text header__btn    ion-ios-paper">
+            <button id="boardsBtn" type="button" class="btn btn-text header__btn    ion-ios-paper">
                 <span class="btn__content">boards</span>
             </button>
-            <ul class="lists-notype header__listsName">
+            <ul id="boardsList" class="lists-notype header__listsName h-0">
                 <li class="listsName__elem">
                     lists of cards
                 </li>
@@ -26,13 +28,14 @@
                 </li>
             </ul>
         </nav>
+        <!-- addList -->
         <div class="header__addListBox">
             <label for="addList" class="addList__label">
                 Add new list
             </label>
-            <input class="input addList__input" id="addList" type="text" placeholder="Add new list">
-            <button class="btn btn-add  ion-plus-round" type="button" title="Add new list"></button>
-            <button class="btn btn-close ion-close-round" type="button"></button>
+            <input id="listName" class="input addList__input" id="addList" type="text" placeholder="Name list">
+            <button id="addNewList" class="btn btn-add  ion-plus-round" type="button" title="Add new list" id="btnAddList"></button>
+            <button id="clearListName" class="btn btn-close ion-close-round" type="button" id="btnCancelAList"></button>
         </div>
         <div class="header__logo">
             <h1 class="header__appName">ToDo List vanilla.js</h1>
@@ -40,8 +43,41 @@
         </div>
     </header>
     <main class="page__main">
+        <!-- lists with todoList -->
         <ul class="lists-notype list__tasks">
+            <!-- one list -->
             <li class="listToDo" id='list1'>
+                <!-- header list -->
+                <div class="listToDo__header">
+                    <input class="input listToDo__name" type="text" name="listName" value="name" required>
+                    <!-- count task -->
+                    <div class="row">
+                      <p class="listToDo__text f_1">all task
+                          <span class="listToDo__allCount">...</span>
+                      </p>
+                      <p class="listToDo__text f_1">checked task
+                          <span class="listToDo__chekedCount">...</span>
+                      </p>
+                    </div>
+                    <!-- new task -->
+                    <input class="input listToDo__newTask" type="text" placeholder="add your task">
+                    <button class="ion-plus-round btn listToDo__add " title="button add item"></button>
+                </div>
+                <!-- Tasks list -->
+                <ul class="lists-notype listToDo__container">
+                    <li class="listToDo__task">
+                        <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
+                            <i class="ion-checkmark-round task__complete">   
+                            </i>
+                        </button>
+                        <input type="text" class="task__name" value="task simple">
+                        <button class="btn task__btn task__btn-dell" title="button add item">
+                            <i class="ion-close-round"></i>
+                        </button>
+                    </li>
+                </ul>
+            </li>
+            <li class="listToDo" id='list2'>
                 <!-- header list -->
                 <div class="listToDo__header">
                     <input class="input listToDo__name" type="text" name="listName" value="name">
@@ -64,34 +100,10 @@
                     <li class="listToDo__task">task1</li>
                 </ul>
             </li>
-                        <li class="listToDo" id='list1'>
-                            <!-- header list -->
-                            <div class="listToDo__header">
-                                <input class="input listToDo__name" type="text" name="listName" value="name">
-                                <!-- count task -->
-                                <p class="listToDo__text">all task
-                                    <span class="listToDo__allCount">num</span>
-                                </p>
-                                <p class="listToDo__text">checked task
-                                    <span class="listToDo__chekedCount">num</span>
-                                </p>
-                                <!-- new task -->
-                                <input class="input listToDo__newTask" type="text" placeholder="add your task">
-                                <button class="ion-plus-round btn listToDo__add " title="button add item"></button>
-                            </div>
-                            <!-- Tasks list -->
-                            <ul class="lists-notype listToDo__container">
-                                <li class="listToDo__task">task1</li>
-                                <li class="listToDo__task">task1</li>
-                                <li class="listToDo__task">task1</li>
-                                <li class="listToDo__task">task1</li>
-                            </ul>
-                        </li>
         </ul>
-
-
     </main>
-    <footer>
+    <footer class="page__footer">
+        <small>Michał Maleszewski 2018</small>
     </footer>
     <script src="js/out.js"></script>
 </body>

@@ -1,16 +1,48 @@
 /*jshint esversion: 6 */
 import * as _glob from './global';
-const addListBtn = _glob.cElem('.btn',true);
-console.log(addListBtn);
+const addListBtn = _glob.cElem('.btn', true);
+// console.log(addListBtn);
 
-let add = document.querySelector('.AddList__addBtn'),
+let add = document.querySelector('.addList__addBtn'),
   body = document.querySelector('body'),
   indexList = 1;
+console.log(add);
+
+class Header {
+  constructor(id) {
+    this.box = document.getElementById(id);
+    this.boardsBtn = _glob.cElem('#boardsBtn');
+    this.boardsList = _glob.cElem('#boardsList');
+    this.newToDoListName = _glob.cElem('#listName');
+    this.addNewListBtn = _glob.cElem('#addNewList');
+    this.clearListName = _glob.cElem('#clearListName');
+    this.initEvents();
+  }
+  initEvents() {
+    this.boardsBtn.addEventListener(
+      'click',
+      (e) => {
+        this.boardsList.classList.toggle('h-0');
+      },
+      false
+    );
+    this.newToDoListName.addEventListener('input',() => {
+      console.log(this.newToDoListName.value);
+    }, false);
+    this.addNewListBtn.addEventListener('click',() => {}, false);
+    this.clearListName.addEventListener('click',() => {
+      this.newToDoListName.value ='';
+    }, false);
+  }
+}
+
+const header = new Header('header');
+console.log(header);
 
 class ToDoList {
   constructor(id) {
     this.box = document.getElementById(id);
-    this.nameInp = this.box.getElementsByClassName('toDoList__name')[0];
+    this.nameInp = this.box.getElementsByClassName('listToDo__name')[0];
     this.newTaskInp = this.box.querySelector('.toDoList__newTask');
     this.addBtn = this.box.querySelector('.toDoList__add');
     this.listNode = this.box.querySelector('.toDoList__container');
@@ -21,11 +53,12 @@ class ToDoList {
     this.list = [];
     this.countTask = 0;
     this.checked = null;
-    this.name = this.nameInp.value;
+    // this.name = this.nameInp.value;
+
     //------------------
     this.initList();
-    this.initLocalStorage();
-    this.initEvent();
+    // this.initLocalStorage();
+    // this.initEvent();
   }
 
   initList() {
@@ -71,7 +104,7 @@ class ToDoList {
       day = '',
       month = '',
       year = '';
-    if (dat === undefined) {
+    if (!dat) {
       (date = new Date()),
         (day = date.getDate()),
         (month = date.getMonth() + 1),
@@ -248,4 +281,4 @@ class ToDoList {
   }
 }
 
-let list1 = new ToDoList('list1');
+// let list1 = new ToDoList('list1');
