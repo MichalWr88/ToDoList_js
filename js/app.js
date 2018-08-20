@@ -2,20 +2,22 @@
 import * as _glob from './global';
 const addListBtn = _glob.cElem('.btn', true);
 // console.log(addListBtn);
-
+const source = document.getElementById("list-template").innerHTML,
+ template = Handlebars.compile(source);
 let add = document.querySelector('.addList__addBtn'),
   body = document.querySelector('body'),
   indexList = 1;
 console.log(add);
 
-class Header {
+class App {
   constructor(id) {
     this.box = document.getElementById(id);
-    this.boardsBtn = _glob.cElem('#boardsBtn');
-    this.boardsList = _glob.cElem('#boardsList');
-    this.newToDoListName = _glob.cElem('#listName');
-    this.addNewListBtn = _glob.cElem('#addNewList');
-    this.clearListName = _glob.cElem('#clearListName');
+    this.boardsBtn = this.box.querySelector('#boardsBtn');
+    this.boardsList = this.box.querySelector('#boardsList');
+    this.newToDoListName = this.box.querySelector('#listName');
+    this.addNewListBtn = this.box.querySelector('#addNewList');
+    this.clearListName = this.box.querySelector('#clearListName');
+    this.listTasks = _glob.cElem('.list__tasks');
     this.initEvents();
   }
   initEvents() {
@@ -29,8 +31,14 @@ class Header {
     this.newToDoListName.addEventListener('input',() => {
       this.newToDoListName.value.length ? clearListName.classList.remove('d_none') : clearListName.classList.add('d_none')
       console.log(this.newToDoListName.value);
+
     }, false);
-    this.addNewListBtn.addEventListener('click',() => {}, false);
+    this.addNewListBtn.addEventListener('click',() => {
+      const lik = document.createElement('lik');
+      lik.innerHTML = this.newToDoListName.value;
+      this.listTasks.appendChild(lik);
+      this.newToDoListName.value = '';
+    }, false);
     this.clearListName.addEventListener('click',() => {
       this.newToDoListName.value ='';
       this.clearListName.classList.add('d_none');
@@ -38,7 +46,7 @@ class Header {
   }
 }
 
-const header = new Header('header');
+const header = new App('header');
 console.log(header);
 
 class ToDoList {

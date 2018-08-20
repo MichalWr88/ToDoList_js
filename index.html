@@ -7,6 +7,7 @@
   <!-- RWD-->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link href="https://fonts.googleapis.com/css?family=Catamaran" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -151,6 +152,88 @@
   <footer class="page__footer">
     <small>Michał Maleszewski 2018</small>
   </footer>
+  <script id="list-template" type="text/x-handlebars-template">
+
+      <li class="listToDo" id=`list {{id}}`>
+        <!-- header list -->
+        <div class="listToDo__header">
+          <input class="input listToDo__name" type="text" name="listName" value="{{taskName}}" required>
+          <!-- count task -->
+          <div class="row">
+            <p class="listToDo__text f_1">all task
+              <span class="listToDo__allCount">...</span>
+            </p>
+            <p class="listToDo__text f_1">checked task
+              <span class="listToDo__chekedCount">...</span>
+            </p>
+          </div>
+          <!-- new task -->
+          <input class="input listToDo__newTask" type="text" placeholder="add your task">
+          <button class="ion-plus-round btn listToDo__add " title="button add item"></button>
+        </div>
+        <!-- Tasks list -->
+        <ul class="lists-notype listToDo__container">
+          <li class="listToDo__task">
+            <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
+              <i class="ion-checkmark-round task__complete">
+              </i>
+            </button>
+            <div class="row d_columns f_1">
+              <input type="text" class="task__name" value="task simple">
+              <div class="row f_jsa task__details">
+                <div class="row d_columns">
+                  <small>create task: 02.12.2018 , 12:12</small>
+                  <small>last update: 02.12.2018 , 12:12</small>
+                </div>
+                <div>
+                  <small for="priority-select">Priority:</small>
+                  <select id="priority-select">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <button class="btn task__btn task__btn-dell" title="button add item">
+              <i class="ion-close-round"></i>
+            </button>
+          </li>
+          <li class="listToDo__task">
+            <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
+              <i class="ion-checkmark-round task__complete">
+              </i>
+            </button>
+            <div class="row d_columns f_1">
+              <input type="text" class="task__name" value="task simple">
+              <div class="row f_jsa task__details">
+                <div class="row d_columns">
+                  <small>create task: 02.12.2018 , 12:12</small>
+                  <small>last update: 02.12.2018 , 12:12</small>
+                </div>
+                <div>
+                  <label for="priority-select">Priority:</label>
+                  <select id="priority-select">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <button class="btn task__btn task__btn-dell" title="button add item">
+              <i class="ion-close-round"></i>
+            </button>
+          </li>
+        </ul>
+      </li>
+
+
+  </script>
   <script src="js/out.js"></script>
 </body>
 

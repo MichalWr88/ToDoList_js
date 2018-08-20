@@ -60,11 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 6:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73,7 +74,7 @@
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*jshint esversion: 6 */
 
 
-var _global = __webpack_require__(1);
+var _global = __webpack_require__(7);
 
 var _glob = _interopRequireWildcard(_global);
 
@@ -83,26 +84,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var addListBtn = _glob.cElem('.btn', true);
 // console.log(addListBtn);
-
+var source = document.getElementById("list-template").innerHTML,
+    template = Handlebars.compile(source);
 var add = document.querySelector('.addList__addBtn'),
     body = document.querySelector('body'),
     indexList = 1;
 console.log(add);
 
-var Header = function () {
-  function Header(id) {
-    _classCallCheck(this, Header);
+var App = function () {
+  function App(id) {
+    _classCallCheck(this, App);
 
     this.box = document.getElementById(id);
-    this.boardsBtn = _glob.cElem('#boardsBtn');
-    this.boardsList = _glob.cElem('#boardsList');
-    this.newToDoListName = _glob.cElem('#listName');
-    this.addNewListBtn = _glob.cElem('#addNewList');
-    this.clearListName = _glob.cElem('#clearListName');
+    this.boardsBtn = this.box.querySelector('#boardsBtn');
+    this.boardsList = this.box.querySelector('#boardsList');
+    this.newToDoListName = this.box.querySelector('#listName');
+    this.addNewListBtn = this.box.querySelector('#addNewList');
+    this.clearListName = this.box.querySelector('#clearListName');
+    this.listTasks = _glob.cElem('.list__tasks');
     this.initEvents();
   }
 
-  _createClass(Header, [{
+  _createClass(App, [{
     key: 'initEvents',
     value: function initEvents() {
       var _this = this;
@@ -114,7 +117,12 @@ var Header = function () {
         _this.newToDoListName.value.length ? clearListName.classList.remove('d_none') : clearListName.classList.add('d_none');
         console.log(_this.newToDoListName.value);
       }, false);
-      this.addNewListBtn.addEventListener('click', function () {}, false);
+      this.addNewListBtn.addEventListener('click', function () {
+        var lik = document.createElement('lik');
+        lik.innerHTML = _this.newToDoListName.value;
+        _this.listTasks.appendChild(lik);
+        _this.newToDoListName.value = '';
+      }, false);
       this.clearListName.addEventListener('click', function () {
         _this.newToDoListName.value = '';
         _this.clearListName.classList.add('d_none');
@@ -122,10 +130,10 @@ var Header = function () {
     }
   }]);
 
-  return Header;
+  return App;
 }();
 
-var header = new Header('header');
+var header = new App('header');
 console.log(header);
 
 var ToDoList = function () {
@@ -372,7 +380,8 @@ var ToDoList = function () {
 // let list1 = new ToDoList('list1');
 
 /***/ }),
-/* 1 */
+
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -397,5 +406,6 @@ var cElem = exports.cElem = function cElem(elem) {
 };
 
 /***/ })
-/******/ ]);
+
+/******/ });
 //# sourceMappingURL=out.js.map

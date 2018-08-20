@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "webW": "webpack --watch",
-    "startW":"webpack-dev-server"
+    "startW": "webpack-dev-server"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +19,8 @@
     "browser-sync": "^2.18.13",
     "browser-sync-webpack-plugin": "^1.2.0",
     "webpack-dev-server": "^1.9.0"
+  },
+  "dependencies": {
+    "handlebars": "^4.0.11"
   }
 }
