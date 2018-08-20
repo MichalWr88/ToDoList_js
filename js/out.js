@@ -111,11 +111,13 @@ var Header = function () {
         _this.boardsList.classList.toggle('h-0');
       }, false);
       this.newToDoListName.addEventListener('input', function () {
+        _this.newToDoListName.value.length ? clearListName.classList.remove('d_none') : clearListName.classList.add('d_none');
         console.log(_this.newToDoListName.value);
       }, false);
       this.addNewListBtn.addEventListener('click', function () {}, false);
       this.clearListName.addEventListener('click', function () {
         _this.newToDoListName.value = '';
+        _this.clearListName.classList.add('d_none');
       }, false);
     }
   }]);

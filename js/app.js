@@ -27,11 +27,13 @@ class Header {
       false
     );
     this.newToDoListName.addEventListener('input',() => {
+      this.newToDoListName.value.length ? clearListName.classList.remove('d_none') : clearListName.classList.add('d_none')
       console.log(this.newToDoListName.value);
     }, false);
     this.addNewListBtn.addEventListener('click',() => {}, false);
     this.clearListName.addEventListener('click',() => {
       this.newToDoListName.value ='';
+      this.clearListName.classList.add('d_none');
     }, false);
   }
 }

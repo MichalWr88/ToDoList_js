@@ -97,12 +97,20 @@ body {
   list-style-type: none;
   padding: 0;
 }
-.row{
-display:flex;
-
+.row {
+  display: flex;
 }
-.f_1{
-  flex:1 1 auto;
+.d_columns{
+  flex-direction: column;
+}
+.d_none {
+  display: none;
+}
+.f_1 {
+  flex: 1 1 auto;
+}
+.f_jsa{
+  justify-content: space-around
 }
 .input {
   border-radius: 5px;
@@ -131,7 +139,6 @@ input:invalid {
   position: relative;
 }
 .header__btn {
-
 }
 .header__listsName {
   position: absolute;
@@ -141,17 +148,16 @@ input:invalid {
   padding: 10px 20px;
   background-color: #232730;
   border-bottom-right-radius: 10px;
-  transition: all .5s ease-in-out;
-  overflow:hidden;
+  transition: all 0.5s ease-in-out;
+  overflow: hidden;
 }
-.h-0{
-  height:0;
-  padding:0;
+.h-0 {
+  height: 0;
+  padding: 0;
 }
 .listsName__elem {
   padding: 5px 0;
 }
-
 /* add box list */
 .header__addListBox {
   flex: 2;
@@ -166,6 +172,7 @@ input:invalid {
 }
 .addList__input {
   height: 25px;
+
   color: white;
   min-width: 300px;
 }
@@ -211,13 +218,14 @@ input:invalid {
 /* --------------------------------- */
 /* ELEMENT TASK */
 .listToDo {
-  min-width: 300px; /* background-color: #7ebde2; */
+  min-width: 350px;
+  /* background-color: #7ebde2; */
   box-shadow: 0px 10px 50px -5px rgba(0, 0, 0, 0.76);
   padding: 10px;
   border-radius: 10px;
   background: #fafafa;
-   overflow: hidden;
-   margin:10px 30px;
+  overflow: hidden;
+  margin: 10px 30px;
 }
 .listToDo__header {
   background-color: #dee0e4;
@@ -225,21 +233,20 @@ input:invalid {
   padding: 30px 10px 10px 10px;
   position: relative;
   color: #dee0e4;
-
   box-sizing: border-box; /* width:100%; */
 }
 .listToDo__name {
   background-color: #4d679e;
-  position:absolute;
-  top:10px;
+  position: absolute;
+  top: 10px;
   width: 100%;
   height: 25px;
   margin: -10px;
-  box-shadow: 0px 10px 5px -20px  rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 10px 5px -20px rgba(0, 0, 0, 0.5);
   border: none;
   border-radius: 2px;
-  color:white;
-  text-transform:uppercase;
+  color: white;
+  text-transform: uppercase;
 }
 .listToDo__add {
   background-color: #4d679e;
@@ -257,54 +264,61 @@ input:invalid {
 .listToDo__task {
   background-color: #ffffff;
   border-radius: 20px;
-  font-size:16px;
+  font-size: 16px;
   margin: 10px 0;
   padding: 5px 0;
-  display:flex;
-  overflow:hidden;
+
+  display: flex;
+  overflow: hidden;
   justify-content: space-around;
-  flex-wrap:nowrap;
+  flex-wrap: nowrap;
   color: #4d679e;
   box-shadow: 0px 5px 30px -5px rgba(0, 0, 0, 0.3);
 }
-.listToDo__task:hover .task__btn-dell{
-    transform:translateX(0);
-} 
-
-.listToDo__text{
-  color:green;
+.listToDo__task:hover .task__btn-dell {
+  transform: translateX(0);
 }
-.task__btn{
-    font-size:15px;
-    margin:0;
-    width: 25px;
-    height:25px;
-    padding:0;
+.task__details{
+  transform:translateY(110%);
+  height:0;
+  padding:5px 0;
+  display: hidden;
 }
-.task__btn-check{
-    border:2px solid;
-    overflow:hidden;
+.listToDo__task:hover .task__details{
+  transform:translateY(0);
+  height:auto;
 }
-[data-complete=false]> .task__complete{
-    /* transform:perspective(2); */
-    /* transform:translateY(0px); */
-    transform:rotate(55deg);
-    /* transform:skew(-20deg,30deg); */
-    transform:scale(0.1);
+.listToDo__text {
+  color: green;
 }
-.task__btn-dell{
-color:red;
-font-weight: bold;
-transition: all .3s ease-in-out;
-transform:translateX(100%);
+.task__btn {
+  font-size: 15px;
+  margin: 0;
+  width: 25px;
+  height: 25px;
+  padding: 0;
 }
-.task__name{
-    /* max-width:100%; */
-    flex:2;
-    margin:0 5px;
-    border:none;
+.task__btn-check {
+  border: 2px solid;
+  overflow: hidden;
 }
-
+[data-complete='false'] > .task__complete {
+  /* transform:perspective(2); */ /* transform:translateY(0px); */
+  transform: rotate(55deg); /* transform:skew(-20deg,30deg); */
+  transform: scale(0.1);
+}
+.task__btn-dell {
+  color: red;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+  transform: translateX(100%);
+}
+.task__name {
+  /* max-width:100%; */
+  flex: 2;
+  margin: 0 5px;
+  border: none;
+}
 /* #4d679e #DEE0E4;
 .toDoList {
   margin: 20px auto;
@@ -474,12 +488,10 @@ transform:translateX(100%);
 
   box-shadow: 0px 0px 40px 2px grey;
 } */
-
-
-
-
-
-.page__footer{
-    display: flex;
-    justify-content: center;
+.page__footer {
+  display: flex;
+  justify-content: center;
+  background-color: #232730;
+  padding: 10px;
+  color: #b1b4b5;
 }
