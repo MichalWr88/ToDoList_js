@@ -152,6 +152,7 @@
   <footer class="page__footer">
     <small>Michał Maleszewski 2018</small>
   </footer>
+  
   <script id="list-template" type="text/x-handlebars-template">
 
       <li class="listToDo" id=`list {{id}}`>
@@ -234,6 +235,36 @@
 
 
   </script>
+    <script id="task-template" type="text/x-handlebars-template">
+      <li class="listToDo__task">
+        <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
+          <i class="ion-checkmark-round task__complete">
+          </i>
+        </button>
+        <div class="row d_columns f_1">
+          <input type="text" class="task__name" value=`{{taskName}}`>
+          <div class="row f_jsa task__details">
+            <div class="row d_columns">
+              <small>create task: {{createDate}}</small>
+              <small>last update: {{updateDate}}</small>
+            </div>
+            <div>
+              <small for="priority-select">Priority:</small>
+              <select id="priority-select">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <button class="btn task__btn task__btn-dell" title="button add item">
+          <i class="ion-close-round"></i>
+        </button>
+      </li>
+      </script>
   <script src="js/out.js"></script>
 </body>
 

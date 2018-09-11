@@ -60,12 +60,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 6:
+/******/ ([
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -74,7 +73,7 @@
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*jshint esversion: 6 */
 
 
-var _global = __webpack_require__(7);
+var _global = __webpack_require__(1);
 
 var _glob = _interopRequireWildcard(_global);
 
@@ -84,304 +83,325 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var addListBtn = _glob.cElem('.btn', true);
 // console.log(addListBtn);
-var source = document.getElementById("list-template").innerHTML,
-    template = Handlebars.compile(source);
+var source = document.getElementById('list-template').innerHTML,
+    templateList = Handlebars.compile(source);
+
 var add = document.querySelector('.addList__addBtn'),
     body = document.querySelector('body'),
     indexList = 1;
 console.log(add);
 
 var App = function () {
-  function App(id) {
-    _classCallCheck(this, App);
+	function App(id) {
+		_classCallCheck(this, App);
 
-    this.box = document.getElementById(id);
-    this.boardsBtn = this.box.querySelector('#boardsBtn');
-    this.boardsList = this.box.querySelector('#boardsList');
-    this.newToDoListName = this.box.querySelector('#listName');
-    this.addNewListBtn = this.box.querySelector('#addNewList');
-    this.clearListName = this.box.querySelector('#clearListName');
-    this.listTasks = _glob.cElem('.list__tasks');
-    this.initEvents();
-  }
+		this.box = document.getElementById(id);
+		this.boardsBtn = this.box.querySelector('#boardsBtn');
+		this.boardsList = this.box.querySelector('#boardsList');
+		this.newToDoListName = this.box.querySelector('#listName');
+		this.addNewListBtn = this.box.querySelector('#addNewList');
+		this.clearListName = this.box.querySelector('#clearListName');
+		this.listTasks = _glob.cElem('.list__tasks');
+		this.initEvents();
+	}
 
-  _createClass(App, [{
-    key: 'initEvents',
-    value: function initEvents() {
-      var _this = this;
+	_createClass(App, [{
+		key: 'initEvents',
+		value: function initEvents() {
+			var _this = this;
 
-      this.boardsBtn.addEventListener('click', function (e) {
-        _this.boardsList.classList.toggle('h-0');
-      }, false);
-      this.newToDoListName.addEventListener('input', function () {
-        _this.newToDoListName.value.length ? clearListName.classList.remove('d_none') : clearListName.classList.add('d_none');
-        console.log(_this.newToDoListName.value);
-      }, false);
-      this.addNewListBtn.addEventListener('click', function () {
-        var lik = document.createElement('lik');
-        lik.innerHTML = _this.newToDoListName.value;
-        _this.listTasks.appendChild(lik);
-        _this.newToDoListName.value = '';
-      }, false);
-      this.clearListName.addEventListener('click', function () {
-        _this.newToDoListName.value = '';
-        _this.clearListName.classList.add('d_none');
-      }, false);
-    }
-  }]);
+			this.boardsBtn.addEventListener('click', function (e) {
+				_this.boardsList.classList.toggle('h-0');
+			}, false);
+			this.newToDoListName.addEventListener('keyup', function (e) {
+				_this.newToDoListName.value.trim().length ? clearListName.classList.remove('d_none') : clearListName.classList.add('d_none');
+				if (e.keyCode === 13) {
+					_this.addNewList();
+				}
+			}, false);
+			this.addNewListBtn.addEventListener('click', function () {
+				_this.addNewList();
+			}, false);
+			this.clearListName.addEventListener('click', function () {
+				_this.newToDoListName.value = '';
+				_this.clearListName.classList.add('d_none');
+			}, false);
+		}
+	}, {
+		key: 'addNewList',
+		value: function addNewList() {
+			var html = templateList({ id: 1, taskName: this.newToDoListName.value });
+			console.log(html);
+			var lik = document.createElement('li');
+			var lik2 = lik.cloneNode(true);
+			lik2.innerHTML = this.newToDoListName.value;
+			lik2.className = 'listsName__elem';
+			this.boardsList.appendChild(lik2);
+			lik.innerHTML = html;
+			this.listTasks.appendChild(lik);
+			this.newToDoListName.value = '';
+		}
+	}]);
 
-  return App;
+	return App;
 }();
 
 var header = new App('header');
 console.log(header);
 
 var ToDoList = function () {
-  function ToDoList(id) {
-    _classCallCheck(this, ToDoList);
+	function ToDoList(id) {
+		_classCallCheck(this, ToDoList);
 
-    this.box = document.getElementById(id);
-    this.nameInp = this.box.getElementsByClassName('listToDo__name')[0];
-    this.newTaskInp = this.box.querySelector('.toDoList__newTask');
-    this.addBtn = this.box.querySelector('.toDoList__add');
-    this.listNode = this.box.querySelector('.toDoList__container');
-    this.countAll = this.box.querySelector('.toDoList__allCount');
-    this.countChecked = this.box.querySelector('.toDoList__chekedCount');
-    // -----------------------------------
-    this.id = id;
-    this.list = [];
-    this.countTask = 0;
-    this.checked = null;
-    // this.name = this.nameInp.value;
+		this.box = document.getElementById(id);
+		this.nameInp = this.box.querySelector('.listToDo__name');
+		this.newTaskInp = this.box.querySelector('.listToDo__newTask');
+		this.addBtn = this.box.querySelector('.listToDo__add');
+		this.listNode = this.box.querySelector('.listToDo__container');
+		this.countAll = this.box.querySelector('.listToDo__allCount');
+		this.countChecked = this.box.querySelector('.listToDo__chekedCount');
+		// -----------------------------------
+		this.id = id;
+		this.list = [];
+		this.countTask = 0;
+		this.checked = null;
+		// this.name = this.nameInp.value;
 
-    //------------------
-    this.initList();
-    // this.initLocalStorage();
-    // this.initEvent();
-  }
+		//------------------
+		this.initList();
+		// this.initLocalStorage();
+		this.initEvent();
+	}
 
-  _createClass(ToDoList, [{
-    key: 'initList',
-    value: function initList() {
-      this.countAll.innerHTML = this.countTask;
-    }
-  }, {
-    key: 'initLocalStorage',
-    value: function initLocalStorage() {
-      var _this2 = this;
+	_createClass(ToDoList, [{
+		key: 'initList',
+		value: function initList() {
+			this.countAll.innerHTML = this.countTask;
+		}
+	}, {
+		key: 'initLocalStorage',
+		value: function initLocalStorage() {
+			var _this2 = this;
 
-      var local = JSON.parse(localStorage.getItem(this.id));
-      if (local === null) {
-        localStorage.setItem(this.id, JSON.stringify(this.list));
-      } else {
-        this.list = JSON.parse(localStorage.getItem(this.id));
-        console.log(this.list);
-        this.countTask = this.list.length;
-        this.countAll.innerHTML = this.countTask;
-        this.list.forEach(function (elem, index) {
-          var Task = _this2.createLik(elem.text, elem.date, elem.checked);
-          _this2.listNode.appendChild(Task.lik);
-        });
-      }
-    }
-  }, {
-    key: 'updateCheckedTask',
-    value: function updateCheckedTask() {
-      var count = 0;
-      var array = this.list.filter(function (elem) {
-        return elem.checked === true;
-      });
-      this.checked = array.length;
-      this.countChecked.textContent = this.checked;
-    }
-  }, {
-    key: 'sortList',
-    value: function sortList() {
-      this.list.sort(function (a, b) {
-        var AA = a.checked === true ? 1 : 0;
-        console.log(AA);
-        var BB = b.checked === true ? 1 : 0;
-        // console.log(BB);
+			var local = JSON.parse(localStorage.getItem(this.id));
+			if (local === null) {
+				localStorage.setItem(this.id, JSON.stringify(this.list));
+			} else {
+				this.list = JSON.parse(localStorage.getItem(this.id));
+				console.log(this.list);
+				this.countTask = this.list.length;
+				this.countAll.innerHTML = this.countTask;
+				this.list.forEach(function (elem, index) {
+					var Task = _this2.createLik(elem.text, elem.date, elem.checked);
+					_this2.listNode.appendChild(Task.lik);
+				});
+			}
+		}
+	}, {
+		key: 'updateCheckedTask',
+		value: function updateCheckedTask() {
+			var count = 0;
+			var array = this.list.filter(function (elem) {
+				return elem.checked === true;
+			});
+			this.checked = array.length;
+			this.countChecked.textContent = this.checked;
+		}
+	}, {
+		key: 'sortList',
+		value: function sortList() {
+			this.list.sort(function (a, b) {
+				var AA = a.checked === true ? 1 : 0;
+				console.log(AA);
+				var BB = b.checked === true ? 1 : 0;
+				// console.log(BB);
 
-        return AA - BB;
-      });
-      localStorage.setItem(this.id, JSON.stringify(this.list));
-    }
-  }, {
-    key: 'createLik',
-    value: function createLik(name, dat, check) {
-      var _this3 = this;
+				return AA - BB;
+			});
+			localStorage.setItem(this.id, JSON.stringify(this.list));
+		}
+	}, {
+		key: 'createLik',
+		value: function createLik(name, dat, check) {
+			var _this3 = this;
 
-      var date = '',
-          day = '',
-          month = '',
-          year = '';
-      if (!dat) {
-        date = new Date(), day = date.getDate(), month = date.getMonth() + 1, year = date.getFullYear();
-        console.log(date);
-      } else {
-        var txt = dat.split('.');
-        console.log(txt);
-        day = txt[0], month = txt[1], year = txt[2];
-      }
+			var date = '',
+			    day = '',
+			    month = '',
+			    year = '';
+			if (!dat) {
+				date = new Date(), day = date.getDate(), month = date.getMonth() + 1, year = date.getFullYear();
+				console.log(date);
+			} else {
+				var txt = dat.split('.');
+				console.log(txt);
+				day = txt[0], month = txt[1], year = txt[2];
+			}
 
-      // ----------------------------------------------------------
-      var lik = document.createElement('li');
-      lik.className = 'toDoList__task';
+			// ----------------------------------------------------------
+			var lik = document.createElement('li');
+			lik.className = 'listToDo__task';
 
-      // ---------------------------------------------------------------
-      var priority = document.createElement('select');
-      priority.className = 'task_priority';
-      for (var i = 0; i <= 5; i++) {
-        var opt = document.createElement('option');
-        opt.value = i;
-        opt.innerHTML = i;
-        priority.appendChild(opt);
-      }
+			// ---------------------------------------------------------------
+			var priority = document.createElement('select');
+			priority.className = 'task_priority';
+			for (var i = 0; i <= 5; i++) {
+				var opt = document.createElement('option');
+				opt.value = i;
+				opt.innerHTML = i;
+				priority.appendChild(opt);
+			}
 
-      // -----------------------------------------------------------------
+			// -----------------------------------------------------------------
 
-      var nameInp = document.createElement('h3');
-      nameInp.className = 'task__name';
-      nameInp.setAttribute('contenteditable', 'true');
-      nameInp.textContent = name;
-      // -------------------------------------------------------------------
-      var labelP = document.createElement('label');
-      labelP.className = 'task__label';
-      labelP.textContent = 'priority';
-      console.log(day);
-      var dateTask = document.createElement('p');
-      dateTask.className = 'task__date';
-      dateTask.textContent = 'create: ' + day + '.' + month + '.' + year;
+			var nameInp = document.createElement('h3');
+			nameInp.className = 'task__name';
+			nameInp.setAttribute('contenteditable', 'true');
+			nameInp.textContent = name;
+			// -------------------------------------------------------------------
+			var labelP = document.createElement('label');
+			labelP.className = 'task__label';
+			labelP.textContent = 'priority';
+			console.log(day);
+			var dateTask = document.createElement('p');
+			dateTask.className = 'task__date';
+			dateTask.textContent = 'create: ' + day + '.' + month + '.' + year;
 
-      var delBtn = document.createElement('button');
-      delBtn.className = 'ion-close-round btn task__delete';
-      delBtn.addEventListener('click', function (e) {
-        e.target.parentNode.remove(e.target.parentNode);
-        _this3.list = _this3.list.filter(function (elem) {
-          if (elem.text !== name) {
-            return elem;
-          }
-        });
-        localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
-        _this3.countTask = _this3.list.length;
-        _this3.countAll.innerHTML = _this3.countTask;
-      }, false);
-      // --------------------------------------------------------------
-      var checkBtn = document.createElement('button');
-      checkBtn.className = 'ion-checkmark-round btn task__check';
-      checkBtn.addEventListener('click', function () {
-        labelP.classList.toggle('blured');
-        nameInp.classList.toggle('checked');
-        nameInp.setAttribute('disabled', true);
-        if (data.checked === false) {
-          data.checked = true;
-          _this3.list.map(function (elem) {
-            if (elem.text === data.text) {
-              elem.checked = true;
-            }
-          });
-          // this.list.push(Task.data);
-          localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
-        } else {
-          data.checked = false;
-          _this3.list.map(function (elem) {
-            if (elem.text === data.text) {
-              elem.checked = false;
-            }
-          });
-          // this.list.push(Task.data);
-          localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
-        }
-        _this3.updateCheckedTask();
-        _this3.sortList();
-      }, false);
-      // ---------------------------------------------------------------------------
-      //
-      var count = this.list.length + 1;
-      // create object with task prop
-      var data = {
-        id: count,
-        text: name,
-        checked: '',
-        priority: 0,
-        date: day + '.' + month + '.' + year
-      };
-      if (check === undefined) {
-        data.checked = false;
-      } else {
-        data.checked = check;
-      }
-      labelP.append(priority);
-      lik.append(checkBtn);
-      lik.append(nameInp);
-      lik.append(delBtn);
-      lik.append(labelP);
-      lik.append(dateTask);
-      console.log(data.checked);
-      if (data.checked === true) {
-        labelP.classList.toggle('blured');
-        nameInp.classList.toggle('checked');
-        nameInp.setAttribute('disabled', true);
-      }
-      this.updateCheckedTask();
-      return { lik: lik, data: data };
-    }
-  }, {
-    key: 'initTask',
-    value: function initTask(name) {
-      createLik(name);
-      this.list.push(Task.data);
-      localStorage.setItem(this.id, JSON.stringify(this.list));
+			var delBtn = document.createElement('button');
+			delBtn.className = 'ion-close-round btn task__delete';
+			delBtn.addEventListener('click', function (e) {
+				e.target.parentNode.remove(e.target.parentNode);
+				_this3.list = _this3.list.filter(function (elem) {
+					if (elem.text !== name) {
+						return elem;
+					}
+				});
+				localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
+				_this3.countTask = _this3.list.length;
+				_this3.countAll.innerHTML = _this3.countTask;
+			}, false);
+			// --------------------------------------------------------------
+			var checkBtn = document.createElement('button');
+			checkBtn.className = 'ion-checkmark-round btn task__check';
+			checkBtn.addEventListener('click', function () {
+				labelP.classList.toggle('blured');
+				nameInp.classList.toggle('checked');
+				nameInp.setAttribute('disabled', true);
+				if (data.checked === false) {
+					data.checked = true;
+					_this3.list.map(function (elem) {
+						if (elem.text === data.text) {
+							elem.checked = true;
+						}
+					});
+					// this.list.push(Task.data);
+					localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
+				} else {
+					data.checked = false;
+					_this3.list.map(function (elem) {
+						if (elem.text === data.text) {
+							elem.checked = false;
+						}
+					});
+					// this.list.push(Task.data);
+					localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
+				}
+				_this3.updateCheckedTask();
+				_this3.sortList();
+			}, false);
+			// ---------------------------------------------------------------------------
+			//
+			var count = this.list.length + 1;
+			// create object with task prop
+			var data = {
+				id: count,
+				text: name,
+				checked: '',
+				priority: 0,
+				date: day + '.' + month + '.' + year
+			};
+			if (check === undefined) {
+				data.checked = false;
+			} else {
+				data.checked = check;
+			}
+			labelP.append(priority);
+			lik.append(checkBtn);
+			lik.append(nameInp);
+			lik.append(delBtn);
+			lik.append(labelP);
+			lik.append(dateTask);
+			console.log(data.checked);
+			if (data.checked === true) {
+				labelP.classList.toggle('blured');
+				nameInp.classList.toggle('checked');
+				nameInp.setAttribute('disabled', true);
+			}
+			this.updateCheckedTask();
+			return { lik: lik, data: data };
+		}
+	}, {
+		key: 'initTask',
+		value: function initTask(name) {
+			createLik(name);
+			this.list.push(Task.data);
+			localStorage.setItem(this.id, JSON.stringify(this.list));
 
-      // var storedNames = JSON.parse(localStorage.getItem(this.id));
+			// var storedNames = JSON.parse(localStorage.getItem(this.id));
 
-      // ------------------------------------------------------------------
-    }
-  }, {
-    key: 'initEvent',
-    value: function initEvent() {
-      var _this4 = this;
+			// ------------------------------------------------------------------
+		}
+	}, {
+		key: 'initEvent',
+		value: function initEvent() {
+			var _this4 = this;
 
-      // change input name List
-      this.nameInp.addEventListener('blur', function (e) {
-        _this4.name = e.target.value.trim();
-      }, false);
+			// change input name List
+			this.nameInp.addEventListener('blur', function (e) {
+				_this4.name = e.target.value.trim();
+			}, false);
 
-      // add Task
-      this.addBtn.addEventListener('click', function () {
-        var Task = _this4.createLik(_this4.newTaskInp.value.trim());
-        _this4.listNode.appendChild(Task.lik);
-        _this4.list.push(Task.data);
-        _this4.countTask++;
-        _this4.countAll.innerHTML = _this4.countTask;
-        localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
-        _this4.newTaskInp.value = '';
-      }, false);
-      // ===================================================
-      this.newTaskInp.addEventListener('keydown', function (e) {
-        if (e.keyCode === 13) {
-          var _Task = _this4.createLik(_this4.newTaskInp.value.trim());
-          _this4.listNode.appendChild(_Task.lik);
-          _this4.list.push(_Task.data);
-          _this4.countTask++;
-          _this4.countAll.innerHTML = _this4.countTask;
-          localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
-          _this4.newTaskInp.value = '';
-        }
-      }, false);
-      // ===================================================
-    }
-  }]);
+			// add Task
+			this.addBtn.addEventListener('click', function () {
+				var Task = _this4.createLik(_this4.newTaskInp.value.trim());
+				_this4.listNode.appendChild(Task.lik);
+				_this4.list.push(Task.data);
+				_this4.countTask++;
+				_this4.countAll.innerHTML = _this4.countTask;
+				localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
+				_this4.newTaskInp.value = '';
+			}, false);
+			// ===================================================
+			this.newTaskInp.addEventListener('keydown', function (e) {
+				if (e.keyCode === 13) {
+					var _Task = _this4.createLik(_this4.newTaskInp.value.trim());
+					_this4.listNode.appendChild(_Task.lik);
+					_this4.list.push(_Task.data);
+					_this4.countTask++;
+					_this4.countAll.innerHTML = _this4.countTask;
+					localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
+					_this4.newTaskInp.value = '';
+				}
+			}, false);
+			// ===================================================
+		}
+	}]);
 
-  return ToDoList;
+	return ToDoList;
 }();
 
-// let list1 = new ToDoList('list1');
+var Task = function Task(id) {
+	_classCallCheck(this, Task);
+
+	this.id = id;
+	this.templateTask = document.getElementById('task-template').innerHTML;
+	this.lik = Handlebars.compile(templateTask);
+};
+
+var list1 = new ToDoList('list1');
 
 /***/ }),
-
-/***/ 7:
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -406,6 +426,5 @@ var cElem = exports.cElem = function cElem(elem) {
 };
 
 /***/ })
-
-/******/ });
+/******/ ]);
 //# sourceMappingURL=out.js.map

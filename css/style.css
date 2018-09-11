@@ -150,6 +150,8 @@ input:invalid {
   border-bottom-right-radius: 10px;
   transition: all 0.5s ease-in-out;
   overflow: hidden;
+  height: auto;
+  z-index: 3;
 }
 .h-0 {
   height: 0;
