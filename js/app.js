@@ -3,8 +3,8 @@ import * as _glob from './global';
 const addListBtn = _glob.cElem('.btn', true);
 // console.log(addListBtn);
 const source = document.getElementById('list-template').innerHTML,
-  templateList = Handlebars.compile(source);
-  
+	templateList = Handlebars.compile(source);
+
 let add = document.querySelector('.addList__addBtn'),
 	body = document.querySelector('body'),
 	indexList = 1;
@@ -19,24 +19,26 @@ class App {
 		this.addNewListBtn = this.box.querySelector('#addNewList');
 		this.clearListName = this.box.querySelector('#clearListName');
 		this.listTasks = _glob.cElem('.list__tasks');
+		this.li = document.createElement('li');
+		this.index = 1;
 		this.initEvents();
 	}
 
 	initEvents() {
-    this.boardsBtn.addEventListener(
-      'click',
-      e => {
-        this.boardsList.classList.toggle('h-0');
-      },
-      false
-    );
+		this.boardsBtn.addEventListener(
+			'click',
+			e => {
+				this.boardsList.classList.toggle('h-0');
+			},
+			false
+		);
 		this.newToDoListName.addEventListener(
 			'keyup',
-			(e) => {
-        this.newToDoListName.value.trim().length ? clearListName.classList.remove('d_none') : clearListName.classList.add('d_none') ;
-        if(e.keyCode === 13 ){
-          this.addNewList();
-        }
+			e => {
+				this.newToDoListName.value.trim().length ? clearListName.classList.remove('d_none') : clearListName.classList.add('d_none');
+				if (e.keyCode === 13) {
+					this.addNewList();
+				}
 			},
 			false
 		);
@@ -57,17 +59,24 @@ class App {
 		);
 	}
 	addNewList() {
-    const html = templateList({ id: 1, taskName: this.newToDoListName.value});
-    console.log(html);
-		const lik = document.createElement('li');
-    const lik2 = lik.cloneNode(true);
-    lik2.innerHTML = this.newToDoListName.value;
-    lik2.className = 'listsName__elem';
-    this.boardsList.appendChild(lik2);
-    lik.innerHTML = html;
-		this.listTasks.appendChild(lik);
+		const id = `l${this.index}`;
+		this.index++;
+		const html = templateList({ taskName: this.newToDoListName.value });
+		const listLi = this.li.cloneNode(true);
+		const boardsLi = this.li.cloneNode(true);
+		boardsLi.innerHTML = this.newToDoListName.value;
+		boardsLi.className = 'listsName__elem';
+		this.boardsList.appendChild(boardsLi);
+		listLi.className = 'listToDo';
+		listLi.setAttribute('id', id);
+		listLi.innerHTML = html;
+		this.listTasks.appendChild(listLi);
+		const list = new ToDoList(id);
 		this.newToDoListName.value = '';
-	}
+  }
+  createListElem(id){
+
+  }
 }
 
 const header = new App('header');
@@ -76,12 +85,12 @@ console.log(header);
 class ToDoList {
 	constructor(id) {
 		this.box = document.getElementById(id);
-    this.nameInp = this.box.querySelector('.listToDo__name');
-    this.newTaskInp = this.box.querySelector('.listToDo__newTask');
-    this.addBtn = this.box.querySelector('.listToDo__add');
-    this.listNode = this.box.querySelector('.listToDo__container');
-    this.countAll = this.box.querySelector('.listToDo__allCount');
-    this.countChecked = this.box.querySelector('.listToDo__chekedCount');
+		this.nameInp = this.box.querySelector('.listToDo__name');
+		this.newTaskInp = this.box.querySelector('.listToDo__newTask');
+		this.addBtn = this.box.querySelector('.listToDo__add');
+		this.listNode = this.box.querySelector('.listToDo__container');
+		this.countAll = this.box.querySelector('.listToDo__allCount');
+		this.countChecked = this.box.querySelector('.listToDo__chekedCount');
 		// -----------------------------------
 		this.id = id;
 		this.list = [];
@@ -149,7 +158,7 @@ class ToDoList {
 
 		// ----------------------------------------------------------
 		const lik = document.createElement('li');
-    lik.className = 'listToDo__task';
+		lik.className = 'listToDo__task';
 
 		// ---------------------------------------------------------------
 		let priority = document.createElement('select');
@@ -282,16 +291,16 @@ class ToDoList {
 		this.addBtn.addEventListener(
 			'click',
 			() => {
-        const templateTask = document.getElementById('task-template').innerHTML;
-        const likHtml = Handlebars.compile(templateTask);
-        const html = likHtml({ id: 1, taskName: this.newTaskInp.value.trim(), createDate: new Date().toDateString()});
+				const templateTask = document.getElementById('task-template').innerHTML;
+				const likHtml = Handlebars.compile(templateTask);
+				const html = likHtml({ id: 1, taskName: this.newTaskInp.value.trim(), createDate: new Date().toDateString() });
 
-        console.log(likHtml);
-const lik = document.createElement('li');
-        lik.className = 'listToDo__task';
-lik.innerHTML = html;
+				console.log(likHtml);
+				const lik = document.createElement('li');
+				lik.className = 'listToDo__task';
+				lik.innerHTML = html;
 				const Task = this.createLik(this.newTaskInp.value.trim());
-        this.listNode.appendChild(lik);
+				this.listNode.appendChild(lik);
 				this.list.push(Task.data);
 				this.countTask++;
 				this.countAll.innerHTML = this.countTask;
@@ -320,14 +329,11 @@ lik.innerHTML = html;
 	}
 }
 class Task {
-  constructor(id){
-this.id = id;
-    this.templateTask = document.getElementById('task-template').innerHTML;
-    this.lik = Handlebars.compile(templateTask);
-
-
-  }
-
+	constructor(id) {
+		this.id = id;
+		this.templateTask = document.getElementById('task-template').innerHTML;
+		this.lik = Handlebars.compile(templateTask);
+	}
 }
 
 let list1 = new ToDoList('list1');

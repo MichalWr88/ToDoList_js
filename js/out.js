@@ -102,6 +102,8 @@ var App = function () {
 		this.addNewListBtn = this.box.querySelector('#addNewList');
 		this.clearListName = this.box.querySelector('#clearListName');
 		this.listTasks = _glob.cElem('.list__tasks');
+		this.li = document.createElement('li');
+		this.index = 1;
 		this.initEvents();
 	}
 
@@ -130,17 +132,24 @@ var App = function () {
 	}, {
 		key: 'addNewList',
 		value: function addNewList() {
-			var html = templateList({ id: 1, taskName: this.newToDoListName.value });
-			console.log(html);
-			var lik = document.createElement('li');
-			var lik2 = lik.cloneNode(true);
-			lik2.innerHTML = this.newToDoListName.value;
-			lik2.className = 'listsName__elem';
-			this.boardsList.appendChild(lik2);
-			lik.innerHTML = html;
-			this.listTasks.appendChild(lik);
+			var id = 'l' + this.index;
+			this.index++;
+			var html = templateList({ taskName: this.newToDoListName.value });
+			var listLi = this.li.cloneNode(true);
+			var boardsLi = this.li.cloneNode(true);
+			boardsLi.innerHTML = this.newToDoListName.value;
+			boardsLi.className = 'listsName__elem';
+			this.boardsList.appendChild(boardsLi);
+			listLi.className = 'listToDo';
+			listLi.setAttribute('id', id);
+			listLi.innerHTML = html;
+			this.listTasks.appendChild(listLi);
+			var list = new ToDoList(id);
 			this.newToDoListName.value = '';
 		}
+	}, {
+		key: 'createListElem',
+		value: function createListElem(id) {}
 	}]);
 
 	return App;

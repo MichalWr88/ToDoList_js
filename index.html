@@ -155,7 +155,7 @@
   
   <script id="list-template" type="text/x-handlebars-template">
 
-      <li class="listToDo" id=`list {{id}}`>
+      <!-- <li class="listToDo" id=`list {{id}}`> -->
         <!-- header list -->
         <div class="listToDo__header">
           <input class="input listToDo__name" type="text" name="listName" value="{{taskName}}" required>
@@ -184,7 +184,6 @@
               <div class="row f_jsa task__details">
                 <div class="row d_columns">
                   <small>create task: 02.12.2018 , 12:12</small>
-                  <small>last update: 02.12.2018 , 12:12</small>
                 </div>
                 <div>
                   <small for="priority-select">Priority:</small>
@@ -231,10 +230,9 @@
             </button>
           </li>
         </ul>
-      </li>
-
-
+      <!-- </li> -->
   </script>
+
     <script id="task-template" type="text/x-handlebars-template">
       <!-- <li class="listToDo__task"> -->
         <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
@@ -245,8 +243,7 @@
           <input type="text" class="task__name" value={{taskName}}>
           <div class="row f_jsa task__details">
             <div class="row d_columns">
-              <small>create task: {{createDate}}</small>
-              <small>last update: {{updateDate}}</small>
+              <small>{{createDate}}</small>
             </div>
             <div>
               <small for="priority-select">Priority:</small>
