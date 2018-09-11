@@ -282,8 +282,16 @@ class ToDoList {
 		this.addBtn.addEventListener(
 			'click',
 			() => {
+        const templateTask = document.getElementById('task-template').innerHTML;
+        const likHtml = Handlebars.compile(templateTask);
+        const html = likHtml({ id: 1, taskName: this.newTaskInp.value.trim(), createDate: new Date().toDateString()});
+
+        console.log(likHtml);
+const lik = document.createElement('li');
+        lik.className = 'listToDo__task';
+lik.innerHTML = html;
 				const Task = this.createLik(this.newTaskInp.value.trim());
-				this.listNode.appendChild(Task.lik);
+        this.listNode.appendChild(lik);
 				this.list.push(Task.data);
 				this.countTask++;
 				this.countAll.innerHTML = this.countTask;

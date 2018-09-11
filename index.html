@@ -236,13 +236,13 @@
 
   </script>
     <script id="task-template" type="text/x-handlebars-template">
-      <li class="listToDo__task">
+      <!-- <li class="listToDo__task"> -->
         <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
           <i class="ion-checkmark-round task__complete">
           </i>
         </button>
         <div class="row d_columns f_1">
-          <input type="text" class="task__name" value=`{{taskName}}`>
+          <input type="text" class="task__name" value={{taskName}}>
           <div class="row f_jsa task__details">
             <div class="row d_columns">
               <small>create task: {{createDate}}</small>
@@ -263,7 +263,7 @@
         <button class="btn task__btn task__btn-dell" title="button add item">
           <i class="ion-close-round"></i>
         </button>
-      </li>
+      <!-- </li> -->
       </script>
   <script src="js/out.js"></script>
 </body>

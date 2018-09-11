@@ -363,8 +363,16 @@ var ToDoList = function () {
 
 			// add Task
 			this.addBtn.addEventListener('click', function () {
+				var templateTask = document.getElementById('task-template').innerHTML;
+				var likHtml = Handlebars.compile(templateTask);
+				var html = likHtml({ id: 1, taskName: _this4.newTaskInp.value.trim(), createDate: new Date().toDateString() });
+
+				console.log(likHtml);
+				var lik = document.createElement('li');
+				lik.className = 'listToDo__task';
+				lik.innerHTML = html;
 				var Task = _this4.createLik(_this4.newTaskInp.value.trim());
-				_this4.listNode.appendChild(Task.lik);
+				_this4.listNode.appendChild(lik);
 				_this4.list.push(Task.data);
 				_this4.countTask++;
 				_this4.countAll.innerHTML = _this4.countTask;
