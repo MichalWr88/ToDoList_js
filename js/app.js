@@ -73,10 +73,8 @@ class App {
 		this.listTasks.appendChild(listLi);
 		const list = new ToDoList(id);
 		this.newToDoListName.value = '';
-  }
-  createListElem(id){
-
-  }
+	}
+	createListElem(id) {}
 }
 
 const header = new App('header');
@@ -291,16 +289,18 @@ class ToDoList {
 		this.addBtn.addEventListener(
 			'click',
 			() => {
-				const templateTask = document.getElementById('task-template').innerHTML;
-				const likHtml = Handlebars.compile(templateTask);
-				const html = likHtml({ id: 1, taskName: this.newTaskInp.value.trim(), createDate: new Date().toDateString() });
+				// const templateTask = document.getElementById('task-template').innerHTML;
+				// const likHtml = Handlebars.compile(templateTask);
+				// const html = likHtml({ id: 1, taskName: this.newTaskInp.value.trim(), createDate: new Date().toDateString() });
 
-				console.log(likHtml);
-				const lik = document.createElement('li');
-				lik.className = 'listToDo__task';
-				lik.innerHTML = html;
-				const Task = this.createLik(this.newTaskInp.value.trim());
-				this.listNode.appendChild(lik);
+				// console.log(likHtml);
+				// const lik = document.createElement('li');
+				// lik.className = 'listToDo__task';
+				// lik.innerHTML = html;
+        // this.listNode.appendChild(lik);
+        const task = new Task(this.countTask, this.newTaskInp.value, this.listNode);
+        
+				// const Task = this.createLik(this.newTaskInp.value.trim());
 				this.list.push(Task.data);
 				this.countTask++;
 				this.countAll.innerHTML = this.countTask;
@@ -329,11 +329,35 @@ class ToDoList {
 	}
 }
 class Task {
-	constructor(id) {
+	constructor(id, name, parent) {
 		this.id = id;
-		this.templateTask = document.getElementById('task-template').innerHTML;
-		this.lik = Handlebars.compile(templateTask);
+		this.parent = parent;
+		this.name = name;
+    this.lik = this.createLik();
+    // this.checkBtn = lik.querySelector('.task__btn-check');
+    // this.nameInp = lik.querySelector('.task__name');
+    // this.delBtn = lik.querySelector('.task__btn-dell');
+    // this.priority = lik.querySelector('.task_priority');
+    // this.createDate = lik.querySelector('.task_createDate');
+    this.onInit();
 	}
+	onInit() {
+    this.parent.appendChild(this.lik);
+  }
+  createLik(){
+    const templateTask = document.getElementById('task-template').innerHTML,
+      likHtml = Handlebars.compile(templateTask),
+      html = likHtml({
+        id: this.id,
+        taskName: this.name,
+        createDate: new Date().toDateString()
+      }),
+      lik = document.createElement('li');
+    lik.className = 'listToDo__task';
+    lik.innerHTML = html;
+    return lik;
+  }
+	initEvents() {}
 }
 
 let list1 = new ToDoList('list1');

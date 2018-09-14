@@ -124,29 +124,6 @@
           </li>
         </ul>
       </li>
-      <li class="listToDo" id='list2'>
-        <!-- header list -->
-        <div class="listToDo__header">
-          <input class="input listToDo__name" type="text" name="listName" value="name">
-          <!-- count task -->
-          <p class="listToDo__text">all task
-            <span class="listToDo__allCount">num</span>
-          </p>
-          <p class="listToDo__text">checked task
-            <span class="listToDo__chekedCount">num</span>
-          </p>
-          <!-- new task -->
-          <input class="input listToDo__newTask" type="text" placeholder="add your task">
-          <button class="ion-plus-round btn listToDo__add " title="button add item"></button>
-        </div>
-        <!-- Tasks list -->
-        <ul class="lists-notype listToDo__container">
-          <li class="listToDo__task">task1</li>
-          <li class="listToDo__task">task1</li>
-          <li class="listToDo__task">task1</li>
-          <li class="listToDo__task">task1</li>
-        </ul>
-      </li>
     </ul>
   </main>
   <footer class="page__footer">
@@ -154,8 +131,6 @@
   </footer>
   
   <script id="list-template" type="text/x-handlebars-template">
-
-      <!-- <li class="listToDo" id=`list {{id}}`> -->
         <!-- header list -->
         <div class="listToDo__header">
           <input class="input listToDo__name" type="text" name="listName" value="{{taskName}}" required>
@@ -234,20 +209,19 @@
   </script>
 
     <script id="task-template" type="text/x-handlebars-template">
-      <!-- <li class="listToDo__task"> -->
         <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
           <i class="ion-checkmark-round task__complete">
           </i>
         </button>
-        <div class="row d_columns f_1">
+        <div class="row f_1">
           <input type="text" class="task__name" value={{taskName}}>
-          <div class="row f_jsa task__details">
+          <div class="row f_jsa task__details d_columns">
             <div class="row d_columns">
-              <small>{{createDate}}</small>
+              <small class="task_createDate">{{createDate}}</small>
             </div>
             <div>
               <small for="priority-select">Priority:</small>
-              <select id="priority-select">
+              <select id="priority-select" class="task_priority">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -260,7 +234,6 @@
         <button class="btn task__btn task__btn-dell" title="button add item">
           <i class="ion-close-round"></i>
         </button>
-      <!-- </li> -->
       </script>
   <script src="js/out.js"></script>
 </body>

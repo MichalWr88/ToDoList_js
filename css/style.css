@@ -239,14 +239,15 @@ input:invalid {
 	transform: translateX(0);
 }
 .task__details {
-	transform: translateY(110%);
-	height: 0;
+	/* transform: translateY(110%);
+  height: 0; */
+  	height: auto;
 	padding: 5px 0;
 	display: hidden;
 }
 .listToDo__task:hover .task__details {
-	transform: translateY(0);
-	height: auto;
+	/* transform: translateY(0); */
+	/* height: auto; */
 }
 .listToDo__text {
 	color: green;

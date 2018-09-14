@@ -372,16 +372,18 @@ var ToDoList = function () {
 
 			// add Task
 			this.addBtn.addEventListener('click', function () {
-				var templateTask = document.getElementById('task-template').innerHTML;
-				var likHtml = Handlebars.compile(templateTask);
-				var html = likHtml({ id: 1, taskName: _this4.newTaskInp.value.trim(), createDate: new Date().toDateString() });
+				// const templateTask = document.getElementById('task-template').innerHTML;
+				// const likHtml = Handlebars.compile(templateTask);
+				// const html = likHtml({ id: 1, taskName: this.newTaskInp.value.trim(), createDate: new Date().toDateString() });
 
-				console.log(likHtml);
-				var lik = document.createElement('li');
-				lik.className = 'listToDo__task';
-				lik.innerHTML = html;
-				var Task = _this4.createLik(_this4.newTaskInp.value.trim());
-				_this4.listNode.appendChild(lik);
+				// console.log(likHtml);
+				// const lik = document.createElement('li');
+				// lik.className = 'listToDo__task';
+				// lik.innerHTML = html;
+				// this.listNode.appendChild(lik);
+				var task = new Task(_this4.countTask, _this4.newTaskInp.value, _this4.listNode);
+
+				// const Task = this.createLik(this.newTaskInp.value.trim());
 				_this4.list.push(Task.data);
 				_this4.countTask++;
 				_this4.countAll.innerHTML = _this4.countTask;
@@ -407,13 +409,49 @@ var ToDoList = function () {
 	return ToDoList;
 }();
 
-var Task = function Task(id) {
-	_classCallCheck(this, Task);
+var Task = function () {
+	function Task(id, name, parent) {
+		_classCallCheck(this, Task);
 
-	this.id = id;
-	this.templateTask = document.getElementById('task-template').innerHTML;
-	this.lik = Handlebars.compile(templateTask);
-};
+		this.id = id;
+		this.parent = parent;
+		this.name = name;
+		this.lik = this.createLik();
+		// this.checkBtn = lik.querySelector('.task__btn-check');
+		// this.nameInp = lik.querySelector('.task__name');
+		// this.delBtn = lik.querySelector('.task__btn-dell');
+		// this.priority = lik.querySelector('.task_priority');
+		// this.createDate = lik.querySelector('.task_createDate');
+		this.onInit();
+	}
+
+	_createClass(Task, [{
+		key: 'onInit',
+		value: function onInit() {
+			this.parent.appendChild(this.lik);
+		}
+	}, {
+		key: 'createLik',
+		value: function createLik() {
+			var templateTask = document.getElementById('task-template').innerHTML,
+			    likHtml = Handlebars.compile(templateTask),
+			    html = likHtml({
+				id: this.id,
+				taskName: this.name,
+				createDate: new Date().toDateString()
+			}),
+			    lik = document.createElement('li');
+			lik.className = 'listToDo__task';
+			lik.innerHTML = html;
+			return lik;
+		}
+	}, {
+		key: 'initEvents',
+		value: function initEvents() {}
+	}]);
+
+	return Task;
+}();
 
 var list1 = new ToDoList('list1');
 
