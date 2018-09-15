@@ -66,62 +66,6 @@
         </div>
         <!-- Tasks list -->
         <ul class="lists-notype listToDo__container">
-          <li class="listToDo__task">
-            <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
-              <i class="ion-checkmark-round task__complete">
-              </i>
-            </button>
-            <div class="row d_columns f_1">
-              <input type="text" class="task__name" value="task simple">
-              <div class="row f_jsa task__details">
-                <div class="row d_columns">
-                  <small>create task: 02.12.2018 , 12:12</small>
-                  <small>last update: 02.12.2018 , 12:12</small>
-                </div>
-                  <div>
-                    <small for="priority-select">Priority:</small>
-                    <select id="priority-select">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                    </select>
-                  </div>
-              </div>
-            </div>
-            <button class="btn task__btn task__btn-dell" title="button add item">
-              <i class="ion-close-round"></i>
-            </button>
-          </li>
-          <li class="listToDo__task">
-            <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
-              <i class="ion-checkmark-round task__complete">
-              </i>
-            </button>
-            <div class="row d_columns f_1">
-              <input type="text" class="task__name" value="task simple">
-              <div class="row f_jsa task__details">
-                <div class="row d_columns">
-                  <small>create task: 02.12.2018 , 12:12</small>
-                  <small>last update: 02.12.2018 , 12:12</small>
-                </div>
-                  <div>
-                    <label for="priority-select">Priority:</label>
-                    <select id="priority-select">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                    </select>
-                  </div>
-              </div>
-            </div>
-            <button class="btn task__btn task__btn-dell" title="button add item">
-              <i class="ion-close-round"></i>
-            </button>
-          </li>
         </ul>
       </li>
     </ul>
@@ -149,9 +93,9 @@
         </div>
         <!-- Tasks list -->
         <ul class="lists-notype listToDo__container">
-          <li class="listToDo__task">
+          <!-- <li class="listToDo__task">
             <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
-              <i class="ion-checkmark-round task__complete">
+              <i class=" task__complete">
               </i>
             </button>
             <div class="row d_columns f_1">
@@ -178,7 +122,7 @@
           </li>
           <li class="listToDo__task">
             <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
-              <i class="ion-checkmark-round task__complete">
+              <i class=" task__complete">
               </i>
             </button>
             <div class="row d_columns f_1">
@@ -203,30 +147,31 @@
             <button class="btn task__btn task__btn-dell" title="button add item">
               <i class="ion-close-round"></i>
             </button>
-          </li>
+          </li> -->
         </ul>
       <!-- </li> -->
   </script>
 
     <script id="task-template" type="text/x-handlebars-template">
         <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
-          <i class="ion-checkmark-round task__complete">
+          <i class=" task__complete">
           </i>
         </button>
         <div class="row f_1">
-          <input type="text" class="task__name" value={{taskName}}>
+          <!-- <input type="text" > -->
+          <textarea class="task__name">{{taskName}}</textarea>
           <div class="row f_jsa task__details d_columns">
-            <div class="row d_columns">
+            <!-- <div class="row d_columns">
               <small class="task_createDate">{{createDate}}</small>
-            </div>
-            <div>
+            </div> -->
+            <div class="row d_columns">
               <small for="priority-select">Priority:</small>
-              <select id="priority-select" class="task_priority">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
+              <select class="task_priority" >
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
               </select>
             </div>
           </div>

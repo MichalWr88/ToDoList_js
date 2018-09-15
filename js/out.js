@@ -77,6 +77,10 @@ var _global = __webpack_require__(1);
 
 var _glob = _interopRequireWildcard(_global);
 
+var _task2 = __webpack_require__(2);
+
+var _task = _interopRequireWildcard(_task2);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -209,7 +213,6 @@ var ToDoList = function () {
 	}, {
 		key: 'updateCheckedTask',
 		value: function updateCheckedTask() {
-			var count = 0;
 			var array = this.list.filter(function (elem) {
 				return elem.checked === true;
 			});
@@ -230,61 +233,49 @@ var ToDoList = function () {
 			localStorage.setItem(this.id, JSON.stringify(this.list));
 		}
 	}, {
+		key: 'removeElement',
+		value: function removeElement(elem) {
+			// const toDelete = this.listNode.querySelectorAll('li');
+			// console.log(id);
+			// console.log(this.listNode);
+			console.log(elem.parentNode);
+			elem.parentNode.removeChild(elem);
+		}
+	}, {
 		key: 'createLik',
 		value: function createLik(name, dat, check) {
 			var _this3 = this;
 
-			var date = '',
-			    day = '',
-			    month = '',
-			    year = '';
-			if (!dat) {
-				date = new Date(), day = date.getDate(), month = date.getMonth() + 1, year = date.getFullYear();
-				console.log(date);
-			} else {
-				var txt = dat.split('.');
-				console.log(txt);
-				day = txt[0], month = txt[1], year = txt[2];
-			}
+			// let date = '',
+			// 	day = '',
+			// 	month = '',
+			// 	year = '';
+			// if (!dat) {
+			// 	(date = new Date()), (day = date.getDate()), (month = date.getMonth() + 1), (year = date.getFullYear());
+			// 	console.log(date);
+			// } else {
+			// 	const txt = dat.split('.');
+			// 	console.log(txt);
+			// 	(day = txt[0]), (month = txt[1]), (year = txt[2]);
+			// }
 
 			// ----------------------------------------------------------
-			var lik = document.createElement('li');
-			lik.className = 'listToDo__task';
 
 			// ---------------------------------------------------------------
-			var priority = document.createElement('select');
-			priority.className = 'task_priority';
-			for (var i = 0; i <= 5; i++) {
-				var opt = document.createElement('option');
-				opt.value = i;
-				opt.innerHTML = i;
-				priority.appendChild(opt);
-			}
 
 			// -----------------------------------------------------------------
 
-			var nameInp = document.createElement('h3');
-			nameInp.className = 'task__name';
-			nameInp.setAttribute('contenteditable', 'true');
-			nameInp.textContent = name;
 			// -------------------------------------------------------------------
-			var labelP = document.createElement('label');
-			labelP.className = 'task__label';
-			labelP.textContent = 'priority';
-			console.log(day);
-			var dateTask = document.createElement('p');
-			dateTask.className = 'task__date';
-			dateTask.textContent = 'create: ' + day + '.' + month + '.' + year;
 
 			var delBtn = document.createElement('button');
 			delBtn.className = 'ion-close-round btn task__delete';
 			delBtn.addEventListener('click', function (e) {
-				e.target.parentNode.remove(e.target.parentNode);
-				_this3.list = _this3.list.filter(function (elem) {
-					if (elem.text !== name) {
-						return elem;
-					}
-				});
+				// e.target.parentNode.remove(e.target.parentNode);
+				// this.list = this.list.filter(function(elem) {
+				// 	if (elem.text !== name) {
+				// 		return elem;
+				// 	}
+				// });
 				localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
 				_this3.countTask = _this3.list.length;
 				_this3.countAll.innerHTML = _this3.countTask;
@@ -322,13 +313,13 @@ var ToDoList = function () {
 			//
 			var count = this.list.length + 1;
 			// create object with task prop
-			var data = {
-				id: count,
-				text: name,
-				checked: '',
-				priority: 0,
-				date: day + '.' + month + '.' + year
-			};
+			// let data = {
+			// 	id: count,
+			// 	text: name,
+			// 	checked: '',
+			// 	priority: 0,
+			// 	date: `${day}.${month}.${year}`
+			// };
 			if (check === undefined) {
 				data.checked = false;
 			} else {
@@ -353,7 +344,7 @@ var ToDoList = function () {
 		key: 'initTask',
 		value: function initTask(name) {
 			createLik(name);
-			this.list.push(Task.data);
+			// this.list.push(Task.data);
 			localStorage.setItem(this.id, JSON.stringify(this.list));
 
 			// var storedNames = JSON.parse(localStorage.getItem(this.id));
@@ -381,10 +372,10 @@ var ToDoList = function () {
 				// lik.className = 'listToDo__task';
 				// lik.innerHTML = html;
 				// this.listNode.appendChild(lik);
-				var task = new Task(_this4.countTask, _this4.newTaskInp.value, _this4.listNode);
+				var task = new _task.Task(_this4.countTask, _this4.newTaskInp.value, _this4);
 
 				// const Task = this.createLik(this.newTaskInp.value.trim());
-				_this4.list.push(Task.data);
+				// this.list.push(Task.data);
 				_this4.countTask++;
 				_this4.countAll.innerHTML = _this4.countTask;
 				localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
@@ -393,9 +384,9 @@ var ToDoList = function () {
 			// ===================================================
 			this.newTaskInp.addEventListener('keydown', function (e) {
 				if (e.keyCode === 13) {
-					var _Task = _this4.createLik(_this4.newTaskInp.value.trim());
-					_this4.listNode.appendChild(_Task.lik);
-					_this4.list.push(_Task.data);
+					var Task = _this4.createLik(_this4.newTaskInp.value.trim());
+					_this4.listNode.appendChild(Task.lik);
+					_this4.list.push(Task.data);
 					_this4.countTask++;
 					_this4.countAll.innerHTML = _this4.countTask;
 					localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
@@ -407,50 +398,6 @@ var ToDoList = function () {
 	}]);
 
 	return ToDoList;
-}();
-
-var Task = function () {
-	function Task(id, name, parent) {
-		_classCallCheck(this, Task);
-
-		this.id = id;
-		this.parent = parent;
-		this.name = name;
-		this.lik = this.createLik();
-		// this.checkBtn = lik.querySelector('.task__btn-check');
-		// this.nameInp = lik.querySelector('.task__name');
-		// this.delBtn = lik.querySelector('.task__btn-dell');
-		// this.priority = lik.querySelector('.task_priority');
-		// this.createDate = lik.querySelector('.task_createDate');
-		this.onInit();
-	}
-
-	_createClass(Task, [{
-		key: 'onInit',
-		value: function onInit() {
-			this.parent.appendChild(this.lik);
-		}
-	}, {
-		key: 'createLik',
-		value: function createLik() {
-			var templateTask = document.getElementById('task-template').innerHTML,
-			    likHtml = Handlebars.compile(templateTask),
-			    html = likHtml({
-				id: this.id,
-				taskName: this.name,
-				createDate: new Date().toDateString()
-			}),
-			    lik = document.createElement('li');
-			lik.className = 'listToDo__task';
-			lik.innerHTML = html;
-			return lik;
-		}
-	}, {
-		key: 'initEvents',
-		value: function initEvents() {}
-	}]);
-
-	return Task;
 }();
 
 var list1 = new ToDoList('list1');
@@ -479,6 +426,83 @@ var cElem = exports.cElem = function cElem(elem) {
     return _obj;
   }
 };
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Task = exports.Task = function () {
+  function Task(id, name, parent) {
+    _classCallCheck(this, Task);
+
+    this.id = id;
+    this.parent = parent;
+    this.name = name;
+    this.priority = 1;
+    this.lik = this.createLik();
+    this.checkBtn = this.lik.querySelector('.task__btn-check');
+    this.nameInp = this.lik.querySelector('.task__name');
+    this.delBtn = this.lik.querySelector('.task__btn-dell');
+    this.priority = this.lik.querySelector('.task_priority');
+    this.onInit();
+  }
+
+  _createClass(Task, [{
+    key: 'onInit',
+    value: function onInit() {
+      this.parent.listNode.appendChild(this.lik);
+      this.initEvents();
+    }
+  }, {
+    key: 'createLik',
+    value: function createLik() {
+      var templateTask = document.getElementById('task-template').innerHTML,
+          likHtml = Handlebars.compile(templateTask),
+          html = likHtml({
+        id: this.id,
+        taskName: this.name,
+        createDate: new Date().toDateString()
+      }),
+          lik = document.createElement('li');
+      lik.className = 'listToDo__task';
+      lik.setAttribute('id', this.id);
+      lik.innerHTML = html;
+      lik.querySelector('.task_priority').value = this.priority;
+      return lik;
+    }
+  }, {
+    key: 'initEvents',
+    value: function initEvents() {
+      var _this = this;
+
+      this.checkBtn.addEventListener('click', function () {
+        console.log('test');
+        _this.checkBtn.querySelector('i').classList.toggle('ion-checkmark-round');
+        _this.parent.updateCheckedTask();
+        console.log(_this.parent);
+        _this.nameInp.classList.toggle('blured');
+      }, false);
+      this.nameInp.addEventListener('blur', function () {}, false);
+      this.delBtn.addEventListener('click', function (e) {
+        _this.parent.removeElement(e.currentTarget.parentNode);
+      }, false);
+      this.priority.addEventListener('change', function () {}, false);
+    }
+  }]);
+
+  return Task;
+}();
 
 /***/ })
 /******/ ]);

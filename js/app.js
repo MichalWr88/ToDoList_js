@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
 import * as _glob from './global';
+import * as _task from './task';
 const addListBtn = _glob.cElem('.btn', true);
 // console.log(addListBtn);
 const source = document.getElementById('list-template').innerHTML,
@@ -121,7 +122,6 @@ class ToDoList {
 		}
 	}
 	updateCheckedTask() {
-		const count = 0;
 		const array = this.list.filter(elem => {
 			return elem.checked === true;
 		});
@@ -139,61 +139,46 @@ class ToDoList {
 		});
 		localStorage.setItem(this.id, JSON.stringify(this.list));
 	}
-
+	removeElement(elem) {
+		// const toDelete = this.listNode.querySelectorAll('li');
+		// console.log(id);
+		// console.log(this.listNode);
+    console.log(elem.parentNode);
+		elem.parentNode.removeChild(elem);
+	}
 	createLik(name, dat, check) {
-		let date = '',
-			day = '',
-			month = '',
-			year = '';
-		if (!dat) {
-			(date = new Date()), (day = date.getDate()), (month = date.getMonth() + 1), (year = date.getFullYear());
-			console.log(date);
-		} else {
-			const txt = dat.split('.');
-			console.log(txt);
-			(day = txt[0]), (month = txt[1]), (year = txt[2]);
-		}
+		// let date = '',
+		// 	day = '',
+		// 	month = '',
+		// 	year = '';
+		// if (!dat) {
+		// 	(date = new Date()), (day = date.getDate()), (month = date.getMonth() + 1), (year = date.getFullYear());
+		// 	console.log(date);
+		// } else {
+		// 	const txt = dat.split('.');
+		// 	console.log(txt);
+		// 	(day = txt[0]), (month = txt[1]), (year = txt[2]);
+		// }
 
 		// ----------------------------------------------------------
-		const lik = document.createElement('li');
-		lik.className = 'listToDo__task';
 
 		// ---------------------------------------------------------------
-		let priority = document.createElement('select');
-		priority.className = 'task_priority';
-		for (let i = 0; i <= 5; i++) {
-			let opt = document.createElement('option');
-			opt.value = i;
-			opt.innerHTML = i;
-			priority.appendChild(opt);
-		}
 
 		// -----------------------------------------------------------------
 
-		let nameInp = document.createElement('h3');
-		nameInp.className = 'task__name';
-		nameInp.setAttribute('contenteditable', 'true');
-		nameInp.textContent = name;
 		// -------------------------------------------------------------------
-		let labelP = document.createElement('label');
-		labelP.className = 'task__label';
-		labelP.textContent = 'priority';
-		console.log(day);
-		let dateTask = document.createElement('p');
-		dateTask.className = 'task__date';
-		dateTask.textContent = `create: ${day}.${month}.${year}`;
 
 		let delBtn = document.createElement('button');
 		delBtn.className = 'ion-close-round btn task__delete';
 		delBtn.addEventListener(
 			'click',
 			e => {
-				e.target.parentNode.remove(e.target.parentNode);
-				this.list = this.list.filter(function(elem) {
-					if (elem.text !== name) {
-						return elem;
-					}
-				});
+				// e.target.parentNode.remove(e.target.parentNode);
+				// this.list = this.list.filter(function(elem) {
+				// 	if (elem.text !== name) {
+				// 		return elem;
+				// 	}
+				// });
 				localStorage.setItem(this.id, JSON.stringify(this.list));
 				this.countTask = this.list.length;
 				this.countAll.innerHTML = this.countTask;
@@ -237,13 +222,13 @@ class ToDoList {
 		//
 		let count = this.list.length + 1;
 		// create object with task prop
-		let data = {
-			id: count,
-			text: name,
-			checked: '',
-			priority: 0,
-			date: `${day}.${month}.${year}`
-		};
+		// let data = {
+		// 	id: count,
+		// 	text: name,
+		// 	checked: '',
+		// 	priority: 0,
+		// 	date: `${day}.${month}.${year}`
+		// };
 		if (check === undefined) {
 			data.checked = false;
 		} else {
@@ -267,7 +252,7 @@ class ToDoList {
 
 	initTask(name) {
 		createLik(name);
-		this.list.push(Task.data);
+		// this.list.push(Task.data);
 		localStorage.setItem(this.id, JSON.stringify(this.list));
 
 		// var storedNames = JSON.parse(localStorage.getItem(this.id));
@@ -297,11 +282,11 @@ class ToDoList {
 				// const lik = document.createElement('li');
 				// lik.className = 'listToDo__task';
 				// lik.innerHTML = html;
-        // this.listNode.appendChild(lik);
-        const task = new Task(this.countTask, this.newTaskInp.value, this.listNode);
-        
+				// this.listNode.appendChild(lik);
+				const task = new _task.Task(this.countTask, this.newTaskInp.value, this);
+
 				// const Task = this.createLik(this.newTaskInp.value.trim());
-				this.list.push(Task.data);
+				// this.list.push(Task.data);
 				this.countTask++;
 				this.countAll.innerHTML = this.countTask;
 				localStorage.setItem(this.id, JSON.stringify(this.list));
@@ -327,37 +312,6 @@ class ToDoList {
 		);
 		// ===================================================
 	}
-}
-class Task {
-	constructor(id, name, parent) {
-		this.id = id;
-		this.parent = parent;
-		this.name = name;
-    this.lik = this.createLik();
-    // this.checkBtn = lik.querySelector('.task__btn-check');
-    // this.nameInp = lik.querySelector('.task__name');
-    // this.delBtn = lik.querySelector('.task__btn-dell');
-    // this.priority = lik.querySelector('.task_priority');
-    // this.createDate = lik.querySelector('.task_createDate');
-    this.onInit();
-	}
-	onInit() {
-    this.parent.appendChild(this.lik);
-  }
-  createLik(){
-    const templateTask = document.getElementById('task-template').innerHTML,
-      likHtml = Handlebars.compile(templateTask),
-      html = likHtml({
-        id: this.id,
-        taskName: this.name,
-        createDate: new Date().toDateString()
-      }),
-      lik = document.createElement('li');
-    lik.className = 'listToDo__task';
-    lik.innerHTML = html;
-    return lik;
-  }
-	initEvents() {}
 }
 
 let list1 = new ToDoList('list1');
