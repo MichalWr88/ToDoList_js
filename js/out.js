@@ -83,6 +83,8 @@ var _task = _interopRequireWildcard(_task2);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var addListBtn = _glob.cElem('.btn', true);
@@ -177,7 +179,7 @@ var ToDoList = function () {
 		this.id = id;
 		this.list = [];
 		this.countTask = 0;
-		this.checked = null;
+		this.checked = 0;
 		// this.name = this.nameInp.value;
 
 		//------------------
@@ -213,24 +215,28 @@ var ToDoList = function () {
 	}, {
 		key: 'updateCheckedTask',
 		value: function updateCheckedTask() {
-			var array = this.list.filter(function (elem) {
-				return elem.checked === true;
+			var array = [].concat(_toConsumableArray(this.listNode.children)).filter(function (elem) {
+				return elem.classList.contains('checked');
 			});
 			this.checked = array.length;
 			this.countChecked.textContent = this.checked;
+			this.sortList();
 		}
 	}, {
 		key: 'sortList',
 		value: function sortList() {
-			this.list.sort(function (a, b) {
-				var AA = a.checked === true ? 1 : 0;
-				console.log(AA);
-				var BB = b.checked === true ? 1 : 0;
-				// console.log(BB);
+			var _this3 = this;
 
+			var sortArr = [].concat(_toConsumableArray(this.listNode.children)).sort(function (a, b) {
+				var AA = a.classList.contains('checked') ? 1 : 0,
+				    BB = b.classList.contains('checked') ? 1 : 0;
 				return AA - BB;
 			});
-			localStorage.setItem(this.id, JSON.stringify(this.list));
+			// localStorage.setItem(this.id, JSON.stringify(this.list));
+			console.log(sortArr);
+			sortArr.forEach(function (e) {
+				_this3.listNode.appendChild(e);
+			});
 		}
 	}, {
 		key: 'removeElement',
@@ -244,7 +250,7 @@ var ToDoList = function () {
 	}, {
 		key: 'createLik',
 		value: function createLik(name, dat, check) {
-			var _this3 = this;
+			var _this4 = this;
 
 			// let date = '',
 			// 	day = '',
@@ -276,9 +282,9 @@ var ToDoList = function () {
 				// 		return elem;
 				// 	}
 				// });
-				localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
-				_this3.countTask = _this3.list.length;
-				_this3.countAll.innerHTML = _this3.countTask;
+				localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
+				_this4.countTask = _this4.list.length;
+				_this4.countAll.innerHTML = _this4.countTask;
 			}, false);
 			// --------------------------------------------------------------
 			var checkBtn = document.createElement('button');
@@ -289,25 +295,25 @@ var ToDoList = function () {
 				nameInp.setAttribute('disabled', true);
 				if (data.checked === false) {
 					data.checked = true;
-					_this3.list.map(function (elem) {
+					_this4.list.map(function (elem) {
 						if (elem.text === data.text) {
 							elem.checked = true;
 						}
 					});
 					// this.list.push(Task.data);
-					localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
+					localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
 				} else {
 					data.checked = false;
-					_this3.list.map(function (elem) {
+					_this4.list.map(function (elem) {
 						if (elem.text === data.text) {
 							elem.checked = false;
 						}
 					});
 					// this.list.push(Task.data);
-					localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
+					localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
 				}
-				_this3.updateCheckedTask();
-				_this3.sortList();
+				_this4.updateCheckedTask();
+				_this4.sortList();
 			}, false);
 			// ---------------------------------------------------------------------------
 			//
@@ -354,11 +360,11 @@ var ToDoList = function () {
 	}, {
 		key: 'initEvent',
 		value: function initEvent() {
-			var _this4 = this;
+			var _this5 = this;
 
 			// change input name List
 			this.nameInp.addEventListener('blur', function (e) {
-				_this4.name = e.target.value.trim();
+				_this5.name = e.target.value.trim();
 			}, false);
 
 			// add Task
@@ -372,25 +378,25 @@ var ToDoList = function () {
 				// lik.className = 'listToDo__task';
 				// lik.innerHTML = html;
 				// this.listNode.appendChild(lik);
-				var task = new _task.Task(_this4.countTask, _this4.newTaskInp.value, _this4);
+				var task = new _task.Task(_this5.countTask, _this5.newTaskInp.value, _this5);
 
 				// const Task = this.createLik(this.newTaskInp.value.trim());
 				// this.list.push(Task.data);
-				_this4.countTask++;
-				_this4.countAll.innerHTML = _this4.countTask;
-				localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
-				_this4.newTaskInp.value = '';
+				_this5.countTask++;
+				_this5.countAll.innerHTML = _this5.countTask;
+				localStorage.setItem(_this5.id, JSON.stringify(_this5.list));
+				_this5.newTaskInp.value = '';
 			}, false);
 			// ===================================================
 			this.newTaskInp.addEventListener('keydown', function (e) {
 				if (e.keyCode === 13) {
-					var Task = _this4.createLik(_this4.newTaskInp.value.trim());
-					_this4.listNode.appendChild(Task.lik);
-					_this4.list.push(Task.data);
-					_this4.countTask++;
-					_this4.countAll.innerHTML = _this4.countTask;
-					localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
-					_this4.newTaskInp.value = '';
+					var Task = _this5.createLik(_this5.newTaskInp.value.trim());
+					_this5.listNode.appendChild(Task.lik);
+					_this5.list.push(Task.data);
+					_this5.countTask++;
+					_this5.countAll.innerHTML = _this5.countTask;
+					localStorage.setItem(_this5.id, JSON.stringify(_this5.list));
+					_this5.newTaskInp.value = '';
 				}
 			}, false);
 			// ===================================================
@@ -487,10 +493,10 @@ var Task = exports.Task = function () {
       var _this = this;
 
       this.checkBtn.addEventListener('click', function () {
-        console.log('test');
-        _this.checkBtn.querySelector('i').classList.toggle('ion-checkmark-round');
+
+        _this.checkedElem();
         _this.parent.updateCheckedTask();
-        console.log(_this.parent);
+
         _this.nameInp.classList.toggle('blured');
       }, false);
       this.nameInp.addEventListener('blur', function () {}, false);
@@ -498,6 +504,12 @@ var Task = exports.Task = function () {
         _this.parent.removeElement(e.currentTarget.parentNode);
       }, false);
       this.priority.addEventListener('change', function () {}, false);
+    }
+  }, {
+    key: 'checkedElem',
+    value: function checkedElem() {
+      this.checkBtn.querySelector('i').classList.toggle('ion-checkmark-round');
+      this.lik.classList.toggle('checked');
     }
   }]);
 

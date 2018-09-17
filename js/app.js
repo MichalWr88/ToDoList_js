@@ -94,7 +94,7 @@ class ToDoList {
 		this.id = id;
 		this.list = [];
 		this.countTask = 0;
-		this.checked = null;
+		this.checked = 0;
 		// this.name = this.nameInp.value;
 
 		//------------------
@@ -122,28 +122,30 @@ class ToDoList {
 		}
 	}
 	updateCheckedTask() {
-		const array = this.list.filter(elem => {
-			return elem.checked === true;
+		const array = [...this.listNode.children].filter(elem => {
+			return elem.classList.contains('checked');
 		});
 		this.checked = array.length;
 		this.countChecked.textContent = this.checked;
+		this.sortList();
 	}
 	sortList() {
-		this.list.sort((a, b) => {
-			let AA = a.checked === true ? 1 : 0;
-			console.log(AA);
-			let BB = b.checked === true ? 1 : 0;
-			// console.log(BB);
-
+		const sortArr = [...this.listNode.children].sort((a, b) => {
+			const AA = a.classList.contains('checked') ? 1 : 0,
+				BB = b.classList.contains('checked') ? 1 : 0;
 			return AA - BB;
 		});
-		localStorage.setItem(this.id, JSON.stringify(this.list));
+		// localStorage.setItem(this.id, JSON.stringify(this.list));
+		console.log(sortArr);
+		sortArr.forEach(e => {
+			this.listNode.appendChild(e);
+		});
 	}
 	removeElement(elem) {
 		// const toDelete = this.listNode.querySelectorAll('li');
 		// console.log(id);
 		// console.log(this.listNode);
-    console.log(elem.parentNode);
+		console.log(elem.parentNode);
 		elem.parentNode.removeChild(elem);
 	}
 	createLik(name, dat, check) {

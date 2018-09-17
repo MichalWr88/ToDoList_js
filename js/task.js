@@ -32,10 +32,10 @@ export class Task {
   }
   initEvents() {
     this.checkBtn.addEventListener('click',()=>{
-      console.log('test');
-      this.checkBtn.querySelector('i').classList.toggle('ion-checkmark-round');
+
+      this.checkedElem();
       this.parent.updateCheckedTask();
-      console.log(this.parent);
+
       this.nameInp.classList.toggle('blured');
     },false);
     this.nameInp.addEventListener('blur',()=>{},false);
@@ -43,5 +43,9 @@ export class Task {
       this.parent.removeElement(e.currentTarget.parentNode);
     },false);
     this.priority.addEventListener('change',()=>{},false);
+   }
+   checkedElem(){
+     this.checkBtn.querySelector('i').classList.toggle('ion-checkmark-round');
+     this.lik.classList.toggle('checked');
    }
 }
