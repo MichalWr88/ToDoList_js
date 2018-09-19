@@ -21,12 +21,6 @@
         <span class="btn__content">boards</span>
       </button>
       <ul id="boardsList" class="lists-notype header__listsName h-0">
-        <li class="listsName__elem">
-          lists of cards
-        </li>
-        <li class="listsName__elem">
-          lists of cards
-        </li>
       </ul>
     </nav>
     <!-- addList -->
@@ -47,45 +41,38 @@
     <!-- lists with todoList -->
     <ul class="lists-notype list__tasks">
       <!-- one list -->
-      <li class="listToDo" id='list1'>
-        <!-- header list -->
-        <div class="listToDo__header">
-          <input class="input listToDo__name" type="text" name="listName" value="name" required>
-          <!-- count task -->
-          <div class="row">
-            <p class="listToDo__text f_1">all task
-              <span class="listToDo__allCount">0</span>
-            </p>
-            <p class="listToDo__text f_1">checked task
-              <span class="listToDo__chekedCount">0</span>
-            </p>
-          </div>
-          <!-- new task -->
-          <input class="input listToDo__newTask" type="text" placeholder="add your task">
-          <button class="ion-plus-round btn listToDo__add " title="button add item"></button>
-        </div>
-        <!-- Tasks list -->
-        <ul class="lists-notype listToDo__container">
-        </ul>
-      </li>
+      <li>List is empty</li>
     </ul>
   </main>
   <footer class="page__footer">
     <small>Michał Maleszewski 2018</small>
   </footer>
-  
+
   <script id="list-template" type="text/x-handlebars-template">
         <!-- header list -->
         <div class="listToDo__header">
           <input class="input listToDo__name" type="text" name="listName" value="{{taskName}}" required>
           <!-- count task -->
-          <div class="row">
-            <p class="listToDo__text f_1">all task
-              <span class="listToDo__allCount">0</span>
-            </p>
-            <p class="listToDo__text f_1">checked task
-              <span class="listToDo__chekedCount">0</span>
-            </p>
+          <button class="btn listToDo__del" title="delete list">
+            <i class="ion-close-round"></i>
+          </button>
+          <div class="row f_jsa">
+            <div class="row d_columns ">
+              <p class="listToDo__text f_1">all task
+                <span class="listToDo__allCount">0</span>
+              </p>
+              <p class="listToDo__text f_1">checked task
+                <span class="listToDo__chekedCount">0</span>
+              </p>
+            </div>
+            <div class="row d_columns">
+              <p class="listToDo__text f_1">Created:
+                <span class="listToDo_created">0</span>
+              </p>
+              <p class="listToDo__text f_1">Last Update:
+                <span class="listToDo_updated">0</span>
+              </p>
+            </div>
           </div>
           <!-- new task -->
           <input class="input listToDo__newTask" type="text" placeholder="add your task">
@@ -152,7 +139,7 @@
       <!-- </li> -->
   </script>
 
-    <script id="task-template" type="text/x-handlebars-template">
+  <script id="task-template" type="text/x-handlebars-template">
         <button class="btn task__btn task__btn-check" title="check item" data-complete=false>
           <i class=" task__complete">
           </i>

@@ -36,9 +36,13 @@ class App {
 		this.newToDoListName.addEventListener(
 			'keyup',
 			e => {
-				this.newToDoListName.value.trim().length ? clearListName.classList.remove('d_none') : clearListName.classList.add('d_none');
-				if (e.keyCode === 13) {
-					this.addNewList();
+				if (this.newToDoListName.value.trim().length) {
+					clearListName.classList.remove('d_none');
+					if (e.keyCode === 13) {
+						this.addNewList();
+					}
+				} else {
+					clearListName.classList.add('d_none');
 				}
 			},
 			false
@@ -46,7 +50,11 @@ class App {
 		this.addNewListBtn.addEventListener(
 			'click',
 			() => {
-				this.addNewList();
+        if (this.newToDoListName.value.trim().length) {
+          this.addNewList();
+        }else{
+
+        }
 			},
 			false
 		);
@@ -87,14 +95,17 @@ class ToDoList {
 		this.nameInp = this.box.querySelector('.listToDo__name');
 		this.newTaskInp = this.box.querySelector('.listToDo__newTask');
 		this.addBtn = this.box.querySelector('.listToDo__add');
+		this.delBtn = this.box.querySelector('.listToDo__del');
 		this.listNode = this.box.querySelector('.listToDo__container');
 		this.countAll = this.box.querySelector('.listToDo__allCount');
 		this.countChecked = this.box.querySelector('.listToDo__chekedCount');
+    this.created = this.box.querySelector('.listToDo_created');
 		// -----------------------------------
 		this.id = id;
 		this.list = [];
 		this.countTask = 0;
-		this.checked = 0;
+    this.checked = 0;
+    this.created.innerHTML = new Date().toLocaleDateString('pl-pl', { year: 'numeric', month: 'short', day: 'numeric' });
 		// this.name = this.nameInp.value;
 
 		//------------------
@@ -295,7 +306,10 @@ class ToDoList {
 				this.newTaskInp.value = '';
 			},
 			false
-		);
+    );
+    this.delBtn.addEventListener('click',()=>{
+     
+    },false)
 		// ===================================================
 		this.newTaskInp.addEventListener(
 			'keydown',

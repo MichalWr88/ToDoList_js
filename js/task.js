@@ -25,7 +25,7 @@ export class Task {
       }),
       lik = document.createElement('li');
     lik.className = 'listToDo__task';
-    lik.setAttribute('id', this.id)
+    lik.setAttribute('id', this.id);
     lik.innerHTML = html;
     lik.querySelector('.task_priority').value = this.priority;
     return lik;

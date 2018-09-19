@@ -122,13 +122,19 @@ var App = function () {
 				_this.boardsList.classList.toggle('h-0');
 			}, false);
 			this.newToDoListName.addEventListener('keyup', function (e) {
-				_this.newToDoListName.value.trim().length ? clearListName.classList.remove('d_none') : clearListName.classList.add('d_none');
-				if (e.keyCode === 13) {
-					_this.addNewList();
+				if (_this.newToDoListName.value.trim().length) {
+					clearListName.classList.remove('d_none');
+					if (e.keyCode === 13) {
+						_this.addNewList();
+					}
+				} else {
+					clearListName.classList.add('d_none');
 				}
 			}, false);
 			this.addNewListBtn.addEventListener('click', function () {
-				_this.addNewList();
+				if (_this.newToDoListName.value.trim().length) {
+					_this.addNewList();
+				} else {}
 			}, false);
 			this.clearListName.addEventListener('click', function () {
 				_this.newToDoListName.value = '';
@@ -172,14 +178,17 @@ var ToDoList = function () {
 		this.nameInp = this.box.querySelector('.listToDo__name');
 		this.newTaskInp = this.box.querySelector('.listToDo__newTask');
 		this.addBtn = this.box.querySelector('.listToDo__add');
+		this.delBtn = this.box.querySelector('.listToDo__del');
 		this.listNode = this.box.querySelector('.listToDo__container');
 		this.countAll = this.box.querySelector('.listToDo__allCount');
 		this.countChecked = this.box.querySelector('.listToDo__chekedCount');
+		this.created = this.box.querySelector('.listToDo_created');
 		// -----------------------------------
 		this.id = id;
 		this.list = [];
 		this.countTask = 0;
 		this.checked = 0;
+		this.created.innerHTML = new Date().toLocaleDateString('pl-pl', { year: 'numeric', month: 'short', day: 'numeric' });
 		// this.name = this.nameInp.value;
 
 		//------------------
@@ -387,6 +396,7 @@ var ToDoList = function () {
 				localStorage.setItem(_this5.id, JSON.stringify(_this5.list));
 				_this5.newTaskInp.value = '';
 			}, false);
+			this.delBtn.addEventListener('click', function () {}, false);
 			// ===================================================
 			this.newTaskInp.addEventListener('keydown', function (e) {
 				if (e.keyCode === 13) {
