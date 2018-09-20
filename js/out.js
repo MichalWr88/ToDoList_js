@@ -77,7 +77,7 @@ var _global = __webpack_require__(1);
 
 var _glob = _interopRequireWildcard(_global);
 
-var _toDoList = __webpack_require__(3);
+var _toDoList = __webpack_require__(2);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -221,94 +221,11 @@ var cElem = exports.cElem = function cElem(elem) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Task = exports.Task = function () {
-  function Task(id, name, parent) {
-    _classCallCheck(this, Task);
-
-    this.id = id;
-    this.parent = parent;
-    this.name = name;
-    this.priority = 1;
-    this.lik = this.createLik();
-    this.checkBtn = this.lik.querySelector('.task__btn-check');
-    this.nameInp = this.lik.querySelector('.task__name');
-    this.delBtn = this.lik.querySelector('.task__btn-dell');
-    this.priority = this.lik.querySelector('.task_priority');
-    this.onInit();
-  }
-
-  _createClass(Task, [{
-    key: 'onInit',
-    value: function onInit() {
-      this.parent.listNode.appendChild(this.lik);
-      this.initEvents();
-    }
-  }, {
-    key: 'createLik',
-    value: function createLik() {
-      var templateTask = document.getElementById('task-template').innerHTML,
-          likHtml = Handlebars.compile(templateTask),
-          html = likHtml({
-        id: this.id,
-        taskName: this.name,
-        createDate: new Date().toDateString()
-      }),
-          lik = document.createElement('li');
-      lik.className = 'listToDo__task';
-      lik.setAttribute('id', this.id);
-      lik.innerHTML = html;
-      lik.querySelector('.task_priority').value = this.priority;
-      return lik;
-    }
-  }, {
-    key: 'initEvents',
-    value: function initEvents() {
-      var _this = this;
-
-      this.checkBtn.addEventListener('click', function () {
-
-        _this.checkedElem();
-        _this.parent.updateCheckedTask();
-
-        _this.nameInp.classList.toggle('blured');
-      }, false);
-      this.nameInp.addEventListener('blur', function () {}, false);
-      this.delBtn.addEventListener('click', function (e) {
-        _this.parent.removeElement(e.currentTarget.parentNode);
-      }, false);
-      this.priority.addEventListener('change', function () {}, false);
-    }
-  }, {
-    key: 'checkedElem',
-    value: function checkedElem() {
-      this.checkBtn.querySelector('i').classList.toggle('ion-checkmark-round');
-      this.lik.classList.toggle('checked');
-    }
-  }]);
-
-  return Task;
-}();
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 exports.ToDoList = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _task = __webpack_require__(2);
+var _task = __webpack_require__(3);
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -531,6 +448,89 @@ var ToDoList = exports.ToDoList = function () {
   }]);
 
   return ToDoList;
+}();
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Task = exports.Task = function () {
+  function Task(id, name, parent) {
+    _classCallCheck(this, Task);
+
+    this.id = id;
+    this.parent = parent;
+    this.name = name;
+    this.priority = 1;
+    this.lik = this.createLik();
+    this.checkBtn = this.lik.querySelector('.task__btn-check');
+    this.nameInp = this.lik.querySelector('.task__name');
+    this.delBtn = this.lik.querySelector('.task__btn-dell');
+    this.priority = this.lik.querySelector('.task_priority');
+    this.onInit();
+  }
+
+  _createClass(Task, [{
+    key: 'onInit',
+    value: function onInit() {
+      this.parent.listNode.appendChild(this.lik);
+      this.initEvents();
+    }
+  }, {
+    key: 'createLik',
+    value: function createLik() {
+      var templateTask = document.getElementById('task-template').innerHTML,
+          likHtml = Handlebars.compile(templateTask),
+          html = likHtml({
+        id: this.id,
+        taskName: this.name,
+        createDate: new Date().toDateString()
+      }),
+          lik = document.createElement('li');
+      lik.className = 'listToDo__task';
+      lik.setAttribute('id', this.id);
+      lik.innerHTML = html;
+      lik.querySelector('.task_priority').value = this.priority;
+      return lik;
+    }
+  }, {
+    key: 'initEvents',
+    value: function initEvents() {
+      var _this = this;
+
+      this.checkBtn.addEventListener('click', function () {
+
+        _this.checkedElem();
+        _this.parent.updateCheckedTask();
+
+        _this.nameInp.classList.toggle('blured');
+      }, false);
+      this.nameInp.addEventListener('blur', function () {}, false);
+      this.delBtn.addEventListener('click', function (e) {
+        _this.parent.removeElement(e.currentTarget.parentNode);
+      }, false);
+      this.priority.addEventListener('change', function () {}, false);
+    }
+  }, {
+    key: 'checkedElem',
+    value: function checkedElem() {
+      this.checkBtn.querySelector('i').classList.toggle('ion-checkmark-round');
+      this.lik.classList.toggle('checked');
+    }
+  }]);
+
+  return Task;
 }();
 
 /***/ })
