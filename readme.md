@@ -1,6 +1,9 @@
 # JavaScript Lista ToDo
 
-## in progress !!!
+## pure HTML,css, js
+## OOP
+## webpack
+
 
 
 
