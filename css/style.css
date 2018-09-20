@@ -150,7 +150,11 @@ input:invalid {
 	flex: 1;
 	text-align: center;
 }
-.header__appName { margin: 0; padding: 5px 0; color: #5980c0; }
+.header__appName {
+	margin: 0;
+	padding: 5px 0;
+	color: #5980c0;
+}
 .header__logoText {
 	margin: 0;
 	padding: 0;
@@ -159,7 +163,7 @@ input:invalid {
 }
 /* ------------------------------------------------------------ */
 .page__main {
-	/* margin: 0 auto; max-width: 1200px; */                             
+	/* margin: 0 auto; max-width: 1200px; */
 	height: calc(100% - 115px);
 	overflow: auto;
 	margin-right: -19px;
@@ -170,6 +174,31 @@ input:invalid {
 	justify-content: center;
 	align-items: flex-start;
 	flex-wrap: wrap;
+	height: 100%;
+}
+.list__empty {
+  display: block;
+	font-size: 20px;
+	text-transform: uppercase;
+	color: white;
+	padding: 10px;
+	border: 1px solid white;
+	border-radius: 10px;
+	flex: 0 1 50%;
+	text-align: center;
+	align-self: center;
+	position: relative;
+}
+.list__empty::after {
+	position: absolute;
+	content: '';
+	background-color: rgba(0, 0, 0, 0.3);
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: 10px;
+	z-index: -1;
 }
 /* --------------------------------- */
 /* ELEMENT TASK */
@@ -200,21 +229,21 @@ input:invalid {
 	margin: -10px;
 	box-shadow: 0px 10px 5px -20px rgba(0, 0, 0, 0.5);
 	border: none;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 5px;
 	color: white;
 	text-transform: uppercase;
 }
-.listToDo__del{
-  position: absolute;
-  top:5px;
-  right:10px;
-  font-size:20px;
-  color:red;
-  padding:1px;
-  margin:0;
-  width:20px;
-  height:20px;
+.listToDo__del {
+	position: absolute;
+	top: 5px;
+	right: 10px;
+	font-size: 20px;
+	color: red;
+	padding: 1px;
+	margin: 0;
+	width: 20px;
+	height: 20px;
 }
 .listToDo__add {
 	background-color: #4d679e;
