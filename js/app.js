@@ -75,12 +75,9 @@ class App {
 		const listLi = this.li.cloneNode(true);
 		const boardsLi = this.li.cloneNode(true);
 
-	
-		console.log(this.boardsList.children.length);
-
     boardsLi.innerHTML = this.newToDoListName.value;
     boardsLi.className = 'listsName__elem';
-    listLi.setAttribute('id', `b${this.index}`);
+    boardsLi.setAttribute('id', `b${this.index}`);
     this.boardsList.appendChild(boardsLi);
     listLi.className = 'listToDo';
     listLi.setAttribute('id', `l${this.index}`);
@@ -93,16 +90,18 @@ class App {
       this.listTasksDom.querySelector('.list__empty').style.display = 'block';
     }
 		this.index++;
-		console.log(this.listTasks);
+
 		this.newToDoListName.value = '';
 	}
 	createListElem(id) {}
 	removeChild(id) {
-		console.log(this.listTasksDom);
-		const index = id.slice(1);
-		// delete this.listTasks[index];
-		// this.listTasks.splice(index,1)
-		console.log(this.listTasks);
+    this.listTasksDom.querySelector(`#l${id}`).remove();
+    this.boardsList.querySelector(`#b${id}`).remove();
+    if (this.boardsList.children.length) {
+      this.listTasksDom.querySelector('.list__empty').style.display = 'none';
+    } else {
+      this.listTasksDom.querySelector('.list__empty').style.display = 'block';
+    }
 	}
 }
 
