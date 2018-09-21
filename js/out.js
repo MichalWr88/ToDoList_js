@@ -70,58 +70,56 @@
 "use strict";
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*jshint esversion: 6 */
-
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _global = __webpack_require__(1);
 
-var _glob = _interopRequireWildcard(_global);
-
 var _toDoList = __webpack_require__(2);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*jshint esversion: 6 */
+
 
 var source = document.getElementById('list-template').innerHTML,
     templateList = Handlebars.compile(source);
 
-// let add = document.querySelector('.addList__addBtn'),
-// 	body = document.querySelector('body'),
-// 	indexList = 1;
-// console.log(add);
+var App = function (_Global) {
+	_inherits(App, _Global);
 
-var App = function () {
 	function App(id) {
 		_classCallCheck(this, App);
 
-		this.box = document.getElementById(id);
-		this.boardsBtn = this.box.querySelector('#boardsBtn');
-		this.boardsList = this.box.querySelector('#boardsList');
-		this.newToDoListName = this.box.querySelector('#listName');
-		this.addNewListBtn = this.box.querySelector('#addNewList');
-		this.clearListName = this.box.querySelector('#clearListName');
-		this.listTasksDom = _glob.cElem('.list__tasks');
+		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
-		this.li = document.createElement('li');
-		this.index = 1;
-		this.initEvents();
+		_this.index = 1;
+		_this.box = document.getElementById(id);
+		_this.boardsBtn = _this.box.querySelector('#boardsBtn');
+		_this.boardsList = _this.box.querySelector('#boardsList');
+		_this.newToDoListName = _this.box.querySelector('#listName');
+		_this.addNewListBtn = _this.box.querySelector('#addNewList');
+		_this.clearListName = _this.box.querySelector('#clearListName');
+		_this.listTasksDom = _this.fInDoc('.list__tasks');
+		_this.initEvents();
+		return _this;
 	}
 
 	_createClass(App, [{
 		key: 'initEvents',
 		value: function initEvents() {
-			var _this = this;
+			var _this2 = this;
 
 			this.boardsBtn.addEventListener('click', function (e) {
-				_this.boardsList.classList.toggle('h-0');
+				_this2.boardsList.classList.toggle('h-0');
 			}, false);
 
 			this.newToDoListName.addEventListener('keyup', function (e) {
-				if (_this.newToDoListName.value.trim().length) {
+				if (_this2._checkName()) {
 					clearListName.classList.remove('d_none');
 					if (e.keyCode === 13) {
-						_this.addNewList();
+						_this2.addNewList();
 					}
 				} else {
 					clearListName.classList.add('d_none');
@@ -129,44 +127,38 @@ var App = function () {
 			}, false);
 
 			this.addNewListBtn.addEventListener('click', function () {
-				if (_this.newToDoListName.value.trim().length) {
-					_this.addNewList();
-				} else {}
+				_this2._checkName() ? _this2.addNewList() : false;
 			}, false);
 
 			this.clearListName.addEventListener('click', function () {
-				_this.newToDoListName.value = '';
-				_this.clearListName.classList.add('d_none');
+				_this2.newToDoListName.value = '';
+				_this2.clearListName.classList.add('d_none');
 			}, false);
+		}
+	}, {
+		key: '_checkName',
+		value: function _checkName() {
+			return this.newToDoListName.value.trim().length;
 		}
 	}, {
 		key: 'addNewList',
 		value: function addNewList() {
 			var html = templateList({ taskName: this.newToDoListName.value });
-			var listLi = this.li.cloneNode(true);
-			var boardsLi = this.li.cloneNode(true);
+			var listLi = this.createElement('li', 'l' + this.index, 'listToDo', html);
+			var boardsLi = this.createElement('li', 'b' + this.index, 'listsName__elem', this.newToDoListName.value);
 
-			boardsLi.innerHTML = this.newToDoListName.value;
-			boardsLi.className = 'listsName__elem';
-			boardsLi.setAttribute('id', 'b' + this.index);
 			this.boardsList.appendChild(boardsLi);
-			listLi.className = 'listToDo';
-			listLi.setAttribute('id', 'l' + this.index);
-			listLi.innerHTML = html;
 			this.listTasksDom.appendChild(listLi);
 			var list = new _toDoList.ToDoList(this.index, this);
+
 			if (this.boardsList.children.length) {
 				this.listTasksDom.querySelector('.list__empty').style.display = 'none';
 			} else {
 				this.listTasksDom.querySelector('.list__empty').style.display = 'block';
 			}
 			this.index++;
-
 			this.newToDoListName.value = '';
 		}
-	}, {
-		key: 'createListElem',
-		value: function createListElem(id) {}
 	}, {
 		key: 'removeChild',
 		value: function removeChild(id) {
@@ -181,10 +173,9 @@ var App = function () {
 	}]);
 
 	return App;
-}();
+}(_global.Global);
 
 var header = new App('header');
-console.log(header);
 
 /***/ }),
 /* 1 */
@@ -194,22 +185,51 @@ console.log(header);
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var cElem = exports.cElem = function cElem(elem) {
-  var all = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  if (all !== false) {
-    var obj = [].concat(_toConsumableArray(document.querySelectorAll(elem)));
-    return obj;
-  } else {
-    var _obj = document.querySelector(elem);
-    return _obj;
-  }
-};
+var Global = exports.Global = function () {
+	function Global() {
+		_classCallCheck(this, Global);
+	}
+
+	_createClass(Global, [{
+		key: 'createElement',
+		value: function createElement() {
+			var elem = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'div';
+			var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+			var classList = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+			var html = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
+
+			var e = document.createElement(elem);
+			e.setAttribute('id', id);
+			e.classList.add(classList);
+			e.innerHTML = html;
+			return e;
+		}
+	}, {
+		key: 'fInDoc',
+		value: function fInDoc(elem) {
+			var all = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+			if (all !== false) {
+				var obj = [].concat(_toConsumableArray(document.querySelectorAll(elem)));
+				return obj;
+			} else {
+				var _obj = document.querySelector(elem);
+				return _obj;
+			}
+		}
+	}]);
+
+	return Global;
+}();
 
 /***/ }),
 /* 2 */

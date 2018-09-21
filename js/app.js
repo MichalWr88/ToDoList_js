@@ -1,28 +1,21 @@
 /*jshint esversion: 6 */
-import * as _glob from './global';
-
+import {Global}  from './global';
 import { ToDoList } from './toDoList';
 
 const source = document.getElementById('list-template').innerHTML,
-	templateList = Handlebars.compile(source);
-
-// let add = document.querySelector('.addList__addBtn'),
-// 	body = document.querySelector('body'),
-// 	indexList = 1;
-// console.log(add);
-
-class App {
+templateList = Handlebars.compile(source);
+  
+class App extends Global {
 	constructor(id) {
+		super();
+		this.index = 1;
 		this.box = document.getElementById(id);
 		this.boardsBtn = this.box.querySelector('#boardsBtn');
 		this.boardsList = this.box.querySelector('#boardsList');
 		this.newToDoListName = this.box.querySelector('#listName');
 		this.addNewListBtn = this.box.querySelector('#addNewList');
 		this.clearListName = this.box.querySelector('#clearListName');
-		this.listTasksDom = _glob.cElem('.list__tasks');
-
-		this.li = document.createElement('li');
-		this.index = 1;
+    this.listTasksDom = this.fInDoc('.list__tasks');
 		this.initEvents();
 	}
 
@@ -38,7 +31,7 @@ class App {
 		this.newToDoListName.addEventListener(
 			'keyup',
 			e => {
-				if (this.newToDoListName.value.trim().length) {
+				if (this._checkName()) {
 					clearListName.classList.remove('d_none');
 					if (e.keyCode === 13) {
 						this.addNewList();
@@ -53,10 +46,7 @@ class App {
 		this.addNewListBtn.addEventListener(
 			'click',
 			() => {
-				if (this.newToDoListName.value.trim().length) {
-					this.addNewList();
-				} else {
-				}
+				this._checkName() ? this.addNewList() : false;
 			},
 			false
 		);
@@ -70,40 +60,36 @@ class App {
 			false
 		);
 	}
+	_checkName() {
+		return this.newToDoListName.value.trim().length;
+	}
 	addNewList() {
 		const html = templateList({ taskName: this.newToDoListName.value });
-		const listLi = this.li.cloneNode(true);
-		const boardsLi = this.li.cloneNode(true);
+		const listLi = this.createElement('li', `l${this.index}`, 'listToDo', html);
+		const boardsLi = this.createElement('li', `b${this.index}`, 'listsName__elem', this.newToDoListName.value);
 
-    boardsLi.innerHTML = this.newToDoListName.value;
-    boardsLi.className = 'listsName__elem';
-    boardsLi.setAttribute('id', `b${this.index}`);
-    this.boardsList.appendChild(boardsLi);
-    listLi.className = 'listToDo';
-    listLi.setAttribute('id', `l${this.index}`);
-    listLi.innerHTML = html;
+		this.boardsList.appendChild(boardsLi);
 		this.listTasksDom.appendChild(listLi);
-		const list = new ToDoList(this.index, this);
-    if (this.boardsList.children.length) {
-      this.listTasksDom.querySelector('.list__empty').style.display = 'none';
-    } else {
-      this.listTasksDom.querySelector('.list__empty').style.display = 'block';
-    }
+    const list = new ToDoList(this.index, this);
+    
+		if (this.boardsList.children.length) {
+			this.listTasksDom.querySelector('.list__empty').style.display = 'none';
+		} else {
+			this.listTasksDom.querySelector('.list__empty').style.display = 'block';
+		}
 		this.index++;
-
 		this.newToDoListName.value = '';
 	}
-	createListElem(id) {}
 	removeChild(id) {
-    this.listTasksDom.querySelector(`#l${id}`).remove();
-    this.boardsList.querySelector(`#b${id}`).remove();
-    if (this.boardsList.children.length) {
-      this.listTasksDom.querySelector('.list__empty').style.display = 'none';
-    } else {
-      this.listTasksDom.querySelector('.list__empty').style.display = 'block';
-    }
+		this.listTasksDom.querySelector(`#l${id}`).remove();
+		this.boardsList.querySelector(`#b${id}`).remove();
+		if (this.boardsList.children.length) {
+			this.listTasksDom.querySelector('.list__empty').style.display = 'none';
+		} else {
+			this.listTasksDom.querySelector('.list__empty').style.display = 'block';
+		}
 	}
 }
 
 const header = new App('header');
-console.log(header);
+
