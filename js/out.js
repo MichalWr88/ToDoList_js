@@ -138,11 +138,19 @@ var App = function (_Global) {
 	}, {
 		key: '_checkName',
 		value: function _checkName() {
+			var form = this.box.querySelector('form');
+			console.dir(form.checkValidity());
+			if (!form.checkValidity()) {
+				this.box.querySelector('.error').classList.add('hide');
+			} else {
+				this.box.querySelector('.error').classList.remove('hide');
+			}
 			return this.newToDoListName.value.trim().length;
 		}
 	}, {
 		key: 'addNewList',
 		value: function addNewList() {
+
 			var html = templateList({ taskName: this.newToDoListName.value });
 			var listLi = this.createElement('li', 'l' + this.index, 'listToDo', html);
 			var boardsLi = this.createElement('li', 'b' + this.index, 'listsName__elem', this.newToDoListName.value);
@@ -158,6 +166,8 @@ var App = function (_Global) {
 			}
 			this.index++;
 			this.newToDoListName.value = '';
+			this.newToDoListName.focus();
+			this.newToDoListName.select();
 		}
 	}, {
 		key: 'removeChild',

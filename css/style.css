@@ -75,8 +75,26 @@ body {
 	border: 2px solid #b1b4b5;
 	padding: 5px 10px;
 }
-input:invalid {
-	border: 2px dashed red;
+.invalid {
+  border: 2px dashed red;
+  box-shadow: 0 0 5px 1px red;
+}
+.error{
+  color:white;
+  display: inline-block;
+  margin:5px 0;
+  padding:5px;
+  border-radius:5px;
+  background-color:#db4d41;
+   height:0px;
+  overflow: hidden;
+  padding:0;
+}
+.hide{
+  transition: all .3s ease-in-out;
+  height:20px;
+  overflow: hidden;
+  padding:5px;
 }
 /* -------------------------------------------- */
 /* HEADER */
@@ -122,12 +140,17 @@ input:invalid {
 	flex: 2;
 	display: flex;
 	flex-wrap: wrap;
-	align-items: center;
+  align-items: center;
+  max-width:450px;
 }
 .addList__label {
-	/* flex:1; */
+  flex:1;
+  flex-wrap: wrap;
 	flex-basis: 100%;
 	margin-left: 5px;
+}
+.addList__label p{
+margin:2px 0;
 }
 .addList__input {
 	height: 25px;
