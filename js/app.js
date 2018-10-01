@@ -61,9 +61,17 @@ class App extends Global {
 		);
 	}
 	_checkName() {
+    const form = this.box.querySelector('form');
+    console.dir(form.checkValidity());
+    if (!form.checkValidity()){
+      this.box.querySelector('.error').classList.add('hide')
+    }else {
+      this.box.querySelector('.error').classList.remove('hide')
+    }
 		return this.newToDoListName.value.trim().length;
 	}
 	addNewList() {
+
 		const html = templateList({ taskName: this.newToDoListName.value });
 		const listLi = this.createElement('li', `l${this.index}`, 'listToDo', html);
 		const boardsLi = this.createElement('li', `b${this.index}`, 'listsName__elem', this.newToDoListName.value);
@@ -78,7 +86,9 @@ class App extends Global {
 			this.listTasksDom.querySelector('.list__empty').style.display = 'block';
 		}
 		this.index++;
-		this.newToDoListName.value = '';
+    this.newToDoListName.value = '';
+    this.newToDoListName.focus();
+    this.newToDoListName.select();
 	}
 	removeChild(id) {
 		this.listTasksDom.querySelector(`#l${id}`).remove();
