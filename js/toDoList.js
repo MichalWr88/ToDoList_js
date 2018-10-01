@@ -11,12 +11,13 @@ export class ToDoList {
     this.countAll = this.box.querySelector('.listToDo__allCount');
     this.countChecked = this.box.querySelector('.listToDo__chekedCount');
     this.created = this.box.querySelector('.listToDo_created');
+    this.updated = this.box.querySelector('.listToDo_updated');
     // -----------------------------------
     this.id = id;
     this.list = [];
     this.countTask = 0;
     this.checked = 0;
-    this.created.innerHTML = new Date().toLocaleDateString('pl-pl', { year: 'numeric', month: 'short', day: 'numeric' });
+    this.created.innerHTML = this._getFormatDate();
     // this.name = this.nameInp.value;
 
     //------------------
@@ -43,6 +44,25 @@ export class ToDoList {
       });
     }
   }
+  _getFormatDate(d) {
+    const options = {
+      year: "numeric",
+      day: "numeric",
+      month: "numeric",
+      hour: "numeric",
+      minute: "numeric"
+    };
+    if (d) {
+      return new Date(d).toLocaleDateString("pl-PL", options).replace(',', '');
+    } else {
+      return new Date().toLocaleDateString("pl-PL", options).replace(',', '');
+    }
+  }
+  _updateDate() {
+    const currentTime = new Date();
+    this.updated.innerHTML = this._getFormatDate(currentTime);
+    return this._getFormatDate(currentTime)
+  }
   updateCheckedTask() {
     const array = [...this.listNode.children].filter(elem => {
       return elem.classList.contains('checked');
@@ -64,12 +84,7 @@ export class ToDoList {
     });
   }
   removeElement(elem) {
-    // const toDelete = this.listNode.querySelectorAll('li');
-    // console.log(id);
-    // console.log(this.listNode);
-
     this.parent.removeChild(this.id);
-
   }
   createLik(name, dat, check) {
     let delBtn = document.createElement('button');
@@ -182,6 +197,7 @@ export class ToDoList {
 
         // const Task = this.createLik(this.newTaskInp.value.trim());
         // this.list.push(Task.data);
+        this._updateDate();
         this.countTask++;
         this.countAll.innerHTML = this.countTask;
         localStorage.setItem(this.id, JSON.stringify(this.list));
