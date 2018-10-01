@@ -296,6 +296,10 @@ margin:2px 0;
 	color: #4d679e;
 	box-shadow: 0px 5px 30px -5px rgba(0, 0, 0, 0.3);
 }
+.checked{
+	filter:blur(2px);
+	pointer-events: none;
+}
 .listToDo__task:hover .task__btn-dell {
 	transform: translateX(0);
 }
@@ -324,6 +328,7 @@ margin:2px 0;
 	border: 2px solid;
 	overflow: hidden;
 }
+
 [data-complete='false'] > .task__complete {
 	/* transform:perspective(2); */ /* transform:translateY(0px); */
 	transform: rotate(55deg); /* transform:skew(-20deg,30deg); */
