@@ -275,12 +275,13 @@ var ToDoList = exports.ToDoList = function () {
     this.countAll = this.box.querySelector('.listToDo__allCount');
     this.countChecked = this.box.querySelector('.listToDo__chekedCount');
     this.created = this.box.querySelector('.listToDo_created');
+    this.updated = this.box.querySelector('.listToDo_updated');
     // -----------------------------------
     this.id = id;
     this.list = [];
     this.countTask = 0;
     this.checked = 0;
-    this.created.innerHTML = new Date().toLocaleDateString('pl-pl', { year: 'numeric', month: 'short', day: 'numeric' });
+    this.created.innerHTML = this._getFormatDate();
     // this.name = this.nameInp.value;
 
     //------------------
@@ -314,6 +315,29 @@ var ToDoList = exports.ToDoList = function () {
       }
     }
   }, {
+    key: '_getFormatDate',
+    value: function _getFormatDate(d) {
+      var options = {
+        year: "numeric",
+        day: "numeric",
+        month: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+      };
+      if (d) {
+        return new Date(d).toLocaleDateString("pl-PL", options).replace(',', '');
+      } else {
+        return new Date().toLocaleDateString("pl-PL", options).replace(',', '');
+      }
+    }
+  }, {
+    key: '_updateDate',
+    value: function _updateDate() {
+      var currentTime = new Date();
+      this.updated.innerHTML = this._getFormatDate(currentTime);
+      return this._getFormatDate(currentTime);
+    }
+  }, {
     key: 'updateCheckedTask',
     value: function updateCheckedTask() {
       var array = [].concat(_toConsumableArray(this.listNode.children)).filter(function (elem) {
@@ -342,10 +366,6 @@ var ToDoList = exports.ToDoList = function () {
   }, {
     key: 'removeElement',
     value: function removeElement(elem) {
-      // const toDelete = this.listNode.querySelectorAll('li');
-      // console.log(id);
-      // console.log(this.listNode);
-
       this.parent.removeChild(this.id);
     }
   }, {
@@ -453,6 +473,7 @@ var ToDoList = exports.ToDoList = function () {
 
         // const Task = this.createLik(this.newTaskInp.value.trim());
         // this.list.push(Task.data);
+        _this4._updateDate();
         _this4.countTask++;
         _this4.countAll.innerHTML = _this4.countTask;
         localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
