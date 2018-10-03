@@ -61,7 +61,7 @@ export class ToDoList {
   _updateDate() {
     const currentTime = new Date();
     this.updated.innerHTML = this._getFormatDate(currentTime);
-    return this._getFormatDate(currentTime)
+    return this._getFormatDate(currentTime);
   }
   updateCheckedTask() {
     const array = [...this.listNode.children].filter(elem => {
@@ -148,11 +148,11 @@ export class ToDoList {
     // 	priority: 0,
     // 	date: `${day}.${month}.${year}`
     // };
-    if (check === undefined) {
-      data.checked = false;
-    } else {
-      data.checked = check;
-    }
+    // if (check === undefined) {
+    //   data.checked = false;
+    // } else {
+    //   data.checked = check;
+    // }
     labelP.append(priority);
     lik.append(checkBtn);
     lik.append(nameInp);
@@ -193,15 +193,18 @@ export class ToDoList {
     this.addBtn.addEventListener(
       'click',
       () => {
-        const task = new Task(this.countTask, this.newTaskInp.value, this);
+				console.log(this.newTaskInp.value.length);
+				if (this.newTaskInp.value.length != 0) {
+					const task = new Task(this.countTask, this.newTaskInp.value, this);
 
-        // const Task = this.createLik(this.newTaskInp.value.trim());
-        // this.list.push(Task.data);
-        this._updateDate();
-        this.countTask++;
-        this.countAll.innerHTML = this.countTask;
-        localStorage.setItem(this.id, JSON.stringify(this.list));
-        this.newTaskInp.value = '';
+					// const Task = this.createLik(this.newTaskInp.value.trim());
+					// this.list.push(Task.data);
+					this._updateDate();
+					this.countTask++;
+					this.countAll.innerHTML = this.countTask;
+					localStorage.setItem(this.id, JSON.stringify(this.list));
+					this.newTaskInp.value = "";
+				}
       },
       false
     );

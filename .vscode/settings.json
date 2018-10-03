@@ -1,6 +1,7 @@
 {
-  "prettier.printWidth": 280,
-  "editor.wordWrapColumn": 280,
-  "prettier.trailingComma": "es5",
-  "prettier.useTabs": true
+	"prettier.trailingComma": "es5",
+	"prettier.arrowParens": "always",
+	"prettier.stylelintIntegration": true,
+	"editor.wordWrap": "wordWrapColumn",
+	"prettier.parser": "flow"
 }
