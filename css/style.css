@@ -297,8 +297,16 @@ margin:2px 0;
 	box-shadow: 0px 5px 30px -5px rgba(0, 0, 0, 0.3);
 }
 .checked{
+	/* pointer-events: none; */
+}
+.checked  textarea {
 	filter:blur(2px);
 	pointer-events: none;
+}
+.checked select {
+	filter:blur(2px);
+	pointer-events: none;
+
 }
 .listToDo__task:hover .task__btn-dell {
 	transform: translateX(0);

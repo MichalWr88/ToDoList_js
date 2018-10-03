@@ -1,6 +1,7 @@
 import { Task } from './task';
 export class ToDoList {
   constructor(id, parent) {
+    this.id = id;
     this.parent = parent;
     this.box = document.getElementById(`l${id}`);
     this.nameInp = this.box.querySelector('.listToDo__name');
@@ -13,22 +14,19 @@ export class ToDoList {
     this.created = this.box.querySelector('.listToDo_created');
     this.updated = this.box.querySelector('.listToDo_updated');
     // -----------------------------------
-    this.id = id;
-    this.list = [];
+    // this.list = [];
     this.countTask = 0;
     this.checked = 0;
     this.created.innerHTML = this._getFormatDate();
-    // this.name = this.nameInp.value;
-
     //------------------
-    this.initList();
+    // this.initList();
     // this.initLocalStorage();
     this.initEvent();
   }
 
-  initList() {
-    this.countAll.innerHTML = this.countTask;
-  }
+  // initList() {
+  //   this.countAll.innerHTML = this.countTask;
+  // }
   initLocalStorage() {
     const local = JSON.parse(localStorage.getItem(this.id));
     if (local === null) {
@@ -73,6 +71,11 @@ export class ToDoList {
   }
   sortList() {
     const sortArr = [...this.listNode.children].sort((a, b) => {
+      const AP = a.querySelector('select').value,
+      BP = b.querySelector('select').value;
+      if(AP -BP) {
+return AP-BP
+      }
       const AA = a.classList.contains('checked') ? 1 : 0,
         BB = b.classList.contains('checked') ? 1 : 0;
       return AA - BB;
@@ -83,27 +86,31 @@ export class ToDoList {
       this.listNode.appendChild(e);
     });
   }
-  removeElement(elem) {
+  removeList(elem) {
     this.parent.removeChild(this.id);
   }
+  removeTask(){
+
+  }
+
   createLik(name, dat, check) {
-    let delBtn = document.createElement('button');
-    delBtn.className = 'ion-close-round btn task__delete';
-    delBtn.addEventListener(
-      'click',
-      e => {
-        // e.target.parentNode.remove(e.target.parentNode);
-        // this.list = this.list.filter(function(elem) {
-        // 	if (elem.text !== name) {
-        // 		return elem;
-        // 	}
-        // });
-        localStorage.setItem(this.id, JSON.stringify(this.list));
-        this.countTask = this.list.length;
-        this.countAll.innerHTML = this.countTask;
-      },
-      false
-    );
+    // let delBtn = document.createElement('button');
+    // delBtn.className = 'ion-close-round btn task__delete';
+    // delBtn.addEventListener(
+    //   'click',
+    //   e => {
+    //     // e.target.parentNode.remove(e.target.parentNode);
+    //     // this.list = this.list.filter(function(elem) {
+    //     // 	if (elem.text !== name) {
+    //     // 		return elem;
+    //     // 	}
+    //     // });
+    //     localStorage.setItem(this.id, JSON.stringify(this.list));
+    //     this.countTask = this.list.length;
+    //     this.countAll.innerHTML = this.countTask;
+    //   },
+    //   false
+    // );
     // --------------------------------------------------------------
     let checkBtn = document.createElement('button');
     checkBtn.className = 'ion-checkmark-round btn task__check';
@@ -121,19 +128,19 @@ export class ToDoList {
             }
           });
           // this.list.push(Task.data);
-          localStorage.setItem(this.id, JSON.stringify(this.list));
-        } else {
-          data.checked = false;
-          this.list.map(elem => {
-            if (elem.text === data.text) {
-              elem.checked = false;
-            }
-          });
+        //   localStorage.setItem(this.id, JSON.stringify(this.list));
+        // } else {
+        //   data.checked = false;
+        //   this.list.map(elem => {
+        //     if (elem.text === data.text) {
+        //       elem.checked = false;
+        //     }
+        //   });
           // this.list.push(Task.data);
-          localStorage.setItem(this.id, JSON.stringify(this.list));
+          // localStorage.setItem(this.id, JSON.stringify(this.list));
         }
-        this.updateCheckedTask();
-        this.sortList();
+        // this.updateCheckedTask();
+        // this.sortList();
       },
       false
     );
@@ -153,13 +160,6 @@ export class ToDoList {
     // } else {
     //   data.checked = check;
     // }
-    labelP.append(priority);
-    lik.append(checkBtn);
-    lik.append(nameInp);
-    lik.append(delBtn);
-    lik.append(labelP);
-    lik.append(dateTask);
-    console.log(data.checked);
     if (data.checked === true) {
       labelP.classList.toggle('blured');
       nameInp.classList.toggle('checked');
@@ -170,7 +170,7 @@ export class ToDoList {
   }
 
   initTask(name) {
-    createLik(name);
+    // createLik(name);
     // this.list.push(Task.data);
     localStorage.setItem(this.id, JSON.stringify(this.list));
 
@@ -178,40 +178,33 @@ export class ToDoList {
 
     // ------------------------------------------------------------------
   }
+addTask(){
 
+  if (this.newTaskInp.value.length != 0) {
+    const task = new Task(this.countTask, this.newTaskInp.value, this);
+    // const Task = this.createLik(this.newTaskInp.value.trim());
+    // this.list.push(Task.data);
+    this._updateDate();
+    this.countTask++;
+    this.countAll.innerHTML = this.countTask;
+    localStorage.setItem(this.id, JSON.stringify(this.list));
+    this.newTaskInp.value = "";
+  }
+}
   initEvent() {
     // change input name List
-    this.nameInp.addEventListener(
-      'blur',
-      e => {
-        this.name = e.target.value.trim();
-      },
-      false
-    );
-
     // add Task
     this.addBtn.addEventListener(
       'click',
       () => {
-				console.log(this.newTaskInp.value.length);
-				if (this.newTaskInp.value.length != 0) {
-					const task = new Task(this.countTask, this.newTaskInp.value, this);
-
-					// const Task = this.createLik(this.newTaskInp.value.trim());
-					// this.list.push(Task.data);
-					this._updateDate();
-					this.countTask++;
-					this.countAll.innerHTML = this.countTask;
-					localStorage.setItem(this.id, JSON.stringify(this.list));
-					this.newTaskInp.value = "";
-				}
+        this.addTask();
       },
       false
     );
     this.delBtn.addEventListener(
       'click',
       () => {
-        this.removeElement();
+        this.removeList();
       },
       false
     );
@@ -220,13 +213,14 @@ export class ToDoList {
       'keydown',
       e => {
         if (e.keyCode === 13) {
-          const Task = this.createLik(this.newTaskInp.value.trim());
-          this.listNode.appendChild(Task.lik);
-          this.list.push(Task.data);
-          this.countTask++;
-          this.countAll.innerHTML = this.countTask;
-          localStorage.setItem(this.id, JSON.stringify(this.list));
-          this.newTaskInp.value = '';
+this.addTask();
+          // const Task = this.createLik(this.newTaskInp.value.trim());
+          // this.listNode.appendChild(Task.lik);
+          // this.list.push(Task.data);
+          // this.countTask++;
+          // this.countAll.innerHTML = this.countTask;
+          // localStorage.setItem(this.id, JSON.stringify(this.list));
+          // this.newTaskInp.value = '';
         }
       },
       false

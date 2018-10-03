@@ -264,6 +264,7 @@ var ToDoList = exports.ToDoList = function () {
   function ToDoList(id, parent) {
     _classCallCheck(this, ToDoList);
 
+    this.id = id;
     this.parent = parent;
     this.box = document.getElementById('l' + id);
     this.nameInp = this.box.querySelector('.listToDo__name');
@@ -276,25 +277,22 @@ var ToDoList = exports.ToDoList = function () {
     this.created = this.box.querySelector('.listToDo_created');
     this.updated = this.box.querySelector('.listToDo_updated');
     // -----------------------------------
-    this.id = id;
-    this.list = [];
+    // this.list = [];
     this.countTask = 0;
     this.checked = 0;
     this.created.innerHTML = this._getFormatDate();
-    // this.name = this.nameInp.value;
-
     //------------------
-    this.initList();
+    // this.initList();
     // this.initLocalStorage();
     this.initEvent();
   }
 
+  // initList() {
+  //   this.countAll.innerHTML = this.countTask;
+  // }
+
+
   _createClass(ToDoList, [{
-    key: 'initList',
-    value: function initList() {
-      this.countAll.innerHTML = this.countTask;
-    }
-  }, {
     key: 'initLocalStorage',
     value: function initLocalStorage() {
       var _this = this;
@@ -352,6 +350,11 @@ var ToDoList = exports.ToDoList = function () {
       var _this2 = this;
 
       var sortArr = [].concat(_toConsumableArray(this.listNode.children)).sort(function (a, b) {
+        var AP = a.querySelector('select').value,
+            BP = b.querySelector('select').value;
+        if (AP - BP) {
+          return AP - BP;
+        }
         var AA = a.classList.contains('checked') ? 1 : 0,
             BB = b.classList.contains('checked') ? 1 : 0;
         return AA - BB;
@@ -363,28 +366,35 @@ var ToDoList = exports.ToDoList = function () {
       });
     }
   }, {
-    key: 'removeElement',
-    value: function removeElement(elem) {
+    key: 'removeList',
+    value: function removeList(elem) {
       this.parent.removeChild(this.id);
     }
+  }, {
+    key: 'removeTask',
+    value: function removeTask() {}
   }, {
     key: 'createLik',
     value: function createLik(name, dat, check) {
       var _this3 = this;
 
-      var delBtn = document.createElement('button');
-      delBtn.className = 'ion-close-round btn task__delete';
-      delBtn.addEventListener('click', function (e) {
-        // e.target.parentNode.remove(e.target.parentNode);
-        // this.list = this.list.filter(function(elem) {
-        // 	if (elem.text !== name) {
-        // 		return elem;
-        // 	}
-        // });
-        localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
-        _this3.countTask = _this3.list.length;
-        _this3.countAll.innerHTML = _this3.countTask;
-      }, false);
+      // let delBtn = document.createElement('button');
+      // delBtn.className = 'ion-close-round btn task__delete';
+      // delBtn.addEventListener(
+      //   'click',
+      //   e => {
+      //     // e.target.parentNode.remove(e.target.parentNode);
+      //     // this.list = this.list.filter(function(elem) {
+      //     // 	if (elem.text !== name) {
+      //     // 		return elem;
+      //     // 	}
+      //     // });
+      //     localStorage.setItem(this.id, JSON.stringify(this.list));
+      //     this.countTask = this.list.length;
+      //     this.countAll.innerHTML = this.countTask;
+      //   },
+      //   false
+      // );
       // --------------------------------------------------------------
       var checkBtn = document.createElement('button');
       checkBtn.className = 'ion-checkmark-round btn task__check';
@@ -400,19 +410,19 @@ var ToDoList = exports.ToDoList = function () {
             }
           });
           // this.list.push(Task.data);
-          localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
-        } else {
-          data.checked = false;
-          _this3.list.map(function (elem) {
-            if (elem.text === data.text) {
-              elem.checked = false;
-            }
-          });
+          //   localStorage.setItem(this.id, JSON.stringify(this.list));
+          // } else {
+          //   data.checked = false;
+          //   this.list.map(elem => {
+          //     if (elem.text === data.text) {
+          //       elem.checked = false;
+          //     }
+          //   });
           // this.list.push(Task.data);
-          localStorage.setItem(_this3.id, JSON.stringify(_this3.list));
+          // localStorage.setItem(this.id, JSON.stringify(this.list));
         }
-        _this3.updateCheckedTask();
-        _this3.sortList();
+        // this.updateCheckedTask();
+        // this.sortList();
       }, false);
       // ---------------------------------------------------------------------------
       //
@@ -430,13 +440,6 @@ var ToDoList = exports.ToDoList = function () {
       // } else {
       //   data.checked = check;
       // }
-      labelP.append(priority);
-      lik.append(checkBtn);
-      lik.append(nameInp);
-      lik.append(delBtn);
-      lik.append(labelP);
-      lik.append(dateTask);
-      console.log(data.checked);
       if (data.checked === true) {
         labelP.classList.toggle('blured');
         nameInp.classList.toggle('checked');
@@ -448,7 +451,7 @@ var ToDoList = exports.ToDoList = function () {
   }, {
     key: 'initTask',
     value: function initTask(name) {
-      createLik(name);
+      // createLik(name);
       // this.list.push(Task.data);
       localStorage.setItem(this.id, JSON.stringify(this.list));
 
@@ -457,43 +460,44 @@ var ToDoList = exports.ToDoList = function () {
       // ------------------------------------------------------------------
     }
   }, {
+    key: 'addTask',
+    value: function addTask() {
+
+      if (this.newTaskInp.value.length != 0) {
+        var task = new _task.Task(this.countTask, this.newTaskInp.value, this);
+        // const Task = this.createLik(this.newTaskInp.value.trim());
+        // this.list.push(Task.data);
+        this._updateDate();
+        this.countTask++;
+        this.countAll.innerHTML = this.countTask;
+        localStorage.setItem(this.id, JSON.stringify(this.list));
+        this.newTaskInp.value = "";
+      }
+    }
+  }, {
     key: 'initEvent',
     value: function initEvent() {
       var _this4 = this;
 
       // change input name List
-      this.nameInp.addEventListener('blur', function (e) {
-        _this4.name = e.target.value.trim();
-      }, false);
-
       // add Task
       this.addBtn.addEventListener('click', function () {
-        console.log(_this4.newTaskInp.value.length);
-        if (_this4.newTaskInp.value.length != 0) {
-          var task = new _task.Task(_this4.countTask, _this4.newTaskInp.value, _this4);
-
-          // const Task = this.createLik(this.newTaskInp.value.trim());
-          // this.list.push(Task.data);
-          _this4._updateDate();
-          _this4.countTask++;
-          _this4.countAll.innerHTML = _this4.countTask;
-          localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
-          _this4.newTaskInp.value = "";
-        }
+        _this4.addTask();
       }, false);
       this.delBtn.addEventListener('click', function () {
-        _this4.removeElement();
+        _this4.removeList();
       }, false);
       // ===================================================
       this.newTaskInp.addEventListener('keydown', function (e) {
         if (e.keyCode === 13) {
-          var _Task = _this4.createLik(_this4.newTaskInp.value.trim());
-          _this4.listNode.appendChild(_Task.lik);
-          _this4.list.push(_Task.data);
-          _this4.countTask++;
-          _this4.countAll.innerHTML = _this4.countTask;
-          localStorage.setItem(_this4.id, JSON.stringify(_this4.list));
-          _this4.newTaskInp.value = '';
+          _this4.addTask();
+          // const Task = this.createLik(this.newTaskInp.value.trim());
+          // this.listNode.appendChild(Task.lik);
+          // this.list.push(Task.data);
+          // this.countTask++;
+          // this.countAll.innerHTML = this.countTask;
+          // localStorage.setItem(this.id, JSON.stringify(this.list));
+          // this.newTaskInp.value = '';
         }
       }, false);
       // ===================================================
@@ -566,14 +570,15 @@ var Task = exports.Task = function () {
 
         _this.checkedElem();
         _this.parent.updateCheckedTask();
-
         _this.nameInp.classList.toggle('blured');
       }, false);
       this.nameInp.addEventListener('blur', function () {}, false);
       this.delBtn.addEventListener('click', function (e) {
-        _this.parent.removeElement(e.currentTarget.parentNode);
+        _this.parent.removeTask(e.currentTarget.parentNode);
       }, false);
-      this.priority.addEventListener('change', function () {}, false);
+      this.priority.addEventListener('change', function () {
+        _this.parent.sortPriority();
+      }, false);
     }
   }, {
     key: 'checkedElem',

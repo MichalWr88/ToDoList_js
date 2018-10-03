@@ -15,6 +15,7 @@ export class Task {
     this.parent.listNode.appendChild(this.lik);
     this.initEvents(); 
   }
+  
   createLik() {
     const templateTask = document.getElementById('task-template').innerHTML,
       likHtml = Handlebars.compile(templateTask),
@@ -35,14 +36,15 @@ export class Task {
 
       this.checkedElem();
       this.parent.updateCheckedTask();
-
       this.nameInp.classList.toggle('blured');
     },false);
     this.nameInp.addEventListener('blur',()=>{},false);
     this.delBtn.addEventListener('click', (e)=>{
-      this.parent.removeElement(e.currentTarget.parentNode);
+      this.parent.removeTask(e.currentTarget.parentNode);
     },false);
-    this.priority.addEventListener('change',()=>{},false);
+    this.priority.addEventListener('change',()=>{
+      this.parent.sortPriority()
+    },false);
    }
    checkedElem(){
      this.checkBtn.querySelector('i').classList.toggle('ion-checkmark-round');
