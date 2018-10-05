@@ -350,11 +350,6 @@ var ToDoList = exports.ToDoList = function () {
       var _this2 = this;
 
       var sortArr = [].concat(_toConsumableArray(this.listNode.children)).sort(function (a, b) {
-        var AP = a.querySelector('select').value,
-            BP = b.querySelector('select').value;
-        if (AP - BP) {
-          return AP - BP;
-        }
         var AA = a.classList.contains('checked') ? 1 : 0,
             BB = b.classList.contains('checked') ? 1 : 0;
         return AA - BB;
@@ -363,6 +358,22 @@ var ToDoList = exports.ToDoList = function () {
       console.log(sortArr);
       sortArr.forEach(function (e) {
         _this2.listNode.appendChild(e);
+      });
+    }
+  }, {
+    key: 'sortPriority',
+    value: function sortPriority() {
+      var _this3 = this;
+
+      var sortArr = [].concat(_toConsumableArray(this.listNode.querySelectorAll('li:not(.checked)'))).sort(function (a, b) {
+        var AA = a.querySelector('.task_priority').value,
+            BB = b.querySelector('.task_priority').value;
+        return BB - AA;
+      });
+      // localStorage.setItem(this.id, JSON.stringify(this.list));
+      console.log(sortArr);
+      sortArr.forEach(function (e) {
+        _this3.listNode.appendChild(e);
       });
     }
   }, {
@@ -376,19 +387,8 @@ var ToDoList = exports.ToDoList = function () {
   }, {
     key: 'createLik',
     value: function createLik(name, dat, check) {
-      var _this3 = this;
+      var _this4 = this;
 
-      // let delBtn = document.createElement('button');
-      // delBtn.className = 'ion-close-round btn task__delete';
-      // delBtn.addEventListener(
-      //   'click',
-      //   e => {
-      //     // e.target.parentNode.remove(e.target.parentNode);
-      //     // this.list = this.list.filter(function(elem) {
-      //     // 	if (elem.text !== name) {
-      //     // 		return elem;
-      //     // 	}
-      //     // });
       //     localStorage.setItem(this.id, JSON.stringify(this.list));
       //     this.countTask = this.list.length;
       //     this.countAll.innerHTML = this.countTask;
@@ -396,15 +396,13 @@ var ToDoList = exports.ToDoList = function () {
       //   false
       // );
       // --------------------------------------------------------------
-      var checkBtn = document.createElement('button');
-      checkBtn.className = 'ion-checkmark-round btn task__check';
       checkBtn.addEventListener('click', function () {
         labelP.classList.toggle('blured');
         nameInp.classList.toggle('checked');
         nameInp.setAttribute('disabled', true);
         if (data.checked === false) {
           data.checked = true;
-          _this3.list.map(function (elem) {
+          _this4.list.map(function (elem) {
             if (elem.text === data.text) {
               elem.checked = true;
             }
@@ -422,24 +420,10 @@ var ToDoList = exports.ToDoList = function () {
           // localStorage.setItem(this.id, JSON.stringify(this.list));
         }
         // this.updateCheckedTask();
-        // this.sortList();
       }, false);
       // ---------------------------------------------------------------------------
       //
       var count = this.list.length + 1;
-      // create object with task prop
-      // let data = {
-      // 	id: count,
-      // 	text: name,
-      // 	checked: '',
-      // 	priority: 0,
-      // 	date: `${day}.${month}.${year}`
-      // };
-      // if (check === undefined) {
-      //   data.checked = false;
-      // } else {
-      //   data.checked = check;
-      // }
       if (data.checked === true) {
         labelP.classList.toggle('blured');
         nameInp.classList.toggle('checked');
@@ -472,32 +456,27 @@ var ToDoList = exports.ToDoList = function () {
         this.countAll.innerHTML = this.countTask;
         localStorage.setItem(this.id, JSON.stringify(this.list));
         this.newTaskInp.value = "";
+        this.sortList();
       }
     }
   }, {
     key: 'initEvent',
     value: function initEvent() {
-      var _this4 = this;
+      var _this5 = this;
 
       // change input name List
       // add Task
       this.addBtn.addEventListener('click', function () {
-        _this4.addTask();
+        _this5.addTask();
       }, false);
       this.delBtn.addEventListener('click', function () {
-        _this4.removeList();
+        _this5.removeList();
       }, false);
       // ===================================================
       this.newTaskInp.addEventListener('keydown', function (e) {
         if (e.keyCode === 13) {
-          _this4.addTask();
-          // const Task = this.createLik(this.newTaskInp.value.trim());
-          // this.listNode.appendChild(Task.lik);
-          // this.list.push(Task.data);
-          // this.countTask++;
-          // this.countAll.innerHTML = this.countTask;
+          _this5.addTask();
           // localStorage.setItem(this.id, JSON.stringify(this.list));
-          // this.newTaskInp.value = '';
         }
       }, false);
       // ===================================================
@@ -576,7 +555,7 @@ var Task = exports.Task = function () {
       this.delBtn.addEventListener('click', function (e) {
         _this.parent.removeTask(e.currentTarget.parentNode);
       }, false);
-      this.priority.addEventListener('change', function () {
+      this.priority.addEventListener('change', function (e) {
         _this.parent.sortPriority();
       }, false);
     }

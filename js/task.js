@@ -42,8 +42,8 @@ export class Task {
     this.delBtn.addEventListener('click', (e)=>{
       this.parent.removeTask(e.currentTarget.parentNode);
     },false);
-    this.priority.addEventListener('change',()=>{
-      this.parent.sortPriority()
+    this.priority.addEventListener('change',(e)=>{
+         this.parent.sortPriority()
     },false);
    }
    checkedElem(){
