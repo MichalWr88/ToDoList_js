@@ -3,5 +3,5 @@
 	"prettier.arrowParens": "always",
 	"prettier.stylelintIntegration": true,
 	"editor.wordWrap": "wordWrapColumn",
-	"prettier.parser": "flow"
+	"prettier.useTabs": true
 }

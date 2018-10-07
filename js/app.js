@@ -35,8 +35,8 @@ class App extends Global {
 				if (this._checkName()) {
 					clearListName.classList.remove("d_none");
 					if (e.keyCode === 13) {
-						e.preventDefault();
 						this.addNewList();
+						clearListName.classList.add("d_none");
 					}
 				} else {
 					clearListName.classList.add("d_none");

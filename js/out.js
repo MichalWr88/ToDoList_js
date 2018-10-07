@@ -121,8 +121,8 @@ var App = function (_Global) {
 				if (_this2._checkName()) {
 					clearListName.classList.remove("d_none");
 					if (e.keyCode === 13) {
-						e.preventDefault();
 						_this2.addNewList();
+						clearListName.classList.add("d_none");
 					}
 				} else {
 					clearListName.classList.add("d_none");
@@ -248,7 +248,7 @@ var Global = exports.Global = function () {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
 exports.ToDoList = undefined;
 
@@ -261,229 +261,222 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ToDoList = exports.ToDoList = function () {
-  function ToDoList(id, parent) {
-    _classCallCheck(this, ToDoList);
+	function ToDoList(id, parent) {
+		_classCallCheck(this, ToDoList);
 
-    this.id = id;
-    this.parent = parent;
-    this.box = document.getElementById('l' + id);
-    this.nameInp = this.box.querySelector('.listToDo__name');
-    this.newTaskInp = this.box.querySelector('.listToDo__newTask');
-    this.addBtn = this.box.querySelector('.listToDo__add');
-    this.delBtn = this.box.querySelector('.listToDo__del');
-    this.listNode = this.box.querySelector('.listToDo__container');
-    this.countAll = this.box.querySelector('.listToDo__allCount');
-    this.countChecked = this.box.querySelector('.listToDo__chekedCount');
-    this.created = this.box.querySelector('.listToDo_created');
-    this.updated = this.box.querySelector('.listToDo_updated');
-    // -----------------------------------
-    // this.list = [];
-    this.countTask = 0;
-    this.checked = 0;
-    this.created.innerHTML = this._getFormatDate();
-    //------------------
-    // this.initList();
-    // this.initLocalStorage();
-    this.initEvent();
-  }
+		this.id = id;
+		this.parent = parent;
+		this.box = document.getElementById("l" + id);
+		this.nameInp = this.box.querySelector(".listToDo__name");
+		this.newTaskInp = this.box.querySelector(".listToDo__newTask");
+		this.addBtn = this.box.querySelector(".listToDo__add");
+		this.delBtn = this.box.querySelector(".listToDo__del");
+		this.listNode = this.box.querySelector(".listToDo__container");
+		this.countAll = this.box.querySelector(".listToDo__allCount");
+		this.countChecked = this.box.querySelector(".listToDo__chekedCount");
+		this.created = this.box.querySelector(".listToDo_created");
+		this.updated = this.box.querySelector(".listToDo_updated");
+		// -----------------------------------
+		// this.list = [];
+		this.countTask = 0;
+		this.checked = 0;
+		this.created.innerHTML = this._getFormatDate();
+		//------------------
+		// this.initList();
+		// this.initLocalStorage();
+		this.initEvent();
+	}
 
-  // initList() {
-  //   this.countAll.innerHTML = this.countTask;
-  // }
+	// initList() {
+	//   this.countAll.innerHTML = this.countTask;
+	// }
 
 
-  _createClass(ToDoList, [{
-    key: 'initLocalStorage',
-    value: function initLocalStorage() {
-      var _this = this;
+	_createClass(ToDoList, [{
+		key: "initLocalStorage",
+		value: function initLocalStorage() {
+			var _this = this;
 
-      var local = JSON.parse(localStorage.getItem(this.id));
-      if (local === null) {
-        localStorage.setItem(this.id, JSON.stringify(this.list));
-      } else {
-        this.list = JSON.parse(localStorage.getItem(this.id));
-        console.log(this.list);
-        this.countTask = this.list.length;
-        this.countAll.innerHTML = this.countTask;
-        this.list.forEach(function (elem, index) {
-          var Task = _this.createLik(elem.text, elem.date, elem.checked);
-          _this.listNode.appendChild(Task.lik);
-        });
-      }
-    }
-  }, {
-    key: '_getFormatDate',
-    value: function _getFormatDate(d) {
-      var options = {
-        year: "numeric",
-        day: "numeric",
-        month: "numeric",
-        hour: "numeric",
-        minute: "numeric"
-      };
-      if (d) {
-        return new Date(d).toLocaleDateString("pl-PL", options).replace(',', '');
-      } else {
-        return new Date().toLocaleDateString("pl-PL", options).replace(',', '');
-      }
-    }
-  }, {
-    key: '_updateDate',
-    value: function _updateDate() {
-      var currentTime = new Date();
-      this.updated.innerHTML = this._getFormatDate(currentTime);
-      return this._getFormatDate(currentTime);
-    }
-  }, {
-    key: 'updateCheckedTask',
-    value: function updateCheckedTask() {
-      var array = [].concat(_toConsumableArray(this.listNode.children)).filter(function (elem) {
-        return elem.classList.contains('checked');
-      });
-      this.checked = array.length;
-      this.countChecked.textContent = this.checked;
-      this.sortList();
-    }
-  }, {
-    key: 'sortList',
-    value: function sortList() {
-      var _this2 = this;
+			var local = JSON.parse(localStorage.getItem(this.id));
+			if (local === null) {
+				localStorage.setItem(this.id, JSON.stringify(this.list));
+			} else {
+				this.list = JSON.parse(localStorage.getItem(this.id));
+				console.log(this.list);
+				this.countTask = this.list.length;
+				this.countAll.innerHTML = this.countTask;
+				this.list.forEach(function (elem, index) {
+					// const Task = this.createLik(elem.text, elem.date, elem.checked);
+					_this.listNode.appendChild(_task.Task.lik);
+				});
+			}
+		}
+	}, {
+		key: "_getFormatDate",
+		value: function _getFormatDate(d) {
+			var options = {
+				year: "numeric",
+				day: "numeric",
+				month: "numeric",
+				hour: "numeric",
+				minute: "numeric"
+			};
+			if (d) {
+				return new Date(d).toLocaleDateString("pl-PL", options).replace(",", "");
+			} else {
+				return new Date().toLocaleDateString("pl-PL", options).replace(",", "");
+			}
+		}
+	}, {
+		key: "_updateDate",
+		value: function _updateDate() {
+			var currentTime = new Date();
+			this.updated.innerHTML = this._getFormatDate(currentTime);
+			return this._getFormatDate(currentTime);
+		}
+	}, {
+		key: "updateCheckedTask",
+		value: function updateCheckedTask() {
+			var array = [].concat(_toConsumableArray(this.listNode.children)).filter(function (elem) {
+				return elem.classList.contains("checked");
+			});
+			this.checked = array.length;
+			this.countChecked.textContent = this.checked;
+			this.sortList();
+		}
+	}, {
+		key: "sortList",
+		value: function sortList() {
+			var _this2 = this;
 
-      var sortArr = [].concat(_toConsumableArray(this.listNode.children)).sort(function (a, b) {
-        var AA = a.classList.contains('checked') ? 1 : 0,
-            BB = b.classList.contains('checked') ? 1 : 0;
-        return AA - BB;
-      });
-      // localStorage.setItem(this.id, JSON.stringify(this.list));
-      console.log(sortArr);
-      sortArr.forEach(function (e) {
-        _this2.listNode.appendChild(e);
-      });
-    }
-  }, {
-    key: 'sortPriority',
-    value: function sortPriority() {
-      var _this3 = this;
+			var sortArr = [].concat(_toConsumableArray(this.listNode.children)).sort(function (a, b) {
+				var AA = a.classList.contains("checked") ? 1 : 0,
+				    BB = b.classList.contains("checked") ? 1 : 0,
+				    AT = a.querySelector(".task_priority").value,
+				    BT = b.querySelector(".task_priority").value;
+				if (AA > BB) {
+					return 1;
+				}
+				if (AT < BT && AA < BB) {
+					return 1;
+				}
+				if (AT < BT && AA == BB) {
+					return 1;
+				}
+				if (AT == BT && AA > BB) {
+					return -1;
+				} else {
+					return -1;
+				}
+			});
+			// localStorage.setItem(this.id, JSON.stringify(this.list));
+			// console.log(sortArr);
+			sortArr.forEach(function (e) {
+				_this2.listNode.appendChild(e);
+			});
+		}
+	}, {
+		key: "removeList",
+		value: function removeList(elem) {
+			this.parent.removeChild(this.id);
+		}
+	}, {
+		key: "removeTask",
+		value: function removeTask() {}
+	}, {
+		key: "createLik",
+		value: function createLik(name, dat, check) {
+			var _this3 = this;
 
-      var sortArr = [].concat(_toConsumableArray(this.listNode.querySelectorAll('li:not(.checked)'))).sort(function (a, b) {
-        var AA = a.querySelector('.task_priority').value,
-            BB = b.querySelector('.task_priority').value;
-        return BB - AA;
-      });
-      // localStorage.setItem(this.id, JSON.stringify(this.list));
-      console.log(sortArr);
-      sortArr.forEach(function (e) {
-        _this3.listNode.appendChild(e);
-      });
-    }
-  }, {
-    key: 'removeList',
-    value: function removeList(elem) {
-      this.parent.removeChild(this.id);
-    }
-  }, {
-    key: 'removeTask',
-    value: function removeTask() {}
-  }, {
-    key: 'createLik',
-    value: function createLik(name, dat, check) {
-      var _this4 = this;
+			//     localStorage.setItem(this.id, JSON.stringify(this.list));
+			//     this.countTask = this.list.length;
+			//     this.countAll.innerHTML = this.countTask;
+			//   },
+			//   false
+			// );
+			// --------------------------------------------------------------
+			checkBtn.addEventListener("click", function () {
+				labelP.classList.toggle("blured");
+				nameInp.classList.toggle("checked");
+				nameInp.setAttribute("disabled", true);
 
-      //     localStorage.setItem(this.id, JSON.stringify(this.list));
-      //     this.countTask = this.list.length;
-      //     this.countAll.innerHTML = this.countTask;
-      //   },
-      //   false
-      // );
-      // --------------------------------------------------------------
-      checkBtn.addEventListener('click', function () {
-        labelP.classList.toggle('blured');
-        nameInp.classList.toggle('checked');
-        nameInp.setAttribute('disabled', true);
-        if (data.checked === false) {
-          data.checked = true;
-          _this4.list.map(function (elem) {
-            if (elem.text === data.text) {
-              elem.checked = true;
-            }
-          });
-          // this.list.push(Task.data);
-          //   localStorage.setItem(this.id, JSON.stringify(this.list));
-          // } else {
-          //   data.checked = false;
-          //   this.list.map(elem => {
-          //     if (elem.text === data.text) {
-          //       elem.checked = false;
-          //     }
-          //   });
-          // this.list.push(Task.data);
-          // localStorage.setItem(this.id, JSON.stringify(this.list));
-        }
-        // this.updateCheckedTask();
-      }, false);
-      // ---------------------------------------------------------------------------
-      //
-      var count = this.list.length + 1;
-      if (data.checked === true) {
-        labelP.classList.toggle('blured');
-        nameInp.classList.toggle('checked');
-        nameInp.setAttribute('disabled', true);
-      }
-      this.updateCheckedTask();
-      return { lik: lik, data: data };
-    }
-  }, {
-    key: 'initTask',
-    value: function initTask(name) {
-      // createLik(name);
-      // this.list.push(Task.data);
-      localStorage.setItem(this.id, JSON.stringify(this.list));
+				if (data.checked === false) {
+					data.checked = true;
+					_this3.list.map(function (elem) {
+						if (elem.text === data.text) {
+							elem.checked = true;
+						}
+					});
+					// this.list.push(Task.data);
+					//   localStorage.setItem(this.id, JSON.stringify(this.list));
+					// } else {
+					//   data.checked = false;
+					//   this.list.map(elem => {
+					//     if (elem.text === data.text) {
+					//       elem.checked = false;
+					//     }
+					//   });
+					// this.list.push(Task.data);
+					// localStorage.setItem(this.id, JSON.stringify(this.list));
+				}
+				// this.updateCheckedTask();
+			}, false);
+			var count = this.list.length + 1;
+			if (data.checked === true) {
+				labelP.classList.toggle("blured");
+				nameInp.classList.toggle("checked");
+				nameInp.setAttribute("disabled", true);
+			}
+			this.updateCheckedTask();
+			return { lik: lik, data: data };
+		}
+	}, {
+		key: "initTask",
+		value: function initTask(name) {
+			// this.list.push(Task.data);
+			// var storedNames = JSON.parse(localStorage.getItem(this.id));
+			localStorage.setItem(this.id, JSON.stringify(this.list));
+		}
+	}, {
+		key: "addTask",
+		value: function addTask() {
+			if (this.newTaskInp.value.length != 0) {
+				var task = new _task.Task(this.countTask, this.newTaskInp.value, this);
+				this._updateDate();
+				this.countTask++;
+				this.countAll.innerHTML = this.countTask;
+				this.newTaskInp.value = "";
+				this.sortList();
+				// localStorage.setItem(this.id, JSON.stringify(this.list));
+				// const Task = this.createLik(this.newTaskInp.value.trim());
+				// this.list.push(Task.data);
+			}
+		}
+	}, {
+		key: "initEvent",
+		value: function initEvent() {
+			var _this4 = this;
 
-      // var storedNames = JSON.parse(localStorage.getItem(this.id));
+			// ===================================================
+			this.addBtn.addEventListener("click", function () {
+				_this4.addTask();
+			}, false);
+			// ===================================================
+			this.delBtn.addEventListener("click", function () {
+				_this4.removeList();
+			}, false);
+			// ===================================================
+			this.newTaskInp.addEventListener("keydown", function (e) {
+				if (e.keyCode === 13) {
+					_this4.addTask();
+					// localStorage.setItem(this.id, JSON.stringify(this.list));
+				}
+			}, false);
+			// ===================================================
+		}
+	}]);
 
-      // ------------------------------------------------------------------
-    }
-  }, {
-    key: 'addTask',
-    value: function addTask() {
-
-      if (this.newTaskInp.value.length != 0) {
-        var task = new _task.Task(this.countTask, this.newTaskInp.value, this);
-        // const Task = this.createLik(this.newTaskInp.value.trim());
-        // this.list.push(Task.data);
-        this._updateDate();
-        this.countTask++;
-        this.countAll.innerHTML = this.countTask;
-        localStorage.setItem(this.id, JSON.stringify(this.list));
-        this.newTaskInp.value = "";
-        this.sortList();
-      }
-    }
-  }, {
-    key: 'initEvent',
-    value: function initEvent() {
-      var _this5 = this;
-
-      // change input name List
-      // add Task
-      this.addBtn.addEventListener('click', function () {
-        _this5.addTask();
-      }, false);
-      this.delBtn.addEventListener('click', function () {
-        _this5.removeList();
-      }, false);
-      // ===================================================
-      this.newTaskInp.addEventListener('keydown', function (e) {
-        if (e.keyCode === 13) {
-          _this5.addTask();
-          // localStorage.setItem(this.id, JSON.stringify(this.list));
-        }
-      }, false);
-      // ===================================================
-    }
-  }]);
-
-  return ToDoList;
+	return ToDoList;
 }();
 
 /***/ }),
@@ -508,7 +501,6 @@ var Task = exports.Task = function () {
     this.id = id;
     this.parent = parent;
     this.name = name;
-    this.priority = 1;
     this.lik = this.createLik();
     this.checkBtn = this.lik.querySelector('.task__btn-check');
     this.nameInp = this.lik.querySelector('.task__name');
@@ -537,7 +529,7 @@ var Task = exports.Task = function () {
       lik.className = 'listToDo__task';
       lik.setAttribute('id', this.id);
       lik.innerHTML = html;
-      lik.querySelector('.task_priority').value = this.priority;
+      lik.querySelector('.task_priority').value = 1;
       return lik;
     }
   }, {
@@ -556,7 +548,8 @@ var Task = exports.Task = function () {
         _this.parent.removeTask(e.currentTarget.parentNode);
       }, false);
       this.priority.addEventListener('change', function (e) {
-        _this.parent.sortPriority();
+        _this.parent.sortList();
+        //  this.parent.sortPriority()
       }, false);
     }
   }, {
@@ -564,6 +557,14 @@ var Task = exports.Task = function () {
     value: function checkedElem() {
       this.checkBtn.querySelector('i').classList.toggle('ion-checkmark-round');
       this.lik.classList.toggle('checked');
+
+      if (this.lik.classList.contains('checked')) {
+        this.nameInp.setAttribute('tabindex', '-1');
+        this.priority.setAttribute('tabindex', '-1');
+      } else {
+        this.nameInp.removeAttribute('tabindex');
+        this.priority.removeAttribute('tabindex');
+      }
     }
   }]);
 

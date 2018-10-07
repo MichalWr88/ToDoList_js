@@ -3,7 +3,6 @@ export class Task {
     this.id = id;
     this.parent = parent;
     this.name = name;
-    this.priority = 1;
     this.lik = this.createLik();
     this.checkBtn = this.lik.querySelector('.task__btn-check');
     this.nameInp = this.lik.querySelector('.task__name');
@@ -28,7 +27,7 @@ export class Task {
     lik.className = 'listToDo__task';
     lik.setAttribute('id', this.id);
     lik.innerHTML = html;
-    lik.querySelector('.task_priority').value = this.priority;
+    lik.querySelector('.task_priority').value = 1;
     return lik;
   }
   initEvents() {
@@ -43,11 +42,21 @@ export class Task {
       this.parent.removeTask(e.currentTarget.parentNode);
     },false);
     this.priority.addEventListener('change',(e)=>{
-         this.parent.sortPriority()
+         this.parent.sortList()
+        //  this.parent.sortPriority()
     },false);
    }
    checkedElem(){
      this.checkBtn.querySelector('i').classList.toggle('ion-checkmark-round');
      this.lik.classList.toggle('checked');
+    
+    
+     if(this.lik.classList.contains('checked')){
+      this.nameInp.setAttribute('tabindex','-1');
+      this.priority.setAttribute('tabindex','-1');
+     }else {
+      this.nameInp.removeAttribute('tabindex');
+      this.priority.removeAttribute('tabindex');
+     }
    }
 }
