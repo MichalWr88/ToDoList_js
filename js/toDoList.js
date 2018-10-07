@@ -60,8 +60,8 @@ export class ToDoList {
 		const currentTime = new Date();
 		this.updated.innerHTML = this._getFormatDate(currentTime);
 		return this._getFormatDate(currentTime);
-  }
-  
+	}
+
 	updateCheckedTask() {
 		const array = [...this.listNode.children].filter((elem) => {
 			return elem.classList.contains("checked");
@@ -92,7 +92,7 @@ export class ToDoList {
 			}
 		});
 		// localStorage.setItem(this.id, JSON.stringify(this.list));
-		// console.log(sortArr);
+
 		sortArr.forEach((e) => {
 			this.listNode.appendChild(e);
 		});
@@ -100,9 +100,11 @@ export class ToDoList {
 	removeList(elem) {
 		this.parent.removeChild(this.id);
 	}
-	removeTask() {}
+	removeTask(elem) {
+		this.listNode.querySelector(`#${elem}`).remove();
+	}
 
-	createLik(name, dat, check) {
+	createLik() {
 		//     localStorage.setItem(this.id, JSON.stringify(this.list));
 		//     this.countTask = this.list.length;
 		//     this.countAll.innerHTML = this.countTask;
@@ -110,20 +112,7 @@ export class ToDoList {
 		//   false
 		// );
 		// --------------------------------------------------------------
-		checkBtn.addEventListener(
-			"click",
-			() => {
-				labelP.classList.toggle("blured");
-				nameInp.classList.toggle("checked");
-        nameInp.setAttribute("disabled", true);
-        
-				if (data.checked === false) {
-					data.checked = true;
-					this.list.map((elem) => {
-						if (elem.text === data.text) {
-							elem.checked = true;
-						}
-					});
+
 					// this.list.push(Task.data);
 					//   localStorage.setItem(this.id, JSON.stringify(this.list));
 					// } else {
@@ -135,19 +124,9 @@ export class ToDoList {
 					//   });
 					// this.list.push(Task.data);
 					// localStorage.setItem(this.id, JSON.stringify(this.list));
-				}
+				
 				// this.updateCheckedTask();
-			},
-			false
-		);
-		let count = this.list.length + 1;
-		if (data.checked === true) {
-			labelP.classList.toggle("blured");
-			nameInp.classList.toggle("checked");
-			nameInp.setAttribute("disabled", true);
-		}
-		this.updateCheckedTask();
-		return { lik, data };
+	
 	}
 
 	initTask(name) {
@@ -157,7 +136,7 @@ export class ToDoList {
 	}
 	addTask() {
 		if (this.newTaskInp.value.length != 0) {
-			const task = new Task(this.countTask, this.newTaskInp.value, this);
+			const task = new Task(`l${this.id}-${this.countTask}`, this.newTaskInp.value, this);
 			this._updateDate();
 			this.countTask++;
 			this.countAll.innerHTML = this.countTask;
@@ -168,12 +147,23 @@ export class ToDoList {
 			// this.list.push(Task.data);
 		}
 	}
+	updateName(){
+		this.parent.updateListName(this.id, this.nameInp.value);
+	}
 	initEvent() {
 		// ===================================================
 		this.addBtn.addEventListener(
 			"click",
 			() => {
 				this.addTask();
+			},
+			false
+		);
+		// ===================================================
+		this.nameInp.addEventListener(
+			"blur",
+			() => {
+				this.updateName();
 			},
 			false
 		);

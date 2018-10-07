@@ -30,7 +30,7 @@
           <p>Add new list</p>
           <p class="error " aria-live="polite">Pole wymagane, nie może zaczynać się od białych znaków</p>
         </label>
-        <input id="listName" class="input addList__input" id="addList" type="text" placeholder="Name list" required pattern="^[a-zA-Z0-9-_\.]{1,20}$">
+        <input id="listName" class="input addList__input" id="addList" type="text" placeholder="Name list" required pattern="[\w ]{1,50}" maxLength="50">
         <button id="addNewList" class="btn btn-add  ion-plus-round" type="button" title="Add new list" id="btnAddList"></button>
         <button id="clearListName" class="btn btn-close ion-close-round d_none" type="button" id="btnCancelAList"></button>
       </div>
@@ -149,7 +149,7 @@
         </button>
         <div class="row f_1">
           <!-- <input type="text" > -->
-          <textarea class="task__name">{{taskName}}</textarea>
+          <div contenteditable="true" aria-multiline="true" class="task__name" >{{taskName}}</div contenteditable="true">
           <div class="row f_jsa task__details d_columns">
             <!-- <div class="row d_columns">
               <small class="task_createDate">{{createDate}}</small>

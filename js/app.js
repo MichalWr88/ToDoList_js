@@ -24,6 +24,7 @@ class App extends Global {
 		this.boardsBtn.addEventListener(
 			"click",
 			() => {
+				if (!this.boardsList.children.length) return;
 				this.boardsList.classList.toggle("h-0");
 			},
 			false
@@ -36,7 +37,6 @@ class App extends Global {
 					clearListName.classList.remove("d_none");
 					if (e.keyCode === 13) {
 						this.addNewList();
-						clearListName.classList.add("d_none");
 					}
 				} else {
 					clearListName.classList.add("d_none");
@@ -69,6 +69,9 @@ class App extends Global {
 		}
 		return this.newToDoListName.value.trim().length;
 	}
+	updateListName(id,updateName){
+this.boardsList.querySelector(`#b${id}`).innerHTML = updateName;
+	}
 	addNewList() {
 		const html = templateList({ taskName: this.newToDoListName.value }),
 			listLi = this.createElement("li", `l${this.index}`, "listToDo", html),
@@ -87,6 +90,7 @@ class App extends Global {
 		this.newToDoListName.value = "";
 		this.newToDoListName.focus();
 		this.newToDoListName.select();
+		clearListName.classList.add("d_none");
 	}
 	removeChild(id) {
 		this.listTasksDom.querySelector(`#l${id}`).remove();

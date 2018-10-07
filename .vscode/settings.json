@@ -1,7 +1,6 @@
 {
 	"prettier.trailingComma": "es5",
 	"prettier.arrowParens": "always",
-	"prettier.stylelintIntegration": true,
 	"editor.wordWrap": "wordWrapColumn",
 	"prettier.useTabs": true
 }
