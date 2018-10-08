@@ -123,6 +123,8 @@ body {
 	position: relative;
 }
 .header__btn {
+display: inline;
+min-width: 150px;
 }
 .header__listsName {
 	position: absolute;
@@ -198,9 +200,9 @@ body {
 /* ------------------------------------------------------------ */
 .page__main {
 	/* margin: 0 auto; max-width: 1200px; */
-	height: calc(100% - 125px);
-	overflow: auto;
-	margin-right: -19px;
+	height: calc(100% - 145px);
+	/* overflow: auto; */
+	/* margin-right: -19px; */
 }
 .list__tasks {
 	display: flex;
@@ -210,6 +212,8 @@ body {
 	flex-wrap: wrap;
 	height: 100%;
 	box-sizing: border-box;
+	overflow: auto;
+	margin:0;
 }
 .list__empty {
 	display: block;
@@ -363,11 +367,12 @@ body {
 }
 .task__name {
 	/* max-width:100%; */
+	padding:5px;
 	flex: 2;
 	margin: 0 5px;
 	border: none;
-	max-width:245px;
-	 resize: none;
+	line-height: 20px;
+	/* max-width:245px; */
 }
 
 .page__footer {
@@ -491,3 +496,19 @@ body {
 		animation-timing-function: ease-out;
 	}
 }
+@media only screen and (max-width: 650px) {
+	.header__addListBox{
+		flex:3 3 100%;
+	}
+	.header__logo{
+		flex:3 3 100%;
+	}
+	 .lists-notype list__tasks{
+		padding:10px;
+	}
+	.listToDo{
+		min-width:200px;
+		max-width:90%;
+
+	}
+	}
