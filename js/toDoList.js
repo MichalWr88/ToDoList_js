@@ -1,6 +1,6 @@
 import { Task } from "./task";
 export class ToDoList {
-	constructor(id, parent) {
+	constructor(id, parent, created, updated) {
 		this.id = id;
 		this.parent = parent;
 		this.box = document.getElementById(`l${id}`);
@@ -13,11 +13,13 @@ export class ToDoList {
 		this.countChecked = this.box.querySelector(".listToDo__chekedCount");
 		this.created = this.box.querySelector(".listToDo_created");
 		this.updated = this.box.querySelector(".listToDo_updated");
+
 		// -----------------------------------
 		// this.list = [];
 		this.countTask = 0;
 		this.checked = 0;
-		this.created.innerHTML = this._getFormatDate();
+		this.created.innerHTML = created || this._getFormatDate();
+		this.updated.innerHTML = updated || "";
 		//------------------
 		// this.initList();
 		// this.initLocalStorage();
@@ -57,9 +59,10 @@ export class ToDoList {
 		}
 	}
 	_updateDate() {
-		const currentTime = new Date();
-		this.updated.innerHTML = this._getFormatDate(currentTime);
-		return this._getFormatDate(currentTime);
+		const currentTime = this._getFormatDate(new Date());
+		this.updated.innerHTML = currentTime;
+		this.parent.updateListDate(this.id, currentTime);
+		return currentTime;
 	}
 
 	updateCheckedTask() {
@@ -112,21 +115,18 @@ export class ToDoList {
 		//   false
 		// );
 		// --------------------------------------------------------------
-
-					// this.list.push(Task.data);
-					//   localStorage.setItem(this.id, JSON.stringify(this.list));
-					// } else {
-					//   data.checked = false;
-					//   this.list.map(elem => {
-					//     if (elem.text === data.text) {
-					//       elem.checked = false;
-					//     }
-					//   });
-					// this.list.push(Task.data);
-					// localStorage.setItem(this.id, JSON.stringify(this.list));
-				
-				// this.updateCheckedTask();
-	
+		// this.list.push(Task.data);
+		//   localStorage.setItem(this.id, JSON.stringify(this.list));
+		// } else {
+		//   data.checked = false;
+		//   this.list.map(elem => {
+		//     if (elem.text === data.text) {
+		//       elem.checked = false;
+		//     }
+		//   });
+		// this.list.push(Task.data);
+		// localStorage.setItem(this.id, JSON.stringify(this.list));
+		// this.updateCheckedTask();
 	}
 
 	initTask(name) {
@@ -147,7 +147,7 @@ export class ToDoList {
 			// this.list.push(Task.data);
 		}
 	}
-	updateName(){
+	updateName() {
 		this.parent.updateListName(this.id, this.nameInp.value);
 	}
 	initEvent() {

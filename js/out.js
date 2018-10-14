@@ -96,7 +96,6 @@ var App = function (_Global) {
 
 		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
-		_this.index = 1;
 		_this.box = document.getElementById(id);
 		_this.boardsBtn = _this.box.querySelector("#boardsBtn");
 		_this.boardsList = _this.box.querySelector("#boardsList");
@@ -104,37 +103,65 @@ var App = function (_Global) {
 		_this.addNewListBtn = _this.box.querySelector("#addNewList");
 		_this.clearListName = _this.box.querySelector("#clearListName");
 		_this.listTasksDom = _this.fInDoc(".list__tasks");
+		_this.listArray = [];
 		_this.initEvents();
+		_this.initLocslSrtorage();
 		return _this;
 	}
 
 	_createClass(App, [{
-		key: "initEvents",
-		value: function initEvents() {
+		key: "initLocslSrtorage",
+		value: function initLocslSrtorage() {
 			var _this2 = this;
 
+			var local = JSON.parse(localStorage.getItem("app"));
+			if (local === null) {
+				localStorage.setItem("app", JSON.stringify([]));
+				this.index = 1;
+			} else {
+				this.listArray = JSON.parse(localStorage.getItem("app"));
+
+				this.index = Math.max.apply(Math, this.listArray.map(function (o) {
+					return o.id;
+				})) + 1;
+				this.listArray.forEach(function (elem, index) {
+					_this2.createDomLik(elem.name, elem.id, elem.created, elem.updated);
+				});
+				this._checkListLength();
+			}
+		}
+	}, {
+		key: "saveInLocalStorage",
+		value: function saveInLocalStorage() {
+			localStorage.setItem("app", JSON.stringify(this.listArray));
+		}
+	}, {
+		key: "initEvents",
+		value: function initEvents() {
+			var _this3 = this;
+
 			this.boardsBtn.addEventListener("click", function () {
-				if (!_this2.boardsList.children.length) return;
-				_this2.boardsList.classList.toggle("h-0");
+				if (!_this3.boardsList.children.length) return;
+				_this3.boardsList.classList.toggle("h-0");
 			}, false);
 
 			this.newToDoListName.addEventListener("keyup", function (e) {
-				if (_this2._checkName()) {
+				if (_this3._checkName()) {
 					clearListName.classList.remove("d_none");
 					if (e.keyCode === 13) {
-						_this2.addNewList();
+						_this3.addNewList();
 					}
 				} else {
 					clearListName.classList.add("d_none");
 				}
 			}, false);
 			this.addNewListBtn.addEventListener("click", function () {
-				_this2._checkName() ? _this2.addNewList() : false;
+				_this3._checkName() ? _this3.addNewList() : false;
 			}, false);
 
 			this.clearListName.addEventListener("click", function () {
-				_this2.newToDoListName.value = "";
-				_this2.clearListName.classList.add("d_none");
+				_this3.newToDoListName.value = "";
+				_this3.clearListName.classList.add("d_none");
 			}, false);
 		}
 	}, {
@@ -153,37 +180,66 @@ var App = function (_Global) {
 			this.boardsList.querySelector("#b" + id).innerHTML = updateName;
 		}
 	}, {
-		key: "addNewList",
-		value: function addNewList() {
-			var html = templateList({ taskName: this.newToDoListName.value }),
-			    listLi = this.createElement("li", "l" + this.index, "listToDo", html),
-			    boardsLi = this.createElement("li", "b" + this.index, "listsName__elem", this.newToDoListName.value);
-
+		key: "createDomLik",
+		value: function createDomLik(name, id, created, updated) {
+			var html = templateList({ taskName: name }),
+			    listLi = this.createElement("li", "l" + id, "listToDo", html),
+			    boardsLi = this.createElement("li", "b" + id, "listsName__elem", name);
 			this.boardsList.appendChild(boardsLi);
 			this.listTasksDom.appendChild(listLi);
-
-			var list = new _toDoList.ToDoList(this.index, this);
+			return new _toDoList.ToDoList(id, this, created, updated);
+		}
+	}, {
+		key: "_checkListLength",
+		value: function _checkListLength() {
 			if (this.boardsList.children.length) {
 				this.listTasksDom.querySelector(".list__empty").style.display = "none";
 			} else {
 				this.listTasksDom.querySelector(".list__empty").style.display = "block";
 			}
+		}
+	}, {
+		key: "updateListDate",
+		value: function updateListDate(id, date) {
+			this.listArray.map(function (e) {
+				if (e.id = id) {
+					e.updated = date;
+				}
+			});
+			localStorage.setItem("app", JSON.stringify(this.listArray));
+			console.log(this.listArray);
+		}
+	}, {
+		key: "addNewList",
+		value: function addNewList() {
+			var list = this.createDomLik(this.newToDoListName.value, this.index, '', '');
+			this.listArray.push({
+				id: list.id,
+				name: list.nameInp.value,
+				created: list.created.innerHTML,
+				updated: list.updated.innerHTML,
+				tasks: []
+			});
+
 			this.index++;
 			this.newToDoListName.value = "";
 			this.newToDoListName.focus();
 			this.newToDoListName.select();
 			clearListName.classList.add("d_none");
+			this._checkListLength();
+			this.saveInLocalStorage();
 		}
 	}, {
 		key: "removeChild",
 		value: function removeChild(id) {
 			this.listTasksDom.querySelector("#l" + id).remove();
 			this.boardsList.querySelector("#b" + id).remove();
-			if (this.boardsList.children.length) {
-				this.listTasksDom.querySelector(".list__empty").style.display = "none";
-			} else {
-				this.listTasksDom.querySelector(".list__empty").style.display = "block";
-			}
+			this.listArray = this.listArray.filter(function (e) {
+				return e.id != id;
+			});
+			console.log(this.listArray);
+			localStorage.setItem("app", JSON.stringify(this.listArray));
+			this._checkListLength();
 		}
 	}]);
 
@@ -267,7 +323,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ToDoList = exports.ToDoList = function () {
-	function ToDoList(id, parent) {
+	function ToDoList(id, parent, created, updated) {
 		_classCallCheck(this, ToDoList);
 
 		this.id = id;
@@ -282,11 +338,13 @@ var ToDoList = exports.ToDoList = function () {
 		this.countChecked = this.box.querySelector(".listToDo__chekedCount");
 		this.created = this.box.querySelector(".listToDo_created");
 		this.updated = this.box.querySelector(".listToDo_updated");
+
 		// -----------------------------------
 		// this.list = [];
 		this.countTask = 0;
 		this.checked = 0;
-		this.created.innerHTML = this._getFormatDate();
+		this.created.innerHTML = created || this._getFormatDate();
+		this.updated.innerHTML = updated || "";
 		//------------------
 		// this.initList();
 		// this.initLocalStorage();
@@ -336,9 +394,10 @@ var ToDoList = exports.ToDoList = function () {
 	}, {
 		key: "_updateDate",
 		value: function _updateDate() {
-			var currentTime = new Date();
-			this.updated.innerHTML = this._getFormatDate(currentTime);
-			return this._getFormatDate(currentTime);
+			var currentTime = this._getFormatDate(new Date());
+			this.updated.innerHTML = currentTime;
+			this.parent.updateListDate(this.id, currentTime);
+			return currentTime;
 		}
 	}, {
 		key: "updateCheckedTask",
@@ -401,7 +460,6 @@ var ToDoList = exports.ToDoList = function () {
 			//   false
 			// );
 			// --------------------------------------------------------------
-
 			// this.list.push(Task.data);
 			//   localStorage.setItem(this.id, JSON.stringify(this.list));
 			// } else {
@@ -413,9 +471,7 @@ var ToDoList = exports.ToDoList = function () {
 			//   });
 			// this.list.push(Task.data);
 			// localStorage.setItem(this.id, JSON.stringify(this.list));
-
 			// this.updateCheckedTask();
-
 		}
 	}, {
 		key: "initTask",
