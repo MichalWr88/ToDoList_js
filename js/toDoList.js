@@ -13,7 +13,7 @@ export class ToDoList {
 		this.countChecked = this.box.querySelector(".listToDo__chekedCount");
 		this.created = this.box.querySelector(".listToDo_created");
 		this.updated = this.box.querySelector(".listToDo_updated");
-
+		this.LsObj = this.initLocalStorage();
 		// -----------------------------------
 		// this.list = [];
 		this.countTask = 0;
@@ -22,7 +22,7 @@ export class ToDoList {
 		this.updated.innerHTML = updated || "";
 		//------------------
 		// this.initList();
-		// this.initLocalStorage();
+		this.initLocalStorage();
 		this.initEvent();
 	}
 
@@ -30,19 +30,13 @@ export class ToDoList {
 	//   this.countAll.innerHTML = this.countTask;
 	// }
 	initLocalStorage() {
-		const local = JSON.parse(localStorage.getItem(this.id));
-		if (local === null) {
-			localStorage.setItem(this.id, JSON.stringify(this.list));
-		} else {
-			this.list = JSON.parse(localStorage.getItem(this.id));
-			console.log(this.list);
-			this.countTask = this.list.length;
-			this.countAll.innerHTML = this.countTask;
-			this.list.forEach((elem, index) => {
-				// const Task = this.createLik(elem.text, elem.date, elem.checked);
-				this.listNode.appendChild(Task.lik);
-			});
-		}
+		const local = JSON.parse(localStorage.getItem("app")),
+			current = local.find((e) => e.id == this.id);
+		return current;
+	}
+
+	updateLocalStorage(props) {
+		this.parent.updateLocalStorage(props);
 	}
 	_getFormatDate(d) {
 		const options = {
@@ -58,12 +52,16 @@ export class ToDoList {
 			return new Date().toLocaleDateString("pl-PL", options).replace(",", "");
 		}
 	}
-	_updateDate() {
+	updateDate() {
 		const currentTime = this._getFormatDate(new Date());
 		this.updated.innerHTML = currentTime;
-		this.parent.updateListDate(this.id, currentTime);
+		this.updateLocalStorage({ updated: currentTime, id: this.id });
+		// this.parent.updateLocalStorage(this.id, currentTime, "updated");
 		return currentTime;
 	}
+updateTasks(props){
+	const {id,name,checked, priority} = props;
+}
 
 	updateCheckedTask() {
 		const array = [...this.listNode.children].filter((elem) => {
@@ -137,14 +135,12 @@ export class ToDoList {
 	addTask() {
 		if (this.newTaskInp.value.length != 0) {
 			const task = new Task(`l${this.id}-${this.countTask}`, this.newTaskInp.value, this);
-			this._updateDate();
+			this.updateDate();
 			this.countTask++;
 			this.countAll.innerHTML = this.countTask;
 			this.newTaskInp.value = "";
 			this.sortList();
-			// localStorage.setItem(this.id, JSON.stringify(this.list));
-			// const Task = this.createLik(this.newTaskInp.value.trim());
-			// this.list.push(Task.data);
+
 		}
 	}
 	updateName() {
@@ -181,7 +177,6 @@ export class ToDoList {
 			(e) => {
 				if (e.keyCode === 13) {
 					this.addTask();
-					// localStorage.setItem(this.id, JSON.stringify(this.list));
 				}
 			},
 			false

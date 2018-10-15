@@ -105,13 +105,13 @@ var App = function (_Global) {
 		_this.listTasksDom = _this.fInDoc(".list__tasks");
 		_this.listArray = [];
 		_this.initEvents();
-		_this.initLocslSrtorage();
+		_this.initLocalSrtorage();
 		return _this;
 	}
 
 	_createClass(App, [{
-		key: "initLocslSrtorage",
-		value: function initLocslSrtorage() {
+		key: "initLocalSrtorage",
+		value: function initLocalSrtorage() {
 			var _this2 = this;
 
 			var local = JSON.parse(localStorage.getItem("app"));
@@ -176,8 +176,9 @@ var App = function (_Global) {
 		}
 	}, {
 		key: "updateListName",
-		value: function updateListName(id, updateName) {
-			this.boardsList.querySelector("#b" + id).innerHTML = updateName;
+		value: function updateListName(id, name) {
+			this.boardsList.querySelector("#b" + id).innerHTML = name;
+			this.updateLocalStorage({ name: name, id: id });
 		}
 	}, {
 		key: "createDomLik",
@@ -199,20 +200,37 @@ var App = function (_Global) {
 			}
 		}
 	}, {
-		key: "updateListDate",
-		value: function updateListDate(id, date) {
+		key: "updateLocalStorage",
+		value: function updateLocalStorage(props) {
+			var id = props.id,
+			    name = props.name,
+			    created = props.created,
+			    updated = props.updated,
+			    tasks = props.tasks;
+
 			this.listArray.map(function (e) {
-				if (e.id = id) {
-					e.updated = date;
+				if (e.id == id) {
+					if (name) {
+						e.name = name;
+					}
+					if (created) {
+						e.created = created;
+					}
+					if (updated) {
+						e.updated = updated;
+					}
+					if (tasks) {
+						e.tasks = tasks;
+					}
 				}
 			});
-			localStorage.setItem("app", JSON.stringify(this.listArray));
+			this.saveInLocalStorage();
 			console.log(this.listArray);
 		}
 	}, {
 		key: "addNewList",
 		value: function addNewList() {
-			var list = this.createDomLik(this.newToDoListName.value, this.index, '', '');
+			var list = this.createDomLik(this.newToDoListName.value, this.index, "", "");
 			this.listArray.push({
 				id: list.id,
 				name: list.nameInp.value,
@@ -238,7 +256,7 @@ var App = function (_Global) {
 				return e.id != id;
 			});
 			console.log(this.listArray);
-			localStorage.setItem("app", JSON.stringify(this.listArray));
+			this.saveInLocalStorage();
 			this._checkListLength();
 		}
 	}]);
@@ -338,7 +356,7 @@ var ToDoList = exports.ToDoList = function () {
 		this.countChecked = this.box.querySelector(".listToDo__chekedCount");
 		this.created = this.box.querySelector(".listToDo_created");
 		this.updated = this.box.querySelector(".listToDo_updated");
-
+		this.LsObj = this.initLocalStorage();
 		// -----------------------------------
 		// this.list = [];
 		this.countTask = 0;
@@ -347,7 +365,7 @@ var ToDoList = exports.ToDoList = function () {
 		this.updated.innerHTML = updated || "";
 		//------------------
 		// this.initList();
-		// this.initLocalStorage();
+		this.initLocalStorage();
 		this.initEvent();
 	}
 
@@ -361,19 +379,16 @@ var ToDoList = exports.ToDoList = function () {
 		value: function initLocalStorage() {
 			var _this = this;
 
-			var local = JSON.parse(localStorage.getItem(this.id));
-			if (local === null) {
-				localStorage.setItem(this.id, JSON.stringify(this.list));
-			} else {
-				this.list = JSON.parse(localStorage.getItem(this.id));
-				console.log(this.list);
-				this.countTask = this.list.length;
-				this.countAll.innerHTML = this.countTask;
-				this.list.forEach(function (elem, index) {
-					// const Task = this.createLik(elem.text, elem.date, elem.checked);
-					_this.listNode.appendChild(_task.Task.lik);
-				});
-			}
+			var local = JSON.parse(localStorage.getItem("app")),
+			    current = local.find(function (e) {
+				return e.id == _this.id;
+			});
+			return current;
+		}
+	}, {
+		key: "updateLocalStorage",
+		value: function updateLocalStorage(props) {
+			this.parent.updateLocalStorage(props);
 		}
 	}, {
 		key: "_getFormatDate",
@@ -392,12 +407,21 @@ var ToDoList = exports.ToDoList = function () {
 			}
 		}
 	}, {
-		key: "_updateDate",
-		value: function _updateDate() {
+		key: "updateDate",
+		value: function updateDate() {
 			var currentTime = this._getFormatDate(new Date());
 			this.updated.innerHTML = currentTime;
-			this.parent.updateListDate(this.id, currentTime);
+			this.updateLocalStorage({ updated: currentTime, id: this.id });
+			// this.parent.updateLocalStorage(this.id, currentTime, "updated");
 			return currentTime;
+		}
+	}, {
+		key: "updateTasks",
+		value: function updateTasks(props) {
+			var id = props.id,
+			    name = props.name,
+			    checked = props.checked,
+			    priority = props.priority;
 		}
 	}, {
 		key: "updateCheckedTask",
@@ -485,14 +509,11 @@ var ToDoList = exports.ToDoList = function () {
 		value: function addTask() {
 			if (this.newTaskInp.value.length != 0) {
 				var task = new _task.Task("l" + this.id + "-" + this.countTask, this.newTaskInp.value, this);
-				this._updateDate();
+				this.updateDate();
 				this.countTask++;
 				this.countAll.innerHTML = this.countTask;
 				this.newTaskInp.value = "";
 				this.sortList();
-				// localStorage.setItem(this.id, JSON.stringify(this.list));
-				// const Task = this.createLik(this.newTaskInp.value.trim());
-				// this.list.push(Task.data);
 			}
 		}
 	}, {
@@ -521,7 +542,6 @@ var ToDoList = exports.ToDoList = function () {
 			this.newTaskInp.addEventListener("keydown", function (e) {
 				if (e.keyCode === 13) {
 					_this3.addTask();
-					// localStorage.setItem(this.id, JSON.stringify(this.list));
 				}
 			}, false);
 			// ===================================================
@@ -574,8 +594,7 @@ var Task = exports.Task = function () {
 			    likHtml = Handlebars.compile(templateTask),
 			    html = likHtml({
 				id: this.id,
-				taskName: this.name,
-				createDate: new Date().toDateString()
+				taskName: this.name
 			}),
 			    lik = document.createElement("li");
 			lik.className = "listToDo__task";
@@ -607,7 +626,6 @@ var Task = exports.Task = function () {
 		value: function checkedElem() {
 			this.checkBtn.querySelector("i").classList.toggle("ion-checkmark-round");
 			this.lik.classList.toggle("checked");
-
 			if (this.lik.classList.contains("checked")) {
 				this.nameInp.setAttribute("tabindex", "-1");
 				this.priority.setAttribute("tabindex", "-1");
@@ -615,6 +633,12 @@ var Task = exports.Task = function () {
 				this.nameInp.removeAttribute("tabindex");
 				this.priority.removeAttribute("tabindex");
 			}
+			this.updateDate();
+		}
+	}, {
+		key: "updateDate",
+		value: function updateDate() {
+			this.parent.updateDate();
 		}
 	}]);
 

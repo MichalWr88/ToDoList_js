@@ -20,9 +20,9 @@ class App extends Global {
 		this.listTasksDom = this.fInDoc(".list__tasks");
 		this.listArray = [];
 		this.initEvents();
-		this.initLocslSrtorage();
+		this.initLocalSrtorage();
 	}
-	initLocslSrtorage() {
+	initLocalSrtorage() {
 		const local = JSON.parse(localStorage.getItem("app"));
 		if (local === null) {
 			localStorage.setItem("app", JSON.stringify([]));
@@ -32,7 +32,7 @@ class App extends Global {
 
 			this.index = Math.max.apply(Math, this.listArray.map((o) => o.id)) + 1;
 			this.listArray.forEach((elem, index) => {
-				this.createDomLik(elem.name, elem.id,elem.created,elem.updated);
+				this.createDomLik(elem.name, elem.id, elem.created, elem.updated);
 			});
 			this._checkListLength();
 		}
@@ -89,16 +89,17 @@ class App extends Global {
 		}
 		return this.newToDoListName.value.trim().length;
 	}
-	updateListName(id, updateName) {
-		this.boardsList.querySelector(`#b${id}`).innerHTML = updateName;
+	updateListName(id, name) {
+		this.boardsList.querySelector(`#b${id}`).innerHTML = name;
+		this.updateLocalStorage({ name, id });
 	}
-	createDomLik(name, id,created,updated) {
+	createDomLik(name, id, created, updated) {
 		const html = templateList({ taskName: name }),
 			listLi = this.createElement("li", `l${id}`, "listToDo", html),
 			boardsLi = this.createElement("li", `b${id}`, "listsName__elem", name);
 		this.boardsList.appendChild(boardsLi);
 		this.listTasksDom.appendChild(listLi);
-		return new ToDoList(id, this,created, updated);
+		return new ToDoList(id, this, created, updated);
 	}
 	_checkListLength() {
 		if (this.boardsList.children.length) {
@@ -107,17 +108,30 @@ class App extends Global {
 			this.listTasksDom.querySelector(".list__empty").style.display = "block";
 		}
 	}
-	updateListDate(id, date) {
+
+	updateLocalStorage(props) {
+		const { id, name, created, updated,tasks } = props;
 		this.listArray.map((e) => {
-			if ((e.id = id)) {
-				e.updated = date;
+			if (e.id == id) {
+				if (name) {
+					e.name = name;
+				}
+				if (created) {
+					e.created = created;
+				}
+				if (updated) {
+					e.updated = updated;
+				}
+				if (tasks){
+					e.tasks = tasks;
+				}
 			}
 		});
-		localStorage.setItem("app", JSON.stringify(this.listArray));
+		this.saveInLocalStorage();
 		console.log(this.listArray);
 	}
 	addNewList() {
-		const list = this.createDomLik(this.newToDoListName.value, this.index,'','');
+		const list = this.createDomLik(this.newToDoListName.value, this.index, "", "");
 		this.listArray.push({
 			id: list.id,
 			name: list.nameInp.value,
@@ -141,7 +155,7 @@ class App extends Global {
 			return e.id != id;
 		});
 		console.log(this.listArray);
-		localStorage.setItem("app", JSON.stringify(this.listArray));
+		this.saveInLocalStorage();
 		this._checkListLength();
 	}
 }

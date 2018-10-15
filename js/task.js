@@ -21,7 +21,6 @@ export class Task {
 			html = likHtml({
 				id: this.id,
 				taskName: this.name,
-				createDate: new Date().toDateString(),
 			}),
 			lik = document.createElement("li");
 		lik.className = "listToDo__task";
@@ -59,7 +58,6 @@ export class Task {
 	checkedElem() {
 		this.checkBtn.querySelector("i").classList.toggle("ion-checkmark-round");
 		this.lik.classList.toggle("checked");
-
 		if (this.lik.classList.contains("checked")) {
 			this.nameInp.setAttribute("tabindex", "-1");
 			this.priority.setAttribute("tabindex", "-1");
@@ -67,5 +65,9 @@ export class Task {
 			this.nameInp.removeAttribute("tabindex");
 			this.priority.removeAttribute("tabindex");
 		}
+		this.updateDate();
+	}
+	updateDate() {
+		this.parent.updateDate();
 	}
 }
