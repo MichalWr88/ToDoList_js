@@ -365,7 +365,7 @@ var ToDoList = exports.ToDoList = function () {
 		this.updated.innerHTML = updated || "";
 		//------------------
 		// this.initList();
-		this.initLocalStorage();
+		// this.initLocalStorage();
 		this.initEvent();
 	}
 
@@ -383,6 +383,7 @@ var ToDoList = exports.ToDoList = function () {
 			    current = local.find(function (e) {
 				return e.id == _this.id;
 			});
+			console.log(current);
 			return current;
 		}
 	}, {
@@ -411,7 +412,7 @@ var ToDoList = exports.ToDoList = function () {
 		value: function updateDate() {
 			var currentTime = this._getFormatDate(new Date());
 			this.updated.innerHTML = currentTime;
-			this.updateLocalStorage({ updated: currentTime, id: this.id });
+			this.updateLocalStorage({ updated: currentTime, id: this.id, tasks: [].concat(_toConsumableArray(this.listNode.children)) });
 			// this.parent.updateLocalStorage(this.id, currentTime, "updated");
 			return currentTime;
 		}
@@ -514,7 +515,19 @@ var ToDoList = exports.ToDoList = function () {
 				this.countAll.innerHTML = this.countTask;
 				this.newTaskInp.value = "";
 				this.sortList();
+				this.updateLocalSTask(task);
 			}
+		}
+	}, {
+		key: "updateLocalSTask",
+		value: function updateLocalSTask(task) {
+			var taskObj = {
+				id: task.id,
+				name: task.name,
+				priority: task.priority.value,
+				checked: task.lik.classList.contains("checked")
+			};
+			console.log(taskObj);
 		}
 	}, {
 		key: "updateName",

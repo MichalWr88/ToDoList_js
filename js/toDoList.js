@@ -22,7 +22,7 @@ export class ToDoList {
 		this.updated.innerHTML = updated || "";
 		//------------------
 		// this.initList();
-		this.initLocalStorage();
+		// this.initLocalStorage();
 		this.initEvent();
 	}
 
@@ -32,6 +32,7 @@ export class ToDoList {
 	initLocalStorage() {
 		const local = JSON.parse(localStorage.getItem("app")),
 			current = local.find((e) => e.id == this.id);
+			console.log(current)
 		return current;
 	}
 
@@ -55,13 +56,13 @@ export class ToDoList {
 	updateDate() {
 		const currentTime = this._getFormatDate(new Date());
 		this.updated.innerHTML = currentTime;
-		this.updateLocalStorage({ updated: currentTime, id: this.id });
+		this.updateLocalStorage({ updated: currentTime, id: this.id, tasks: [...this.listNode.children] });
 		// this.parent.updateLocalStorage(this.id, currentTime, "updated");
 		return currentTime;
 	}
-updateTasks(props){
-	const {id,name,checked, priority} = props;
-}
+	updateTasks(props) {
+		const { id, name, checked, priority } = props;
+	}
 
 	updateCheckedTask() {
 		const array = [...this.listNode.children].filter((elem) => {
@@ -140,8 +141,17 @@ updateTasks(props){
 			this.countAll.innerHTML = this.countTask;
 			this.newTaskInp.value = "";
 			this.sortList();
-
+			this.updateLocalSTask(task)
 		}
+	}
+	updateLocalSTask(task) {
+		const taskObj = {
+			id: task.id,
+			name: task.name,
+			priority: task.priority.value,
+			checked: task.lik.classList.contains("checked"),
+		};
+		console.log(taskObj);
 	}
 	updateName() {
 		this.parent.updateListName(this.id, this.nameInp.value);
