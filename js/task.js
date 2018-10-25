@@ -1,16 +1,16 @@
 export class Task {
-	constructor(id, name, parent) {
+	constructor(id, name, parent, priority,checked) {
 		this.id = id;
 		this.parent = parent;
 		this.name = name;
+		this.priority = priority;
+		this.checked = checked;
 		this.lik = this.createLik();
-		this.checkBtn = this.lik.querySelector(".task__btn-check");
-		this.nameInp = this.lik.querySelector(".task__name");
-		this.delBtn = this.lik.querySelector(".task__btn-dell");
-		this.priority = this.lik.querySelector(".task_priority");
 		this.onInit();
 	}
 	onInit() {
+		console.log(this);
+		
 		this.parent.listNode.appendChild(this.lik);
 		this.initEvents();
 	}
@@ -30,7 +30,7 @@ export class Task {
 		return lik;
 	}
 	initEvents() {
-		this.checkBtn.addEventListener(
+		this.lik.querySelector(".task__btn-check").addEventListener(
 			"click",
 			() => {
 				this.checkedElem();
@@ -39,15 +39,15 @@ export class Task {
 			},
 			false
 		);
-		this.nameInp.addEventListener("blur", () => {}, false);
-		this.delBtn.addEventListener(
+		this.lik.querySelector(".task__name").addEventListener("blur", () => {}, false);
+		this.lik.querySelector(".task__btn-dell").addEventListener(
 			"click",
 			(e) => {
 				this.parent.removeTask(this.id);
 			},
 			false
 		);
-		this.priority.addEventListener(
+		this.lik.querySelector(".task_priority").addEventListener(
 			"change",
 			(e) => {
 				this.parent.sortList();
@@ -56,7 +56,10 @@ export class Task {
 		);
 	}
 	checkedElem() {
-		this.checkBtn.querySelector("i").classList.toggle("ion-checkmark-round");
+		this.lik
+			.querySelector(".task__btn-check")
+			.querySelector("i")
+			.classList.toggle("ion-checkmark-round");
 		this.lik.classList.toggle("checked");
 		if (this.lik.classList.contains("checked")) {
 			this.nameInp.setAttribute("tabindex", "-1");

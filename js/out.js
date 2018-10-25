@@ -356,11 +356,11 @@ var ToDoList = exports.ToDoList = function () {
 		this.countChecked = this.box.querySelector(".listToDo__chekedCount");
 		this.created = this.box.querySelector(".listToDo_created");
 		this.updated = this.box.querySelector(".listToDo_updated");
-		this.LsObj = this.initLocalStorage();
-		// -----------------------------------
-		// this.list = [];
+		this.list = [];
 		this.countTask = 0;
 		this.checked = 0;
+		this.LsObj = this.initLocalStorage();
+		// -----------------------------------
 		this.created.innerHTML = created || this._getFormatDate();
 		this.updated.innerHTML = updated || "";
 		//------------------
@@ -383,7 +383,12 @@ var ToDoList = exports.ToDoList = function () {
 			    current = local.find(function (e) {
 				return e.id == _this.id;
 			});
-			console.log(current);
+			if (current && current.tasks.length) {
+				current.tasks.forEach(function (e) {
+					_this.createTask(e.id, e.name, _this, e.priority, e.checked);
+				});
+				console.log(current);
+			}
 			return current;
 		}
 	}, {
@@ -412,7 +417,7 @@ var ToDoList = exports.ToDoList = function () {
 		value: function updateDate() {
 			var currentTime = this._getFormatDate(new Date());
 			this.updated.innerHTML = currentTime;
-			this.updateLocalStorage({ updated: currentTime, id: this.id, tasks: [].concat(_toConsumableArray(this.listNode.children)) });
+			this.updateLocalStorage({ updated: currentTime, id: this.id, tasks: this.list });
 			// this.parent.updateLocalStorage(this.id, currentTime, "updated");
 			return currentTime;
 		}
@@ -476,29 +481,6 @@ var ToDoList = exports.ToDoList = function () {
 			this.listNode.querySelector("#" + elem).remove();
 		}
 	}, {
-		key: "createLik",
-		value: function createLik() {
-			//     localStorage.setItem(this.id, JSON.stringify(this.list));
-			//     this.countTask = this.list.length;
-			//     this.countAll.innerHTML = this.countTask;
-			//   },
-			//   false
-			// );
-			// --------------------------------------------------------------
-			// this.list.push(Task.data);
-			//   localStorage.setItem(this.id, JSON.stringify(this.list));
-			// } else {
-			//   data.checked = false;
-			//   this.list.map(elem => {
-			//     if (elem.text === data.text) {
-			//       elem.checked = false;
-			//     }
-			//   });
-			// this.list.push(Task.data);
-			// localStorage.setItem(this.id, JSON.stringify(this.list));
-			// this.updateCheckedTask();
-		}
-	}, {
 		key: "initTask",
 		value: function initTask(name) {
 			// this.list.push(Task.data);
@@ -509,14 +491,22 @@ var ToDoList = exports.ToDoList = function () {
 		key: "addTask",
 		value: function addTask() {
 			if (this.newTaskInp.value.length != 0) {
-				var task = new _task.Task("l" + this.id + "-" + this.countTask, this.newTaskInp.value, this);
-				this.updateDate();
-				this.countTask++;
-				this.countAll.innerHTML = this.countTask;
-				this.newTaskInp.value = "";
-				this.sortList();
-				this.updateLocalSTask(task);
+				this.createTask("l" + this.id + "-" + this.countTask, this.newTaskInp.value);
 			}
+		}
+	}, {
+		key: "createTask",
+		value: function createTask(id, name) {
+			var priority = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+			var checked = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+
+			var task = new _task.Task(id, name, this, priority, checked);
+			this.countTask++;
+			this.countAll.innerHTML = this.countTask;
+			this.newTaskInp.value = "";
+			this.updateLocalSTask(task);
+			this.sortList();
+			this.updateDate();
 		}
 	}, {
 		key: "updateLocalSTask",
@@ -527,6 +517,7 @@ var ToDoList = exports.ToDoList = function () {
 				priority: task.priority.value,
 				checked: task.lik.classList.contains("checked")
 			};
+			this.list.push(taskObj);
 			console.log(taskObj);
 		}
 	}, {
@@ -580,23 +571,23 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Task = exports.Task = function () {
-	function Task(id, name, parent) {
+	function Task(id, name, parent, priority, checked) {
 		_classCallCheck(this, Task);
 
 		this.id = id;
 		this.parent = parent;
 		this.name = name;
+		this.priority = priority;
+		this.checked = checked;
 		this.lik = this.createLik();
-		this.checkBtn = this.lik.querySelector(".task__btn-check");
-		this.nameInp = this.lik.querySelector(".task__name");
-		this.delBtn = this.lik.querySelector(".task__btn-dell");
-		this.priority = this.lik.querySelector(".task_priority");
 		this.onInit();
 	}
 
 	_createClass(Task, [{
 		key: "onInit",
 		value: function onInit() {
+			console.log(this);
+
 			this.parent.listNode.appendChild(this.lik);
 			this.initEvents();
 		}
@@ -621,23 +612,23 @@ var Task = exports.Task = function () {
 		value: function initEvents() {
 			var _this = this;
 
-			this.checkBtn.addEventListener("click", function () {
+			this.lik.querySelector(".task__btn-check").addEventListener("click", function () {
 				_this.checkedElem();
 				_this.parent.updateCheckedTask();
 				_this.nameInp.classList.toggle("blured");
 			}, false);
-			this.nameInp.addEventListener("blur", function () {}, false);
-			this.delBtn.addEventListener("click", function (e) {
+			this.lik.querySelector(".task__name").addEventListener("blur", function () {}, false);
+			this.lik.querySelector(".task__btn-dell").addEventListener("click", function (e) {
 				_this.parent.removeTask(_this.id);
 			}, false);
-			this.priority.addEventListener("change", function (e) {
+			this.lik.querySelector(".task_priority").addEventListener("change", function (e) {
 				_this.parent.sortList();
 			}, false);
 		}
 	}, {
 		key: "checkedElem",
 		value: function checkedElem() {
-			this.checkBtn.querySelector("i").classList.toggle("ion-checkmark-round");
+			this.lik.querySelector(".task__btn-check").querySelector("i").classList.toggle("ion-checkmark-round");
 			this.lik.classList.toggle("checked");
 			if (this.lik.classList.contains("checked")) {
 				this.nameInp.setAttribute("tabindex", "-1");
