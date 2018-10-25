@@ -1,5 +1,5 @@
 export class Task {
-	constructor(id, name, parent, priority,checked) {
+	constructor(id, name, parent, priority, checked) {
 		this.id = id;
 		this.parent = parent;
 		this.name = name;
@@ -10,8 +10,8 @@ export class Task {
 	}
 	onInit() {
 		console.log(this);
-		
-		this.parent.listNode.appendChild(this.lik);
+
+		this.parent.listNode.appendChild(this.lik.box);
 		this.initEvents();
 	}
 
@@ -27,10 +27,17 @@ export class Task {
 		lik.setAttribute("id", this.id);
 		lik.innerHTML = html;
 		lik.querySelector(".task_priority").value = 1;
-		return lik;
+		const likNode = {
+			box:lik,
+			name: lik.querySelector(".task__name"),
+			checkedBtn: lik.querySelector(".task__btn-check"),
+			priority: lik.querySelector(".task_priority"),
+			delBtn: lik.querySelector(".task__btn-dell"),
+		};
+		return likNode;
 	}
 	initEvents() {
-		this.lik.querySelector(".task__btn-check").addEventListener(
+		this.lik.checkedBtn.addEventListener(
 			"click",
 			() => {
 				this.checkedElem();
@@ -39,32 +46,43 @@ export class Task {
 			},
 			false
 		);
-		this.lik.querySelector(".task__name").addEventListener("blur", () => {}, false);
-		this.lik.querySelector(".task__btn-dell").addEventListener(
+		this.lik.name.addEventListener("blur", () => {}, false);
+		this.lik.delBtn.addEventListener(
 			"click",
 			(e) => {
 				this.parent.removeTask(this.id);
 			},
 			false
 		);
-		this.lik.querySelector(".task_priority").addEventListener(
+		this.lik.priority.addEventListener(
 			"change",
 			(e) => {
+				this.priority = e.target.value;
+				console.log(this.parent.list);
+				this.parent.list.forEach((e) => {
+					if (e.id == this.id) {
+						e.checked = this.checked;
+						e.priority = this.priority;
+						e.name = this.name;
+					}
+				});
 				this.parent.sortList();
 			},
 			false
 		);
 	}
 	checkedElem() {
-		this.lik
+		const nameInp = this.lik.this.lik
 			.querySelector(".task__btn-check")
 			.querySelector("i")
 			.classList.toggle("ion-checkmark-round");
 		this.lik.classList.toggle("checked");
 		if (this.lik.classList.contains("checked")) {
+			this.checked = true;
 			this.nameInp.setAttribute("tabindex", "-1");
 			this.priority.setAttribute("tabindex", "-1");
 		} else {
+			this.checked = false;
 			this.nameInp.removeAttribute("tabindex");
 			this.priority.removeAttribute("tabindex");
 		}

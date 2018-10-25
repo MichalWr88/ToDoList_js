@@ -444,6 +444,7 @@ var ToDoList = exports.ToDoList = function () {
 		value: function sortList() {
 			var _this2 = this;
 
+			console.log(this.list);
 			var sortArr = [].concat(_toConsumableArray(this.listNode.children)).sort(function (a, b) {
 				var AA = a.classList.contains("checked") ? 1 : 0,
 				    BB = b.classList.contains("checked") ? 1 : 0,
@@ -515,7 +516,7 @@ var ToDoList = exports.ToDoList = function () {
 				id: task.id,
 				name: task.name,
 				priority: task.priority.value,
-				checked: task.lik.classList.contains("checked")
+				checked: task.lik.box.classList.contains("checked")
 			};
 			this.list.push(taskObj);
 			console.log(taskObj);
@@ -588,7 +589,7 @@ var Task = exports.Task = function () {
 		value: function onInit() {
 			console.log(this);
 
-			this.parent.listNode.appendChild(this.lik);
+			this.parent.listNode.appendChild(this.lik.box);
 			this.initEvents();
 		}
 	}, {
@@ -605,35 +606,53 @@ var Task = exports.Task = function () {
 			lik.setAttribute("id", this.id);
 			lik.innerHTML = html;
 			lik.querySelector(".task_priority").value = 1;
-			return lik;
+			var likNode = {
+				box: lik,
+				name: lik.querySelector(".task__name"),
+				checkedBtn: lik.querySelector(".task__btn-check"),
+				priority: lik.querySelector(".task_priority"),
+				delBtn: lik.querySelector(".task__btn-dell")
+			};
+			return likNode;
 		}
 	}, {
 		key: "initEvents",
 		value: function initEvents() {
 			var _this = this;
 
-			this.lik.querySelector(".task__btn-check").addEventListener("click", function () {
+			this.lik.checkedBtn.addEventListener("click", function () {
 				_this.checkedElem();
 				_this.parent.updateCheckedTask();
 				_this.nameInp.classList.toggle("blured");
 			}, false);
-			this.lik.querySelector(".task__name").addEventListener("blur", function () {}, false);
-			this.lik.querySelector(".task__btn-dell").addEventListener("click", function (e) {
+			this.lik.name.addEventListener("blur", function () {}, false);
+			this.lik.delBtn.addEventListener("click", function (e) {
 				_this.parent.removeTask(_this.id);
 			}, false);
-			this.lik.querySelector(".task_priority").addEventListener("change", function (e) {
+			this.lik.priority.addEventListener("change", function (e) {
+				_this.priority = e.target.value;
+				console.log(_this.parent.list);
+				_this.parent.list.forEach(function (e) {
+					if (e.id == _this.id) {
+						e.checked = _this.checked;
+						e.priority = _this.priority;
+						e.name = _this.name;
+					}
+				});
 				_this.parent.sortList();
 			}, false);
 		}
 	}, {
 		key: "checkedElem",
 		value: function checkedElem() {
-			this.lik.querySelector(".task__btn-check").querySelector("i").classList.toggle("ion-checkmark-round");
+			var nameInp = this.lik.this.lik.querySelector(".task__btn-check").querySelector("i").classList.toggle("ion-checkmark-round");
 			this.lik.classList.toggle("checked");
 			if (this.lik.classList.contains("checked")) {
+				this.checked = true;
 				this.nameInp.setAttribute("tabindex", "-1");
 				this.priority.setAttribute("tabindex", "-1");
 			} else {
+				this.checked = false;
 				this.nameInp.removeAttribute("tabindex");
 				this.priority.removeAttribute("tabindex");
 			}
