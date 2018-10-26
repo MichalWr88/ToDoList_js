@@ -78,7 +78,7 @@ export class ToDoList {
 		this.sortList();
 	}
 	sortList() {
-		console.log(this.list)
+		console.log(this.list);
 		const sortArr = [...this.listNode.children].sort((a, b) => {
 			const AA = a.classList.contains("checked") ? 1 : 0,
 				BB = b.classList.contains("checked") ? 1 : 0,
@@ -166,7 +166,6 @@ export class ToDoList {
 			"click",
 			() => {
 				this.removeList();
-				
 			},
 			false
 		);
