@@ -3,7 +3,7 @@ export class Task {
 		this.id = id;
 		this.parent = parent;
 		this.name = name;
-		this.priority = priority || 1;
+		this.priority = priority != undefined ? priority: 1;
 		this.checked = checked || false;
 		this.lik = this.createLik();
 		this.onInit();
@@ -28,6 +28,8 @@ export class Task {
 			priority: lik.querySelector(".task_priority"),
 			delBtn: lik.querySelector(".task__btn-dell"),
 		};
+		console.log(this.priority);
+		
 		likNode.priority.value = this.priority;
 		return likNode;
 	}
@@ -36,21 +38,19 @@ export class Task {
 			"click",
 			() => {
 				this.checkedElem(this.lik);
-				this.updateTask();
-				this.parent.sortList();
+				this.updateTask(true);
 			},
 			false
 		);
 		this.lik.name.addEventListener("blur", (e) => {
 			this.name = e.target.value;
-			this.updateTask();
+			this.updateTask(false);
 		}, false);
 
 		this.lik.delBtn.addEventListener(
 			"click",
 			(e) => {
 				this.parent.removeTask(this.id);
-				
 			},
 			false
 		);
@@ -58,8 +58,7 @@ export class Task {
 			"change",
 			(e) => {
 				this.priority = e.target.value;
-				this.updateTask();
-				this.parent.sortList();
+				this.updateTask(true);
 			},
 			false
 		);
@@ -78,13 +77,13 @@ export class Task {
 			priority.removeAttribute("tabindex");
 		}
 	}
-	updateTask() {
+	updateTask(sort) {
 		const obj = {
 			id: this.id,
 			checked :this.checked,
 			priority : this.priority,
 			name : this.name
 		}
-		this.parent.updateDate(obj);
+		this.parent.updateList(obj,sort);
 	}
 }

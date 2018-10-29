@@ -21,14 +21,9 @@ export class ToDoList {
 		this.created.innerHTML = created || this._getFormatDate();
 		this.updated.innerHTML = updated || "";
 		//------------------
-		// this.initList();
-		// this.initLocalStorage();
 		this.initEvent();
 	}
 
-	// initList() {
-	//   this.countAll.innerHTML = this.countTask;
-	// }
 	initLocalStorage() {
 		const local = JSON.parse(localStorage.getItem("app")),
 			current = local.find((e) => e.id == this.id);
@@ -36,7 +31,6 @@ export class ToDoList {
 			current.tasks.forEach((e) => {
 				this.createTask(e.id, e.name, this, e.priority, e.checked);
 			});
-			console.log(current);
 		}
 		return current;
 	}
@@ -44,25 +38,15 @@ export class ToDoList {
 	updateLocalStorage(props) {
 		this.parent.updateLocalStorage(props);
 	}
-	_getFormatDate(d) {
-		const options = {
-			year: "numeric",
-			day: "numeric",
-			month: "numeric",
-			hour: "numeric",
-			minute: "numeric",
-		};
-		if (d) {
-			return new Date(d).toLocaleDateString("pl-PL", options).replace(",", "");
-		} else {
-			return new Date().toLocaleDateString("pl-PL", options).replace(",", "");
-		}
+	_getFormatDate(d = Date.now()) {
+		const options = { year: "numeric", day: "numeric", month: "numeric", hour: "numeric", minute: "numeric", };
+		return new Date(d).toLocaleDateString("pl-PL", options).replace(",", "");
 	}
-	updateDate() {
-		const currentTime = this._getFormatDate(new Date());
+	updateDate(obj, sort) {
+		const currentTime = this._getFormatDate();
 		this.updated.innerHTML = currentTime;
 		this.updateLocalStorage({ updated: currentTime, id: this.id, tasks: this.list });
-		// this.parent.updateLocalStorage(this.id, currentTime, "updated");
+		if (sort) this.updateCheckedTask();
 		return currentTime;
 	}
 	updateTasks(props) {
@@ -99,8 +83,6 @@ export class ToDoList {
 				return -1;
 			}
 		});
-		// localStorage.setItem(this.id, JSON.stringify(this.list));
-
 		sortArr.forEach((e) => {
 			this.listNode.appendChild(e);
 		});
@@ -112,40 +94,50 @@ export class ToDoList {
 		this.listNode.querySelector(`#${elem}`).remove();
 	}
 
-	initTask(name) {
-		// this.list.push(Task.data);
-		// var storedNames = JSON.parse(localStorage.getItem(this.id));
-		localStorage.setItem(this.id, JSON.stringify(this.list));
-	}
+	// initTask(name) {
+	// 	localStorage.setItem(this.id, JSON.stringify(this.list));
+	// }
 	addTask() {
 		if (this.newTaskInp.value.length != 0) {
 			this.createTask(`l${this.id}-${this.countTask}`, this.newTaskInp.value);
 		}
 	}
-	createTask(id, name, priority = 1, checked = false) {
-		const task = new Task(id, name, this, priority, checked);
+	createTask(id, name,parent=this, priority = 1, checked = false) {
+		const task = new Task(id, name, parent, priority, checked);		
 		this.countTask++;
 		this.countAll.innerHTML = this.countTask;
 		this.newTaskInp.value = "";
+
 		this.updateLocalSTask(task);
 		this.sortList();
 		this.updateDate();
 	}
 	updateLocalSTask(task) {
+		console.log(task);
+		
 		const taskObj = {
 			id: task.id,
 			name: task.name,
-			priority: task.priority.value,
-			checked: task.lik.box.classList.contains("checked"),
+			priority: task.priority,
+			checked: task.checked,
 		};
 		this.list.push(taskObj);
 		console.log(taskObj);
 	}
+	updateList(obj, sort){
+		this.list = 	this.list.map(e=>{ return e.id == obj.id ? obj: e; });
+
+		this.sortList();
+		this.updateDate();
+
+	}
+
 	updateName() {
 		this.parent.updateListName(this.id, this.nameInp.value);
 	}
-	initEvent() {
 		// ===================================================
+	initEvent() {
+
 		this.addBtn.addEventListener(
 			"click",
 			() => {
@@ -153,7 +145,7 @@ export class ToDoList {
 			},
 			false
 		);
-		// ===================================================
+
 		this.nameInp.addEventListener(
 			"blur",
 			() => {
@@ -161,7 +153,7 @@ export class ToDoList {
 			},
 			false
 		);
-		// ===================================================
+
 		this.delBtn.addEventListener(
 			"click",
 			() => {
@@ -169,7 +161,7 @@ export class ToDoList {
 			},
 			false
 		);
-		// ===================================================
+
 		this.newTaskInp.addEventListener(
 			"keydown",
 			(e) => {
@@ -179,6 +171,6 @@ export class ToDoList {
 			},
 			false
 		);
-		// ===================================================
+	
 	}
 }

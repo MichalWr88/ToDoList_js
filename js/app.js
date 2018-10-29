@@ -29,7 +29,6 @@ class App extends Global {
 			this.index = 1;
 		} else {
 			this.listArray = JSON.parse(localStorage.getItem("app"));
-
 			this.index = Math.max.apply(Math, this.listArray.map((o) => o.id)) + 1;
 			this.listArray.forEach((elem, index) => {
 				this.createDomLik(elem.name, elem.id, elem.created, elem.updated);

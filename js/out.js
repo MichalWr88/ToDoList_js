@@ -120,7 +120,6 @@ var App = function (_Global) {
 				this.index = 1;
 			} else {
 				this.listArray = JSON.parse(localStorage.getItem("app"));
-
 				this.index = Math.max.apply(Math, this.listArray.map(function (o) {
 					return o.id;
 				})) + 1;
@@ -364,15 +363,8 @@ var ToDoList = exports.ToDoList = function () {
 		this.created.innerHTML = created || this._getFormatDate();
 		this.updated.innerHTML = updated || "";
 		//------------------
-		// this.initList();
-		// this.initLocalStorage();
 		this.initEvent();
 	}
-
-	// initList() {
-	//   this.countAll.innerHTML = this.countTask;
-	// }
-
 
 	_createClass(ToDoList, [{
 		key: "initLocalStorage",
@@ -387,7 +379,6 @@ var ToDoList = exports.ToDoList = function () {
 				current.tasks.forEach(function (e) {
 					_this.createTask(e.id, e.name, _this, e.priority, e.checked);
 				});
-				console.log(current);
 			}
 			return current;
 		}
@@ -398,27 +389,19 @@ var ToDoList = exports.ToDoList = function () {
 		}
 	}, {
 		key: "_getFormatDate",
-		value: function _getFormatDate(d) {
-			var options = {
-				year: "numeric",
-				day: "numeric",
-				month: "numeric",
-				hour: "numeric",
-				minute: "numeric"
-			};
-			if (d) {
-				return new Date(d).toLocaleDateString("pl-PL", options).replace(",", "");
-			} else {
-				return new Date().toLocaleDateString("pl-PL", options).replace(",", "");
-			}
+		value: function _getFormatDate() {
+			var d = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : Date.now();
+
+			var options = { year: "numeric", day: "numeric", month: "numeric", hour: "numeric", minute: "numeric" };
+			return new Date(d).toLocaleDateString("pl-PL", options).replace(",", "");
 		}
 	}, {
 		key: "updateDate",
-		value: function updateDate() {
-			var currentTime = this._getFormatDate(new Date());
+		value: function updateDate(obj, sort) {
+			var currentTime = this._getFormatDate();
 			this.updated.innerHTML = currentTime;
 			this.updateLocalStorage({ updated: currentTime, id: this.id, tasks: this.list });
-			// this.parent.updateLocalStorage(this.id, currentTime, "updated");
+			if (sort) this.updateCheckedTask();
 			return currentTime;
 		}
 	}, {
@@ -465,8 +448,6 @@ var ToDoList = exports.ToDoList = function () {
 					return -1;
 				}
 			});
-			// localStorage.setItem(this.id, JSON.stringify(this.list));
-
 			sortArr.forEach(function (e) {
 				_this2.listNode.appendChild(e);
 			});
@@ -481,13 +462,11 @@ var ToDoList = exports.ToDoList = function () {
 		value: function removeTask(elem) {
 			this.listNode.querySelector("#" + elem).remove();
 		}
-	}, {
-		key: "initTask",
-		value: function initTask(name) {
-			// this.list.push(Task.data);
-			// var storedNames = JSON.parse(localStorage.getItem(this.id));
-			localStorage.setItem(this.id, JSON.stringify(this.list));
-		}
+
+		// initTask(name) {
+		// 	localStorage.setItem(this.id, JSON.stringify(this.list));
+		// }
+
 	}, {
 		key: "addTask",
 		value: function addTask() {
@@ -498,13 +477,15 @@ var ToDoList = exports.ToDoList = function () {
 	}, {
 		key: "createTask",
 		value: function createTask(id, name) {
-			var priority = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
-			var checked = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+			var parent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this;
+			var priority = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
+			var checked = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
 
-			var task = new _task.Task(id, name, this, priority, checked);
+			var task = new _task.Task(id, name, parent, priority, checked);
 			this.countTask++;
 			this.countAll.innerHTML = this.countTask;
 			this.newTaskInp.value = "";
+
 			this.updateLocalSTask(task);
 			this.sortList();
 			this.updateDate();
@@ -512,44 +493,56 @@ var ToDoList = exports.ToDoList = function () {
 	}, {
 		key: "updateLocalSTask",
 		value: function updateLocalSTask(task) {
+			console.log(task);
+
 			var taskObj = {
 				id: task.id,
 				name: task.name,
-				priority: task.priority.value,
-				checked: task.lik.box.classList.contains("checked")
+				priority: task.priority,
+				checked: task.checked
 			};
 			this.list.push(taskObj);
 			console.log(taskObj);
+		}
+	}, {
+		key: "updateList",
+		value: function updateList(obj, sort) {
+			this.list = this.list.map(function (e) {
+				return e.id == obj.id ? obj : e;
+			});
+
+			this.sortList();
+			this.updateDate();
 		}
 	}, {
 		key: "updateName",
 		value: function updateName() {
 			this.parent.updateListName(this.id, this.nameInp.value);
 		}
+		// ===================================================
+
 	}, {
 		key: "initEvent",
 		value: function initEvent() {
 			var _this3 = this;
 
-			// ===================================================
 			this.addBtn.addEventListener("click", function () {
 				_this3.addTask();
 			}, false);
-			// ===================================================
+
 			this.nameInp.addEventListener("blur", function () {
 				_this3.updateName();
 			}, false);
-			// ===================================================
+
 			this.delBtn.addEventListener("click", function () {
 				_this3.removeList();
 			}, false);
-			// ===================================================
+
 			this.newTaskInp.addEventListener("keydown", function (e) {
 				if (e.keyCode === 13) {
 					_this3.addTask();
 				}
 			}, false);
-			// ===================================================
 		}
 	}]);
 
@@ -578,7 +571,7 @@ var Task = exports.Task = function () {
 		this.id = id;
 		this.parent = parent;
 		this.name = name;
-		this.priority = priority || 1;
+		this.priority = priority != undefined ? priority : 1;
 		this.checked = checked || false;
 		this.lik = this.createLik();
 		this.onInit();
@@ -607,6 +600,8 @@ var Task = exports.Task = function () {
 				priority: lik.querySelector(".task_priority"),
 				delBtn: lik.querySelector(".task__btn-dell")
 			};
+			console.log(this.priority);
+
 			likNode.priority.value = this.priority;
 			return likNode;
 		}
@@ -617,12 +612,11 @@ var Task = exports.Task = function () {
 
 			this.lik.checkedBtn.addEventListener("click", function () {
 				_this.checkedElem(_this.lik);
-				_this.updateTask();
-				_this.parent.sortList();
+				_this.updateTask(true);
 			}, false);
 			this.lik.name.addEventListener("blur", function (e) {
 				_this.name = e.target.value;
-				_this.updateTask();
+				_this.updateTask(false);
 			}, false);
 
 			this.lik.delBtn.addEventListener("click", function (e) {
@@ -630,8 +624,7 @@ var Task = exports.Task = function () {
 			}, false);
 			this.lik.priority.addEventListener("change", function (e) {
 				_this.priority = e.target.value;
-				_this.updateTask();
-				_this.parent.sortList();
+				_this.updateTask(true);
 			}, false);
 		}
 	}, {
@@ -656,14 +649,14 @@ var Task = exports.Task = function () {
 		}
 	}, {
 		key: "updateTask",
-		value: function updateTask() {
+		value: function updateTask(sort) {
 			var obj = {
 				id: this.id,
 				checked: this.checked,
 				priority: this.priority,
 				name: this.name
 			};
-			this.parent.updateDate(obj);
+			this.parent.updateList(obj, sort);
 		}
 	}]);
 
