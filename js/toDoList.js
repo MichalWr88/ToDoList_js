@@ -20,7 +20,7 @@ export class ToDoList extends Global {
 		this.initTasksList();
 	}
 createDomElem(){
-	console.log(this.countTask);
+	console.log(this.created);
 	
 	const source = document.getElementById("list-template").innerHTML,
 		templateList = Handlebars.compile(source),
@@ -63,19 +63,13 @@ nameInp : elem.querySelector(".listToDo__name"),
 
 		return currentTime;
 	}
-	updateTasks(props) {
-		const { id, name, checked, priority } = props;
-	}
 
 	updateCheckedTask() {
 		const array = [...this.domElem.listNode.children].filter((elem) => {
 			return elem.classList.contains("checked");
-		});
+		});		
 		this.countChecked = array.length;
-		console.log(this.checked);
-		
 		this.domElem.countChecked.innerHTML = this.countChecked;
-		this.sortList();
 	}
 	sortList() {
 		[...this.domElem.listNode.children].sort((a, b) => {
@@ -91,12 +85,15 @@ nameInp : elem.querySelector(".listToDo__name"),
 				return 0;
 			}
 		}).forEach((e) => this.domElem.listNode.appendChild(e));
+		this.updateCheckedTask();
 	}
 	removeList(elem) {
 		this.parent.removeChild(this.id);
 	}
-	removeTask(elem) {
-		this.domElem.listNode.querySelector(`#${elem}`).remove();
+	removeTask(id) {
+		this.domElem.listNode.querySelector(`#${id}`).remove();
+		this.tasks = this.tasks.filter((e)=>e.id != id);
+		this.updateDate();
 	}
 	addTask() {
 		if (this.domElem.newTaskInp.value.length != 0) {
@@ -131,7 +128,7 @@ nameInp : elem.querySelector(".listToDo__name"),
 	}
 
 	updateName() {
-		this.parent.updateListName(this.id, this.nameInp.value);
+		this.parent.updateListName(this.id, this.domElem.nameInp.value);
 	}
 		// ===================================================
 	initEvent() {

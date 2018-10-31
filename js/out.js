@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,9 +70,63 @@
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _global = __webpack_require__(1);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Global = exports.Global = function () {
+	function Global() {
+		_classCallCheck(this, Global);
+	}
+
+	_createClass(Global, [{
+		key: 'createElement',
+		value: function createElement() {
+			var elem = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'div';
+			var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+			var classList = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+			var html = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
+
+			var e = document.createElement(elem);
+			e.setAttribute('id', id);
+			e.classList.add(classList);
+			e.innerHTML = html;
+			return e;
+		}
+	}, {
+		key: 'fInDoc',
+		value: function fInDoc(elem) {
+			var all = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+			if (all !== false) {
+				var obj = [].concat(_toConsumableArray(document.querySelectorAll(elem)));
+				return obj;
+			} else {
+				var _obj = document.querySelector(elem);
+				return _obj;
+			}
+		}
+	}]);
+
+	return Global;
+}();
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _global = __webpack_require__(0);
 
 var _toDoList = __webpack_require__(2);
 
@@ -101,6 +155,7 @@ var App = function (_Global) {
 		_this.clearListName = _this.box.querySelector("#clearListName");
 		_this.listTasksDom = _this.fInDoc(".list__tasks");
 		_this.listArray = [];
+		_this.index = 0;
 		_this.initEvents();
 		_this.initLocalSrtorage();
 		return _this;
@@ -121,7 +176,13 @@ var App = function (_Global) {
 					return o.id;
 				})) + 1;
 				this.listArray.forEach(function (elem, index) {
-					_this2.createDomLik(elem.name, elem.id, elem.created, elem.updated, elem.tasks);
+					var name = elem.name,
+					    id = elem.id,
+					    created = elem.created,
+					    updated = elem.updated,
+					    tasks = elem.tasks;
+
+					_this2.createDomLik(name, id, created, updated, tasks);
 				});
 				this._checkListLength();
 			}
@@ -181,8 +242,10 @@ var App = function (_Global) {
 		value: function createDomLik(name, id, created, updated, tasks) {
 			var boardsLi = this.createElement("li", "b" + id, "listsName__elem", name);
 			this.boardsList.appendChild(boardsLi);
+
 			var list = new _toDoList.ToDoList(name, id, this, created, updated, tasks);
 			this.listTasksDom.appendChild(list.domElem.box);
+			return list;
 		}
 	}, {
 		key: "_checkListLength",
@@ -224,20 +287,19 @@ var App = function (_Global) {
 		key: "addNewList",
 		value: function addNewList() {
 			var list = this.createDomLik(this.newToDoListName.value, this.index, "", "");
-			this.listArray.push({
-				id: list.id,
-				name: list.nameInp.value,
-				created: list.created.innerHTML,
-				updated: list.updated.innerHTML,
-				tasks: []
-			});
-
 			this.index++;
 			this.newToDoListName.value = "";
 			this.newToDoListName.focus();
 			this.newToDoListName.select();
 			clearListName.classList.add("d_none");
 			this._checkListLength();
+			var id = list.id,
+			    name = list.name,
+			    created = list.created,
+			    updated = list.updated,
+			    tasks = list.tasks;
+
+			this.listArray.push({ id: id, name: name, created: created, updated: updated, tasks: tasks });
 			this.saveInLocalStorage();
 		}
 	}, {
@@ -260,60 +322,6 @@ var App = function (_Global) {
 var header = new App("header");
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Global = exports.Global = function () {
-	function Global() {
-		_classCallCheck(this, Global);
-	}
-
-	_createClass(Global, [{
-		key: 'createElement',
-		value: function createElement() {
-			var elem = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'div';
-			var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-			var classList = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
-			var html = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
-
-			var e = document.createElement(elem);
-			e.setAttribute('id', id);
-			e.classList.add(classList);
-			e.innerHTML = html;
-			return e;
-		}
-	}, {
-		key: 'fInDoc',
-		value: function fInDoc(elem) {
-			var all = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-			if (all !== false) {
-				var obj = [].concat(_toConsumableArray(document.querySelectorAll(elem)));
-				return obj;
-			} else {
-				var _obj = document.querySelector(elem);
-				return _obj;
-			}
-		}
-	}]);
-
-	return Global;
-}();
-
-/***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -329,7 +337,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _task = __webpack_require__(3);
 
-var _global = __webpack_require__(1);
+var _global = __webpack_require__(0);
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -370,7 +378,7 @@ var ToDoList = exports.ToDoList = function (_Global) {
 	_createClass(ToDoList, [{
 		key: "createDomElem",
 		value: function createDomElem() {
-			console.log(this.countTask);
+			console.log(this.created);
 
 			var source = document.getElementById("list-template").innerHTML,
 			    templateList = Handlebars.compile(source),
@@ -431,24 +439,13 @@ var ToDoList = exports.ToDoList = function (_Global) {
 			return currentTime;
 		}
 	}, {
-		key: "updateTasks",
-		value: function updateTasks(props) {
-			var id = props.id,
-			    name = props.name,
-			    checked = props.checked,
-			    priority = props.priority;
-		}
-	}, {
 		key: "updateCheckedTask",
 		value: function updateCheckedTask() {
 			var array = [].concat(_toConsumableArray(this.domElem.listNode.children)).filter(function (elem) {
 				return elem.classList.contains("checked");
 			});
 			this.countChecked = array.length;
-			console.log(this.checked);
-
 			this.domElem.countChecked.innerHTML = this.countChecked;
-			this.sortList();
 		}
 	}, {
 		key: "sortList",
@@ -470,6 +467,7 @@ var ToDoList = exports.ToDoList = function (_Global) {
 			}).forEach(function (e) {
 				return _this3.domElem.listNode.appendChild(e);
 			});
+			this.updateCheckedTask();
 		}
 	}, {
 		key: "removeList",
@@ -478,8 +476,12 @@ var ToDoList = exports.ToDoList = function (_Global) {
 		}
 	}, {
 		key: "removeTask",
-		value: function removeTask(elem) {
-			this.domElem.listNode.querySelector("#" + elem).remove();
+		value: function removeTask(id) {
+			this.domElem.listNode.querySelector("#" + id).remove();
+			this.tasks = this.tasks.filter(function (e) {
+				return e.id != id;
+			});
+			this.updateDate();
 		}
 	}, {
 		key: "addTask",
@@ -527,7 +529,7 @@ var ToDoList = exports.ToDoList = function (_Global) {
 	}, {
 		key: "updateName",
 		value: function updateName() {
-			this.parent.updateListName(this.id, this.nameInp.value);
+			this.parent.updateListName(this.id, this.domElem.nameInp.value);
 		}
 		// ===================================================
 
