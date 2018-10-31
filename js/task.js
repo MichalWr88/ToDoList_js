@@ -4,16 +4,16 @@ export class Task {
 		this.parent = parent;
 		this.name = name;
 		this.priority = priority != undefined ? priority: 1;
-		this.checked = checked || false;
-		this.lik = this.createLik();
+		this.checked = checked;
+		this.lik = this.createDomElem();
 		this.onInit();
 	}
 	onInit() {
-		this.parent.listNode.appendChild(this.lik.box);
+		this.parent.domElem.listNode.appendChild(this.lik.box);
 		this.initEvents();
 	}
 
-	createLik() {
+	createDomElem() {
 		const templateTask = document.getElementById("task-template").innerHTML,
 			likHtml = Handlebars.compile(templateTask),
 			html = likHtml({ id: this.id, taskName: this.name }),
@@ -28,8 +28,7 @@ export class Task {
 			priority: lik.querySelector(".task_priority"),
 			delBtn: lik.querySelector(".task__btn-dell"),
 		};
-		console.log(this.priority);
-		
+		this.checkedElem(likNode, this.checked);
 		likNode.priority.value = this.priority;
 		return likNode;
 	}
@@ -37,13 +36,13 @@ export class Task {
 		this.lik.checkedBtn.addEventListener(
 			"click",
 			() => {
-				this.checkedElem(this.lik);
+				this.checkedElem(this.lik, !this.checked);
 				this.updateTask(true);
 			},
 			false
 		);
 		this.lik.name.addEventListener("blur", (e) => {
-			this.name = e.target.value;
+			this.name = e.target.innerHTML;
 			this.updateTask(false);
 		}, false);
 
@@ -63,27 +62,23 @@ export class Task {
 			false
 		);
 	}
-	checkedElem(likNode) {
-		const { box, name, checkedBtn, priority} = likNode;
-		checkedBtn.querySelector("i").classList.toggle("ion-checkmark-round");
-		box.classList.toggle("checked");
-		if (box.classList.contains("checked")) {
+	checkedElem(likNode, status) {
+		const { box, name, checkedBtn, priority} = likNode;		
+		if (status) {
 			this.checked = true;
 			name.setAttribute("tabindex", "-1");
 			priority.setAttribute("tabindex", "-1");
+			checkedBtn.querySelector("i").classList.add("ion-checkmark-round");
+			box.classList.add("checked");
 		} else {
 			this.checked = false;
 			name.removeAttribute("tabindex");
 			priority.removeAttribute("tabindex");
+			checkedBtn.querySelector("i").classList.remove("ion-checkmark-round");
+			box.classList.remove("checked");
 		}
 	}
 	updateTask(sort) {
-		const obj = {
-			id: this.id,
-			checked :this.checked,
-			priority : this.priority,
-			name : this.name
-		}
-		this.parent.updateList(obj,sort);
+		this.parent.updateList(this,sort);
 	}
 }

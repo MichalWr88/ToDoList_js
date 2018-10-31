@@ -55,7 +55,7 @@
 	<script id="list-template" type="text/x-handlebars-template">
         <!-- header list -->
         <div class="listToDo__header">
-          <input class="input listToDo__name" type="text" name="listName" value="{{taskName}}" required>
+          <input class="input listToDo__name" type="text" name="listName" value="{{name}}" required>
           <!-- count task -->
           <button class="btn listToDo__del" title="delete list">
             <i class="ion-close-round"></i>
@@ -63,18 +63,18 @@
           <div class="row f_jsa">
             <div class="row d_columns ">
               <p class="listToDo__text f_1">all task
-                <b class="listToDo__allCount">0</b>
+                <b class="listToDo__allCount">{{countTask}}</b>
               </p>
               <p class="listToDo__text f_1">checked task
-                <b class="listToDo__chekedCount">0</b>
+                <b class="listToDo__chekedCount">{{countChecked}}</b>
               </p>
             </div>
             <div class="row d_columns">
               <p class="listToDo__text f_1">Created:
-                <b class="listToDo_created">0</b>
+                <b class="listToDo_created">{{created}}</b>
               </p>
               <p class="listToDo__text f_1">Last Update:
-                <b class="listToDo_updated">0</b>
+                <b class="listToDo_updated">{{updated}}</b>
               </p>
             </div>
           </div>

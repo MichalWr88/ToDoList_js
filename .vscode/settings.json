@@ -1,12 +1,9 @@
 {
-	"prettier.trailingComma": "all",
+	"prettier.trailingComma": "es5",
 	"prettier.arrowParens": "always",
 	"editor.wordWrap": "wordWrapColumn",
 	"prettier.useTabs": true,
 	"prettier.printWidth": 120,
 	"prettier.stylelintIntegration": true,
-	"prettier.eslintIntegration": true,
-	"prettier.requireConfig": true,
-	"prettier.singleQuote": true,
-	"prettier.tslintIntegration": true
+	"prettier.singleQuote": true
 }

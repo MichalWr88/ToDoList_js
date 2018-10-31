@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,9 +70,63 @@
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _global = __webpack_require__(1);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Global = exports.Global = function () {
+	function Global() {
+		_classCallCheck(this, Global);
+	}
+
+	_createClass(Global, [{
+		key: 'createElement',
+		value: function createElement() {
+			var elem = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'div';
+			var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+			var classList = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+			var html = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
+
+			var e = document.createElement(elem);
+			e.setAttribute('id', id);
+			e.classList.add(classList);
+			e.innerHTML = html;
+			return e;
+		}
+	}, {
+		key: 'fInDoc',
+		value: function fInDoc(elem) {
+			var all = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+			if (all !== false) {
+				var obj = [].concat(_toConsumableArray(document.querySelectorAll(elem)));
+				return obj;
+			} else {
+				var _obj = document.querySelector(elem);
+				return _obj;
+			}
+		}
+	}]);
+
+	return Global;
+}();
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _global = __webpack_require__(0);
 
 var _toDoList = __webpack_require__(2);
 
@@ -84,9 +138,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /* jshint -W024 */
 /* jshint expr:true */
 
-
-var source = document.getElementById("list-template").innerHTML,
-    templateList = Handlebars.compile(source);
 
 var App = function (_Global) {
 	_inherits(App, _Global);
@@ -104,6 +155,7 @@ var App = function (_Global) {
 		_this.clearListName = _this.box.querySelector("#clearListName");
 		_this.listTasksDom = _this.fInDoc(".list__tasks");
 		_this.listArray = [];
+		_this.index = 0;
 		_this.initEvents();
 		_this.initLocalSrtorage();
 		return _this;
@@ -124,7 +176,13 @@ var App = function (_Global) {
 					return o.id;
 				})) + 1;
 				this.listArray.forEach(function (elem, index) {
-					_this2.createDomLik(elem.name, elem.id, elem.created, elem.updated);
+					var name = elem.name,
+					    id = elem.id,
+					    created = elem.created,
+					    updated = elem.updated,
+					    tasks = elem.tasks;
+
+					_this2.createDomLik(name, id, created, updated, tasks);
 				});
 				this._checkListLength();
 			}
@@ -181,13 +239,13 @@ var App = function (_Global) {
 		}
 	}, {
 		key: "createDomLik",
-		value: function createDomLik(name, id, created, updated) {
-			var html = templateList({ taskName: name }),
-			    listLi = this.createElement("li", "l" + id, "listToDo", html),
-			    boardsLi = this.createElement("li", "b" + id, "listsName__elem", name);
+		value: function createDomLik(name, id, created, updated, tasks) {
+			var boardsLi = this.createElement("li", "b" + id, "listsName__elem", name);
 			this.boardsList.appendChild(boardsLi);
-			this.listTasksDom.appendChild(listLi);
-			return new _toDoList.ToDoList(id, this, created, updated);
+
+			var list = new _toDoList.ToDoList(name, id, this, created, updated, tasks);
+			this.listTasksDom.appendChild(list.domElem.box);
+			return list;
 		}
 	}, {
 		key: "_checkListLength",
@@ -224,26 +282,24 @@ var App = function (_Global) {
 				}
 			});
 			this.saveInLocalStorage();
-			console.log(this.listArray);
 		}
 	}, {
 		key: "addNewList",
 		value: function addNewList() {
 			var list = this.createDomLik(this.newToDoListName.value, this.index, "", "");
-			this.listArray.push({
-				id: list.id,
-				name: list.nameInp.value,
-				created: list.created.innerHTML,
-				updated: list.updated.innerHTML,
-				tasks: []
-			});
-
 			this.index++;
 			this.newToDoListName.value = "";
 			this.newToDoListName.focus();
 			this.newToDoListName.select();
 			clearListName.classList.add("d_none");
 			this._checkListLength();
+			var id = list.id,
+			    name = list.name,
+			    created = list.created,
+			    updated = list.updated,
+			    tasks = list.tasks;
+
+			this.listArray.push({ id: id, name: name, created: created, updated: updated, tasks: tasks });
 			this.saveInLocalStorage();
 		}
 	}, {
@@ -266,60 +322,6 @@ var App = function (_Global) {
 var header = new App("header");
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Global = exports.Global = function () {
-	function Global() {
-		_classCallCheck(this, Global);
-	}
-
-	_createClass(Global, [{
-		key: 'createElement',
-		value: function createElement() {
-			var elem = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'div';
-			var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-			var classList = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
-			var html = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
-
-			var e = document.createElement(elem);
-			e.setAttribute('id', id);
-			e.classList.add(classList);
-			e.innerHTML = html;
-			return e;
-		}
-	}, {
-		key: 'fInDoc',
-		value: function fInDoc(elem) {
-			var all = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-			if (all !== false) {
-				var obj = [].concat(_toConsumableArray(document.querySelectorAll(elem)));
-				return obj;
-			} else {
-				var _obj = document.querySelector(elem);
-				return _obj;
-			}
-		}
-	}]);
-
-	return Global;
-}();
-
-/***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -335,52 +337,84 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _task = __webpack_require__(3);
 
+var _global = __webpack_require__(0);
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ToDoList = exports.ToDoList = function () {
-	function ToDoList(id, parent, created, updated) {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ToDoList = exports.ToDoList = function (_Global) {
+	_inherits(ToDoList, _Global);
+
+	function ToDoList(name, id, parent, created, updated, tasks) {
 		_classCallCheck(this, ToDoList);
 
-		this.id = id;
-		this.parent = parent;
-		this.box = document.getElementById("l" + id);
-		this.nameInp = this.box.querySelector(".listToDo__name");
-		this.newTaskInp = this.box.querySelector(".listToDo__newTask");
-		this.addBtn = this.box.querySelector(".listToDo__add");
-		this.delBtn = this.box.querySelector(".listToDo__del");
-		this.listNode = this.box.querySelector(".listToDo__container");
-		this.countAll = this.box.querySelector(".listToDo__allCount");
-		this.countChecked = this.box.querySelector(".listToDo__chekedCount");
-		this.created = this.box.querySelector(".listToDo_created");
-		this.updated = this.box.querySelector(".listToDo_updated");
-		this.list = [];
-		this.countTask = 0;
-		this.checked = 0;
-		this.LsObj = this.initLocalStorage();
+		var _this = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this));
+
+		_this.id = id;
+		_this.parent = parent;
+		_this.created = created || _this._getFormatDate();
+		_this.updated = updated || "";
+		_this.name = name;
+		_this.tasks = tasks || [];
+		_this.countTask = 0;
+		_this.countChecked = _this.tasks.filter(function (e) {
+			return e.checked;
+		}).length;
+		_this.domElem = _this.createDomElem();
+
 		// -----------------------------------
-		this.created.innerHTML = created || this._getFormatDate();
-		this.updated.innerHTML = updated || "";
+
 		//------------------
-		this.initEvent();
+		_this.initEvent();
+		_this.initTasksList();
+		return _this;
 	}
 
 	_createClass(ToDoList, [{
-		key: "initLocalStorage",
-		value: function initLocalStorage() {
-			var _this = this;
+		key: "createDomElem",
+		value: function createDomElem() {
+			console.log(this.created);
 
-			var local = JSON.parse(localStorage.getItem("app")),
-			    current = local.find(function (e) {
-				return e.id == _this.id;
+			var source = document.getElementById("list-template").innerHTML,
+			    templateList = Handlebars.compile(source),
+			    name = this.name,
+			    id = this.id,
+			    created = this.created,
+			    updated = this.updated,
+			    countTask = this.countTask,
+			    countChecked = this.countChecked,
+			    html = templateList({ name: name, id: id, created: created, updated: updated, countTask: countTask, countChecked: countChecked }),
+			    elem = this.createElement("li", "l" + id, "listToDo", html);
+
+
+			var ListDom = {
+				box: elem,
+				nameInp: elem.querySelector(".listToDo__name"),
+				newTaskInp: elem.querySelector(".listToDo__newTask"),
+				addBtn: elem.querySelector(".listToDo__add"),
+				delBtn: elem.querySelector(".listToDo__del"),
+				listNode: elem.querySelector(".listToDo__container"),
+				countAll: elem.querySelector(".listToDo__allCount"),
+				countChecked: elem.querySelector(".listToDo__chekedCount"),
+				created: elem.querySelector(".listToDo_created"),
+				updated: elem.querySelector(".listToDo_updated")
+			};
+			return ListDom;
+		}
+	}, {
+		key: "initTasksList",
+		value: function initTasksList() {
+			var _this2 = this;
+
+			if (!this.tasks.length) return;
+			this.tasks.forEach(function (e) {
+				_this2.createTask(e.id, e.name, _this2, e.priority, e.checked);
 			});
-			if (current && current.tasks.length) {
-				current.tasks.forEach(function (e) {
-					_this.createTask(e.id, e.name, _this, e.priority, e.checked);
-				});
-			}
-			return current;
 		}
 	}, {
 		key: "updateLocalStorage",
@@ -397,60 +431,43 @@ var ToDoList = exports.ToDoList = function () {
 		}
 	}, {
 		key: "updateDate",
-		value: function updateDate(obj, sort) {
+		value: function updateDate() {
 			var currentTime = this._getFormatDate();
-			this.updated.innerHTML = currentTime;
-			this.updateLocalStorage({ updated: currentTime, id: this.id, tasks: this.list });
-			if (sort) this.updateCheckedTask();
+			this.domElem.updated.innerHTML = currentTime;
+			this.updateLocalStorage({ updated: currentTime, id: this.id, tasks: this.tasks });
+
 			return currentTime;
-		}
-	}, {
-		key: "updateTasks",
-		value: function updateTasks(props) {
-			var id = props.id,
-			    name = props.name,
-			    checked = props.checked,
-			    priority = props.priority;
 		}
 	}, {
 		key: "updateCheckedTask",
 		value: function updateCheckedTask() {
-			var array = [].concat(_toConsumableArray(this.listNode.children)).filter(function (elem) {
+			var array = [].concat(_toConsumableArray(this.domElem.listNode.children)).filter(function (elem) {
 				return elem.classList.contains("checked");
 			});
-			this.checked = array.length;
-			this.countChecked.textContent = this.checked;
-			this.sortList();
+			this.countChecked = array.length;
+			this.domElem.countChecked.innerHTML = this.countChecked;
 		}
 	}, {
 		key: "sortList",
 		value: function sortList() {
-			var _this2 = this;
+			var _this3 = this;
 
-			console.log(this.list);
-			var sortArr = [].concat(_toConsumableArray(this.listNode.children)).sort(function (a, b) {
+			[].concat(_toConsumableArray(this.domElem.listNode.children)).sort(function (a, b) {
 				var AA = a.classList.contains("checked") ? 1 : 0,
 				    BB = b.classList.contains("checked") ? 1 : 0,
 				    AT = a.querySelector(".task_priority").value,
 				    BT = b.querySelector(".task_priority").value;
-				if (AA > BB) {
-					return 1;
-				}
-				if (AT < BT && AA < BB) {
-					return 1;
-				}
-				if (AT < BT && AA == BB) {
-					return 1;
-				}
-				if (AT == BT && AA > BB) {
+				if (AA < BB) {
 					return -1;
-				} else {
+				} else if (!AA && !BB && AT > BT) {
 					return -1;
+				} else if (AA == BB) {
+					return 0;
 				}
+			}).forEach(function (e) {
+				return _this3.domElem.listNode.appendChild(e);
 			});
-			sortArr.forEach(function (e) {
-				_this2.listNode.appendChild(e);
-			});
+			this.updateCheckedTask();
 		}
 	}, {
 		key: "removeList",
@@ -459,19 +476,18 @@ var ToDoList = exports.ToDoList = function () {
 		}
 	}, {
 		key: "removeTask",
-		value: function removeTask(elem) {
-			this.listNode.querySelector("#" + elem).remove();
+		value: function removeTask(id) {
+			this.domElem.listNode.querySelector("#" + id).remove();
+			this.tasks = this.tasks.filter(function (e) {
+				return e.id != id;
+			});
+			this.updateDate();
 		}
-
-		// initTask(name) {
-		// 	localStorage.setItem(this.id, JSON.stringify(this.list));
-		// }
-
 	}, {
 		key: "addTask",
 		value: function addTask() {
-			if (this.newTaskInp.value.length != 0) {
-				this.createTask("l" + this.id + "-" + this.countTask, this.newTaskInp.value);
+			if (this.domElem.newTaskInp.value.length != 0) {
+				this.createTask("l" + this.id + "-" + this.countTask, this.domElem.newTaskInp.value);
 			}
 		}
 	}, {
@@ -483,71 +499,67 @@ var ToDoList = exports.ToDoList = function () {
 
 			var task = new _task.Task(id, name, parent, priority, checked);
 			this.countTask++;
-			this.countAll.innerHTML = this.countTask;
-			this.newTaskInp.value = "";
+			this.domElem.countAll.innerHTML = this.countTask;
+			this.domElem.newTaskInp.value = "";
 
-			this.updateLocalSTask(task);
+			this.updateList(task);
 			this.sortList();
 			this.updateDate();
 		}
 	}, {
-		key: "updateLocalSTask",
-		value: function updateLocalSTask(task) {
+		key: "updateList",
+		value: function updateList(task, sort) {
 			console.log(task);
 
-			var taskObj = {
+			var obj = {
 				id: task.id,
-				name: task.name,
+				checked: task.checked,
 				priority: task.priority,
-				checked: task.checked
+				name: task.name
 			};
-			this.list.push(taskObj);
-			console.log(taskObj);
-		}
-	}, {
-		key: "updateList",
-		value: function updateList(obj, sort) {
-			this.list = this.list.map(function (e) {
+			if (!this.tasks.find(function (e) {
+				return e.id == obj.id;
+			})) this.tasks.push(obj);
+			this.tasks = this.tasks.map(function (e) {
 				return e.id == obj.id ? obj : e;
 			});
-
-			this.sortList();
+			if (sort) this.sortList();
 			this.updateDate();
 		}
 	}, {
 		key: "updateName",
 		value: function updateName() {
-			this.parent.updateListName(this.id, this.nameInp.value);
+			this.parent.updateListName(this.id, this.domElem.nameInp.value);
 		}
 		// ===================================================
 
 	}, {
 		key: "initEvent",
 		value: function initEvent() {
-			var _this3 = this;
+			var _this4 = this;
 
-			this.addBtn.addEventListener("click", function () {
-				_this3.addTask();
+			this.domElem.addBtn.addEventListener("click", function () {
+				_this4.addTask();
 			}, false);
 
-			this.nameInp.addEventListener("blur", function () {
-				_this3.updateName();
+			this.domElem.nameInp.addEventListener("blur", function () {
+				_this4.updateName();
 			}, false);
 
-			this.delBtn.addEventListener("click", function () {
-				_this3.removeList();
+			this.domElem.delBtn.addEventListener("click", function () {
+				_this4.removeList();
 			}, false);
 
-			this.newTaskInp.addEventListener("keydown", function (e) {
+			this.domElem.newTaskInp.addEventListener("keydown", function (e) {
 				if (e.keyCode === 13) {
-					_this3.addTask();
+					_this4.addTask();
 				}
 			}, false);
 		}
 	}]);
 
 	return ToDoList;
-}();
+}(_global.Global);
 
 /***/ }),
 /* 3 */
@@ -572,20 +584,20 @@ var Task = exports.Task = function () {
 		this.parent = parent;
 		this.name = name;
 		this.priority = priority != undefined ? priority : 1;
-		this.checked = checked || false;
-		this.lik = this.createLik();
+		this.checked = checked;
+		this.lik = this.createDomElem();
 		this.onInit();
 	}
 
 	_createClass(Task, [{
 		key: "onInit",
 		value: function onInit() {
-			this.parent.listNode.appendChild(this.lik.box);
+			this.parent.domElem.listNode.appendChild(this.lik.box);
 			this.initEvents();
 		}
 	}, {
-		key: "createLik",
-		value: function createLik() {
+		key: "createDomElem",
+		value: function createDomElem() {
 			var templateTask = document.getElementById("task-template").innerHTML,
 			    likHtml = Handlebars.compile(templateTask),
 			    html = likHtml({ id: this.id, taskName: this.name }),
@@ -600,8 +612,7 @@ var Task = exports.Task = function () {
 				priority: lik.querySelector(".task_priority"),
 				delBtn: lik.querySelector(".task__btn-dell")
 			};
-			console.log(this.priority);
-
+			this.checkedElem(likNode, this.checked);
 			likNode.priority.value = this.priority;
 			return likNode;
 		}
@@ -611,11 +622,11 @@ var Task = exports.Task = function () {
 			var _this = this;
 
 			this.lik.checkedBtn.addEventListener("click", function () {
-				_this.checkedElem(_this.lik);
+				_this.checkedElem(_this.lik, !_this.checked);
 				_this.updateTask(true);
 			}, false);
 			this.lik.name.addEventListener("blur", function (e) {
-				_this.name = e.target.value;
+				_this.name = e.target.innerHTML;
 				_this.updateTask(false);
 			}, false);
 
@@ -629,34 +640,30 @@ var Task = exports.Task = function () {
 		}
 	}, {
 		key: "checkedElem",
-		value: function checkedElem(likNode) {
+		value: function checkedElem(likNode, status) {
 			var box = likNode.box,
 			    name = likNode.name,
 			    checkedBtn = likNode.checkedBtn,
 			    priority = likNode.priority;
 
-			checkedBtn.querySelector("i").classList.toggle("ion-checkmark-round");
-			box.classList.toggle("checked");
-			if (box.classList.contains("checked")) {
+			if (status) {
 				this.checked = true;
 				name.setAttribute("tabindex", "-1");
 				priority.setAttribute("tabindex", "-1");
+				checkedBtn.querySelector("i").classList.add("ion-checkmark-round");
+				box.classList.add("checked");
 			} else {
 				this.checked = false;
 				name.removeAttribute("tabindex");
 				priority.removeAttribute("tabindex");
+				checkedBtn.querySelector("i").classList.remove("ion-checkmark-round");
+				box.classList.remove("checked");
 			}
 		}
 	}, {
 		key: "updateTask",
 		value: function updateTask(sort) {
-			var obj = {
-				id: this.id,
-				checked: this.checked,
-				priority: this.priority,
-				name: this.name
-			};
-			this.parent.updateList(obj, sort);
+			this.parent.updateList(this, sort);
 		}
 	}]);
 

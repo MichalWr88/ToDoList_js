@@ -4,13 +4,11 @@
 import { Global } from "./global";
 import { ToDoList } from "./toDoList";
 
-const source = document.getElementById("list-template").innerHTML,
-	templateList = Handlebars.compile(source);
+
 
 class App extends Global {
 	constructor(id) {
 		super();
-
 		this.box = document.getElementById(id);
 		this.boardsBtn = this.box.querySelector("#boardsBtn");
 		this.boardsList = this.box.querySelector("#boardsList");
@@ -19,6 +17,7 @@ class App extends Global {
 		this.clearListName = this.box.querySelector("#clearListName");
 		this.listTasksDom = this.fInDoc(".list__tasks");
 		this.listArray = [];
+		this.index = 0;
 		this.initEvents();
 		this.initLocalSrtorage();
 	}
@@ -31,7 +30,8 @@ class App extends Global {
 			this.listArray = JSON.parse(localStorage.getItem("app"));
 			this.index = Math.max.apply(Math, this.listArray.map((o) => o.id)) + 1;
 			this.listArray.forEach((elem, index) => {
-				this.createDomLik(elem.name, elem.id, elem.created, elem.updated);
+				const { name, id, created, updated, tasks} = elem;
+				this.createDomLik(name, id, created, updated,tasks);
 			});
 			this._checkListLength();
 		}
@@ -92,13 +92,13 @@ class App extends Global {
 		this.boardsList.querySelector(`#b${id}`).innerHTML = name;
 		this.updateLocalStorage({ name, id });
 	}
-	createDomLik(name, id, created, updated) {
-		const html = templateList({ taskName: name }),
-			listLi = this.createElement("li", `l${id}`, "listToDo", html),
-			boardsLi = this.createElement("li", `b${id}`, "listsName__elem", name);
+	createDomLik(name, id, created, updated,tasks) {
+		const	boardsLi = this.createElement("li", `b${id}`, "listsName__elem", name);
 		this.boardsList.appendChild(boardsLi);
-		this.listTasksDom.appendChild(listLi);
-		return new ToDoList(id, this, created, updated);
+
+		const list = new ToDoList(name, id, this, created, updated,tasks);
+		this.listTasksDom.appendChild(list.domElem.box);
+		return list;
 	}
 	_checkListLength() {
 		if (this.boardsList.children.length) {
@@ -127,24 +127,17 @@ class App extends Global {
 			}
 		});
 		this.saveInLocalStorage();
-		console.log(this.listArray);
 	}
 	addNewList() {
 		const list = this.createDomLik(this.newToDoListName.value, this.index, "", "");
-		this.listArray.push({
-			id: list.id,
-			name: list.nameInp.value,
-			created: list.created.innerHTML,
-			updated: list.updated.innerHTML,
-			tasks: [],
-		});
-
 		this.index++;
 		this.newToDoListName.value = "";
 		this.newToDoListName.focus();
 		this.newToDoListName.select();
 		clearListName.classList.add("d_none");
 		this._checkListLength();
+		const { id, name, created, updated, tasks } = list;
+		this.listArray.push({ id, name, created, updated, tasks})
 		this.saveInLocalStorage();
 	}
 	removeChild(id) {
