@@ -191,6 +191,7 @@ var App = function (_Global) {
 		key: "saveInLocalStorage",
 		value: function saveInLocalStorage() {
 			localStorage.setItem("app", JSON.stringify(this.listArray));
+			this._checkListLength();
 		}
 	}, {
 		key: "initEvents",
@@ -286,13 +287,12 @@ var App = function (_Global) {
 	}, {
 		key: "addNewList",
 		value: function addNewList() {
-			var list = this.createDomLik(this.newToDoListName.value, this.index, "", "");
+			var list = this.createDomLik(this.newToDoListName.value.trim(), this.index, "", "");
 			this.index++;
 			this.newToDoListName.value = "";
 			this.newToDoListName.focus();
 			this.newToDoListName.select();
 			clearListName.classList.add("d_none");
-			this._checkListLength();
 			var id = list.id,
 			    name = list.name,
 			    created = list.created,
@@ -310,9 +310,7 @@ var App = function (_Global) {
 			this.listArray = this.listArray.filter(function (e) {
 				return e.id != id;
 			});
-			console.log(this.listArray);
 			this.saveInLocalStorage();
-			this._checkListLength();
 		}
 	}]);
 
@@ -367,9 +365,6 @@ var ToDoList = exports.ToDoList = function (_Global) {
 		}).length;
 		_this.domElem = _this.createDomElem();
 
-		// -----------------------------------
-
-		//------------------
 		_this.initEvent();
 		_this.initTasksList();
 		return _this;
@@ -378,8 +373,6 @@ var ToDoList = exports.ToDoList = function (_Global) {
 	_createClass(ToDoList, [{
 		key: "createDomElem",
 		value: function createDomElem() {
-			console.log(this.created);
-
 			var source = document.getElementById("list-template").innerHTML,
 			    templateList = Handlebars.compile(source),
 			    name = this.name,
@@ -435,7 +428,6 @@ var ToDoList = exports.ToDoList = function (_Global) {
 			var currentTime = this._getFormatDate();
 			this.domElem.updated.innerHTML = currentTime;
 			this.updateLocalStorage({ updated: currentTime, id: this.id, tasks: this.tasks });
-
 			return currentTime;
 		}
 	}, {
@@ -501,7 +493,6 @@ var ToDoList = exports.ToDoList = function (_Global) {
 			this.countTask++;
 			this.domElem.countAll.innerHTML = this.countTask;
 			this.domElem.newTaskInp.value = "";
-
 			this.updateList(task);
 			this.sortList();
 			this.updateDate();
@@ -509,8 +500,6 @@ var ToDoList = exports.ToDoList = function (_Global) {
 	}, {
 		key: "updateList",
 		value: function updateList(task, sort) {
-			console.log(task);
-
 			var obj = {
 				id: task.id,
 				checked: task.checked,
@@ -626,7 +615,7 @@ var Task = exports.Task = function () {
 				_this.updateTask(true);
 			}, false);
 			this.lik.name.addEventListener("blur", function (e) {
-				_this.name = e.target.innerHTML;
+				_this.name = e.target.innerText;
 				_this.updateTask(false);
 			}, false);
 

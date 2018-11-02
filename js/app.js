@@ -4,8 +4,6 @@
 import { Global } from "./global";
 import { ToDoList } from "./toDoList";
 
-
-
 class App extends Global {
 	constructor(id) {
 		super();
@@ -38,6 +36,7 @@ class App extends Global {
 	}
 	saveInLocalStorage() {
 		localStorage.setItem("app", JSON.stringify(this.listArray));
+		this._checkListLength();
 	}
 	initEvents() {
 		this.boardsBtn.addEventListener(
@@ -129,15 +128,14 @@ class App extends Global {
 		this.saveInLocalStorage();
 	}
 	addNewList() {
-		const list = this.createDomLik(this.newToDoListName.value, this.index, "", "");
+		const list = this.createDomLik(this.newToDoListName.value.trim(), this.index, "", "");
 		this.index++;
 		this.newToDoListName.value = "";
 		this.newToDoListName.focus();
 		this.newToDoListName.select();
 		clearListName.classList.add("d_none");
-		this._checkListLength();
 		const { id, name, created, updated, tasks } = list;
-		this.listArray.push({ id, name, created, updated, tasks})
+		this.listArray.push({ id, name, created, updated, tasks});
 		this.saveInLocalStorage();
 	}
 	removeChild(id) {
@@ -146,9 +144,7 @@ class App extends Global {
 		this.listArray = this.listArray.filter((e) => {
 			return e.id != id;
 		});
-		console.log(this.listArray);
 		this.saveInLocalStorage();
-		this._checkListLength();
 	}
 }
 const header = new App("header");

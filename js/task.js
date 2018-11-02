@@ -42,7 +42,7 @@ export class Task {
 			false
 		);
 		this.lik.name.addEventListener("blur", (e) => {
-			this.name = e.target.innerHTML;
+			this.name = e.target.innerText;
 			this.updateTask(false);
 		}, false);
 

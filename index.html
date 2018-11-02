@@ -17,6 +17,14 @@
 	<header class="page__header" id="header">
 		<!-- dashbord -->
 		<nav class="header__nav">
+				<div class="header__hamburger">
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
 			<button id="boardsBtn" type="button" class="btn btn-text header__btn    ion-ios-paper">
 				<span class="btn__content">boards</span>
 			</button>
@@ -28,7 +36,7 @@
 		<div class="header__addListBox">
 			<label for="addList" class="addList__label">
 				<p>Add new list</p>
-				<p class="error " aria-live="polite">Pole wymagane, nie może zaczynać się od białych znaków</p>
+				<p class="error " aria-live="polite">Pole wymagane, nie może zaczynać się od znaków specjalnych</p>
 			</label>
 			<input id="listName" class="input addList__input" id="addList" type="text" placeholder="Name list" required pattern="[\w ]{1,50}"
 			 maxLength="50">
@@ -38,7 +46,7 @@
 
 		<div class="header__logo">
 			<h1 class="header__appName">ToDo List vanilla.js</h1>
-			<!-- <p class="header__logoText">with local storage</p> -->
+			<p class="header__logoText">with localStorage</p>
 		</div>
 	</header>
 	<main class="page__main">

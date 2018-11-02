@@ -13,15 +13,10 @@ export class ToDoList extends Global {
 		this.countChecked = this.tasks.filter(e => e.checked).length;
 		this.domElem = this.createDomElem();
 
-		// -----------------------------------
-
-		//------------------
 		this.initEvent();
 		this.initTasksList();
 	}
 createDomElem(){
-	console.log(this.created);
-	
 	const source = document.getElementById("list-template").innerHTML,
 		templateList = Handlebars.compile(source),
 	{ name, id, created, updated, countTask, countChecked } = this,
@@ -30,7 +25,7 @@ createDomElem(){
 
 const ListDom = {
 	box : elem,
-nameInp : elem.querySelector(".listToDo__name"),
+	nameInp : elem.querySelector(".listToDo__name"),
 	newTaskInp : elem.querySelector(".listToDo__newTask"),
 	addBtn : elem.querySelector(".listToDo__add"),
 	delBtn : elem.querySelector(".listToDo__del"),
@@ -48,7 +43,6 @@ nameInp : elem.querySelector(".listToDo__name"),
 			this.createTask(e.id, e.name, this, e.priority, e.checked);
 		});
 	}
-
 	updateLocalStorage(props) {
 		this.parent.updateLocalStorage(props);
 	}
@@ -60,7 +54,6 @@ nameInp : elem.querySelector(".listToDo__name"),
 		const currentTime = this._getFormatDate();
 		this.domElem.updated.innerHTML = currentTime;
 		this.updateLocalStorage({ updated: currentTime, id: this.id, tasks: this.tasks });
-
 		return currentTime;
 	}
 
@@ -105,15 +98,12 @@ nameInp : elem.querySelector(".listToDo__name"),
 		this.countTask++;
 		this.domElem.countAll.innerHTML = this.countTask;
 		this.domElem.newTaskInp.value = "";
-
 		this.updateList(task);
 		this.sortList();
 		this.updateDate();
 	}
 
 	updateList(task, sort){
-		console.log(task);
-		
 		const obj = {
 			id: task.id,
 			checked: task.checked,
@@ -121,7 +111,7 @@ nameInp : elem.querySelector(".listToDo__name"),
 			name: task.name
 		};
 		if (!this.tasks.find(e => e.id == obj.id)) this.tasks.push(obj);
-		this.tasks = 	this.tasks.map(e=>{ return e.id == obj.id ? obj: e; });
+		this.tasks = 	this.tasks.map(e=>{ return e.id == obj.id ? obj: e; });		
 		if(sort)  this.sortList();
 		this.updateDate();
 
