@@ -3,7 +3,7 @@
  :root {
      --color1: #232730;
     /* black #232730*/
-     --height-header: 85px;
+     --height-header: 80px;
      --height-footer: 40px;
      --color2: #B1B4B5;
     /* lightgrey #B1B4B5 */
@@ -14,7 +14,7 @@
      height: 100vh;
      background: #5c6873;
      display: grid;
-     grid-template-rows: 95px auto 50px;
+     grid-template-rows: var(--height-header) auto var(--height-footer);
      overflow: hidden;
      background-size: cover;
      font-family: "Catamaran", sans-serif;
@@ -103,6 +103,7 @@
 /* -------------------------------------------- */
 /* HEADER */
  .page__header {
+	   height:var(--height-header);
      display: flex;
      justify-content: space-around;
      align-items: center;
@@ -225,10 +226,13 @@
      margin: 0;
      padding: 0;
      color: #7ebde2;
-     letter-spacing: 1.5px;
+		 letter-spacing: 1.5px;
+		 					
 }
  .page__main{
-     height:calc(100vh - var(--height-footer) - var(--height-header)) 
+		 height:calc(100vh - var(--height-footer) - var(--height-header));
+		 padding-top: 10px;
+     margin-top: 10px;
 }
 /* ------------------------------------------------------------ */
  .list__tasks {
