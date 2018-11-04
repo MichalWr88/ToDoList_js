@@ -148,12 +148,13 @@ var App = function (_Global) {
 		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
 		_this.box = document.getElementById(id);
-		_this.boardsBtn = _this.box.querySelector("#boardsBtn");
-		_this.boardsList = _this.box.querySelector("#boardsList");
-		_this.newToDoListName = _this.box.querySelector("#listName");
-		_this.addNewListBtn = _this.box.querySelector("#addNewList");
-		_this.clearListName = _this.box.querySelector("#clearListName");
-		_this.listTasksDom = _this.fInDoc(".list__tasks");
+		_this.boardsBtn = _this.box.querySelector('#boardsBtn');
+		_this.menuBtn = _this.box.querySelector('#menuBtn');
+		_this.boardsList = _this.box.querySelector('#boardsList');
+		_this.newToDoListName = _this.box.querySelector('#listName');
+		_this.addNewListBtn = _this.box.querySelector('#addNewList');
+		_this.clearListName = _this.box.querySelector('#clearListName');
+		_this.listTasksDom = _this.fInDoc('.list__tasks');
 		_this.listArray = [];
 		_this.index = 0;
 		_this.initEvents();
@@ -162,16 +163,16 @@ var App = function (_Global) {
 	}
 
 	_createClass(App, [{
-		key: "initLocalSrtorage",
+		key: 'initLocalSrtorage',
 		value: function initLocalSrtorage() {
 			var _this2 = this;
 
-			var local = JSON.parse(localStorage.getItem("app"));
+			var local = JSON.parse(localStorage.getItem('app'));
 			if (local === null) {
-				localStorage.setItem("app", JSON.stringify([]));
+				localStorage.setItem('app', JSON.stringify([]));
 				this.index = 1;
 			} else {
-				this.listArray = JSON.parse(localStorage.getItem("app"));
+				this.listArray = JSON.parse(localStorage.getItem('app'));
 				this.index = Math.max.apply(Math, this.listArray.map(function (o) {
 					return o.id;
 				})) + 1;
@@ -188,60 +189,72 @@ var App = function (_Global) {
 			}
 		}
 	}, {
-		key: "saveInLocalStorage",
+		key: 'saveInLocalStorage',
 		value: function saveInLocalStorage() {
-			localStorage.setItem("app", JSON.stringify(this.listArray));
+			localStorage.setItem('app', JSON.stringify(this.listArray));
 			this._checkListLength();
 		}
 	}, {
-		key: "initEvents",
+		key: '_mobileMenu',
+		value: function _mobileMenu() {
+			var menu = document.querySelector('.nav__mobile'),
+			    addListBox = document.querySelector('.header__addListBox');
+			menu.classList.toggle('active');
+			addListBox.classList.toggle('active');
+			this.menuBtn.classList.toggle('active');
+		}
+	}, {
+		key: 'initEvents',
 		value: function initEvents() {
 			var _this3 = this;
 
-			this.boardsBtn.addEventListener("click", function () {
+			this.boardsBtn.addEventListener('click', function () {
 				if (!_this3.boardsList.children.length) return;
-				_this3.boardsList.classList.toggle("h-0");
+				_this3.boardsList.classList.toggle('h-0');
+			}, false);
+			this.menuBtn.addEventListener('click', function () {
+				_this3._mobileMenu();
 			}, false);
 
-			this.newToDoListName.addEventListener("keyup", function (e) {
+			this.newToDoListName.addEventListener('keyup', function (e) {
 				if (_this3._checkName()) {
-					clearListName.classList.remove("d_none");
+					clearListName.classList.remove('d_none');
 					if (e.keyCode === 13) {
 						_this3.addNewList();
 					}
 				} else {
-					clearListName.classList.add("d_none");
+					clearListName.classList.add('d_none');
 				}
 			}, false);
-			this.addNewListBtn.addEventListener("click", function () {
+			this.addNewListBtn.addEventListener('click', function () {
 				_this3._checkName() ? _this3.addNewList() : false;
 			}, false);
 
-			this.clearListName.addEventListener("click", function () {
-				_this3.newToDoListName.value = "";
-				_this3.clearListName.classList.add("d_none");
+			this.clearListName.addEventListener('click', function () {
+				_this3.newToDoListName.value = '';
+				_this3.clearListName.classList.add('d_none');
 			}, false);
 		}
 	}, {
-		key: "_checkName",
+		key: '_checkName',
 		value: function _checkName() {
 			if (!this.newToDoListName.validity.valid) {
-				this.box.querySelector(".error").classList.add("hide");
+				this.box.querySelector('.error').classList.add('hide');
 			} else {
-				this.box.querySelector(".error").classList.remove("hide");
+				this.box.querySelector('.error').classList.remove('hide');
 			}
 			return this.newToDoListName.value.trim().length;
 		}
 	}, {
-		key: "updateListName",
+		key: 'updateListName',
 		value: function updateListName(id, name) {
-			this.boardsList.querySelector("#b" + id).innerHTML = name;
+			this.boardsList.querySelector('#b' + id).innerHTML = name;
 			this.updateLocalStorage({ name: name, id: id });
 		}
 	}, {
-		key: "createDomLik",
+		key: 'createDomLik',
 		value: function createDomLik(name, id, created, updated, tasks) {
-			var boardsLi = this.createElement("li", "b" + id, "listsName__elem", name);
+			var boardsLi = this.createElement('li', 'b' + id, 'listsName__elem', name);
 			this.boardsList.appendChild(boardsLi);
 
 			var list = new _toDoList.ToDoList(name, id, this, created, updated, tasks);
@@ -249,16 +262,16 @@ var App = function (_Global) {
 			return list;
 		}
 	}, {
-		key: "_checkListLength",
+		key: '_checkListLength',
 		value: function _checkListLength() {
 			if (this.boardsList.children.length) {
-				this.listTasksDom.querySelector(".list__empty").style.display = "none";
+				this.listTasksDom.querySelector('.list__empty').style.display = 'none';
 			} else {
-				this.listTasksDom.querySelector(".list__empty").style.display = "block";
+				this.listTasksDom.querySelector('.list__empty').style.display = 'block';
 			}
 		}
 	}, {
-		key: "updateLocalStorage",
+		key: 'updateLocalStorage',
 		value: function updateLocalStorage(props) {
 			var id = props.id,
 			    name = props.name,
@@ -285,14 +298,14 @@ var App = function (_Global) {
 			this.saveInLocalStorage();
 		}
 	}, {
-		key: "addNewList",
+		key: 'addNewList',
 		value: function addNewList() {
-			var list = this.createDomLik(this.newToDoListName.value.trim(), this.index, "", "");
+			var list = this.createDomLik(this.newToDoListName.value.trim(), this.index, '', '');
 			this.index++;
-			this.newToDoListName.value = "";
+			this.newToDoListName.value = '';
 			this.newToDoListName.focus();
 			this.newToDoListName.select();
-			clearListName.classList.add("d_none");
+			clearListName.classList.add('d_none');
 			var id = list.id,
 			    name = list.name,
 			    created = list.created,
@@ -303,10 +316,10 @@ var App = function (_Global) {
 			this.saveInLocalStorage();
 		}
 	}, {
-		key: "removeChild",
+		key: 'removeChild',
 		value: function removeChild(id) {
-			this.listTasksDom.querySelector("#l" + id).remove();
-			this.boardsList.querySelector("#b" + id).remove();
+			this.listTasksDom.querySelector('#l' + id).remove();
+			this.boardsList.querySelector('#b' + id).remove();
 			this.listArray = this.listArray.filter(function (e) {
 				return e.id != id;
 			});
@@ -317,7 +330,7 @@ var App = function (_Global) {
 	return App;
 }(_global.Global);
 
-var header = new App("header");
+var header = new App('header');
 
 /***/ }),
 /* 2 */

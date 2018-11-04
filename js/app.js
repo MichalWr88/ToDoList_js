@@ -1,69 +1,84 @@
 /*jshint esversion: 6 */
 /* jshint -W024 */
 /* jshint expr:true */
-import { Global } from "./global";
-import { ToDoList } from "./toDoList";
+import { Global } from './global';
+import { ToDoList } from './toDoList';
 
 class App extends Global {
 	constructor(id) {
 		super();
 		this.box = document.getElementById(id);
-		this.boardsBtn = this.box.querySelector("#boardsBtn");
-		this.boardsList = this.box.querySelector("#boardsList");
-		this.newToDoListName = this.box.querySelector("#listName");
-		this.addNewListBtn = this.box.querySelector("#addNewList");
-		this.clearListName = this.box.querySelector("#clearListName");
-		this.listTasksDom = this.fInDoc(".list__tasks");
+		this.boardsBtn = this.box.querySelector('#boardsBtn');
+		this.menuBtn = this.box.querySelector('#menuBtn');
+		this.boardsList = this.box.querySelector('#boardsList');
+		this.newToDoListName = this.box.querySelector('#listName');
+		this.addNewListBtn = this.box.querySelector('#addNewList');
+		this.clearListName = this.box.querySelector('#clearListName');
+		this.listTasksDom = this.fInDoc('.list__tasks');
 		this.listArray = [];
 		this.index = 0;
 		this.initEvents();
 		this.initLocalSrtorage();
 	}
 	initLocalSrtorage() {
-		const local = JSON.parse(localStorage.getItem("app"));
+		const local = JSON.parse(localStorage.getItem('app'));
 		if (local === null) {
-			localStorage.setItem("app", JSON.stringify([]));
+			localStorage.setItem('app', JSON.stringify([]));
 			this.index = 1;
 		} else {
-			this.listArray = JSON.parse(localStorage.getItem("app"));
+			this.listArray = JSON.parse(localStorage.getItem('app'));
 			this.index = Math.max.apply(Math, this.listArray.map((o) => o.id)) + 1;
 			this.listArray.forEach((elem, index) => {
-				const { name, id, created, updated, tasks} = elem;
-				this.createDomLik(name, id, created, updated,tasks);
+				const { name, id, created, updated, tasks } = elem;
+				this.createDomLik(name, id, created, updated, tasks);
 			});
 			this._checkListLength();
 		}
 	}
 	saveInLocalStorage() {
-		localStorage.setItem("app", JSON.stringify(this.listArray));
+		localStorage.setItem('app', JSON.stringify(this.listArray));
 		this._checkListLength();
+	}
+	_mobileMenu() {
+		const menu = document.querySelector('.nav__mobile'),
+			addListBox = document.querySelector('.header__addListBox');
+		menu.classList.toggle('active');
+		addListBox.classList.toggle('active');
+		this.menuBtn.classList.toggle('active');
 	}
 	initEvents() {
 		this.boardsBtn.addEventListener(
-			"click",
+			'click',
 			() => {
 				if (!this.boardsList.children.length) return;
-				this.boardsList.classList.toggle("h-0");
+				this.boardsList.classList.toggle('h-0');
+			},
+			false
+		);
+		this.menuBtn.addEventListener(
+			'click',
+			() => {
+				this._mobileMenu();
 			},
 			false
 		);
 
 		this.newToDoListName.addEventListener(
-			"keyup",
+			'keyup',
 			(e) => {
 				if (this._checkName()) {
-					clearListName.classList.remove("d_none");
+					clearListName.classList.remove('d_none');
 					if (e.keyCode === 13) {
 						this.addNewList();
 					}
 				} else {
-					clearListName.classList.add("d_none");
+					clearListName.classList.add('d_none');
 				}
 			},
 			false
 		);
 		this.addNewListBtn.addEventListener(
-			"click",
+			'click',
 			() => {
 				this._checkName() ? this.addNewList() : false;
 			},
@@ -71,19 +86,19 @@ class App extends Global {
 		);
 
 		this.clearListName.addEventListener(
-			"click",
+			'click',
 			() => {
-				this.newToDoListName.value = "";
-				this.clearListName.classList.add("d_none");
+				this.newToDoListName.value = '';
+				this.clearListName.classList.add('d_none');
 			},
 			false
 		);
 	}
 	_checkName() {
 		if (!this.newToDoListName.validity.valid) {
-			this.box.querySelector(".error").classList.add("hide");
+			this.box.querySelector('.error').classList.add('hide');
 		} else {
-			this.box.querySelector(".error").classList.remove("hide");
+			this.box.querySelector('.error').classList.remove('hide');
 		}
 		return this.newToDoListName.value.trim().length;
 	}
@@ -91,24 +106,24 @@ class App extends Global {
 		this.boardsList.querySelector(`#b${id}`).innerHTML = name;
 		this.updateLocalStorage({ name, id });
 	}
-	createDomLik(name, id, created, updated,tasks) {
-		const	boardsLi = this.createElement("li", `b${id}`, "listsName__elem", name);
+	createDomLik(name, id, created, updated, tasks) {
+		const boardsLi = this.createElement('li', `b${id}`, 'listsName__elem', name);
 		this.boardsList.appendChild(boardsLi);
 
-		const list = new ToDoList(name, id, this, created, updated,tasks);
+		const list = new ToDoList(name, id, this, created, updated, tasks);
 		this.listTasksDom.appendChild(list.domElem.box);
 		return list;
 	}
 	_checkListLength() {
 		if (this.boardsList.children.length) {
-			this.listTasksDom.querySelector(".list__empty").style.display = "none";
+			this.listTasksDom.querySelector('.list__empty').style.display = 'none';
 		} else {
-			this.listTasksDom.querySelector(".list__empty").style.display = "block";
+			this.listTasksDom.querySelector('.list__empty').style.display = 'block';
 		}
 	}
 
 	updateLocalStorage(props) {
-		const { id, name, created, updated,tasks } = props;
+		const { id, name, created, updated, tasks } = props;
 		this.listArray.map((e) => {
 			if (e.id == id) {
 				if (name) {
@@ -120,7 +135,7 @@ class App extends Global {
 				if (updated) {
 					e.updated = updated;
 				}
-				if (tasks){
+				if (tasks) {
 					e.tasks = tasks;
 				}
 			}
@@ -128,14 +143,14 @@ class App extends Global {
 		this.saveInLocalStorage();
 	}
 	addNewList() {
-		const list = this.createDomLik(this.newToDoListName.value.trim(), this.index, "", "");
+		const list = this.createDomLik(this.newToDoListName.value.trim(), this.index, '', '');
 		this.index++;
-		this.newToDoListName.value = "";
+		this.newToDoListName.value = '';
 		this.newToDoListName.focus();
 		this.newToDoListName.select();
-		clearListName.classList.add("d_none");
+		clearListName.classList.add('d_none');
 		const { id, name, created, updated, tasks } = list;
-		this.listArray.push({ id, name, created, updated, tasks});
+		this.listArray.push({ id, name, created, updated, tasks });
 		this.saveInLocalStorage();
 	}
 	removeChild(id) {
@@ -147,4 +162,4 @@ class App extends Global {
 		this.saveInLocalStorage();
 	}
 }
-const header = new App("header");
+const header = new App('header');

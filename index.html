@@ -16,20 +16,18 @@
 	<!-- header -->
 	<header class="page__header" id="header">
 		<!-- dashbord -->
+
 		<nav class="header__nav">
-				<div class="header__hamburger">
-					<span></span>
-					<span></span>
-					<span></span>
-					<span></span>
-					<span></span>
-					<span></span>
-				</div>
-			<button id="boardsBtn" type="button" class="btn btn-text header__btn    ion-ios-paper">
-				<span class="btn__content">boards</span>
+			<button class="nav__hamburger" id="menuBtn">
+				<span class="line"></span>
 			</button>
-			<ul id="boardsList" class="lists-notype header__listsName h-0">
-			</ul>
+			<div class="nav__mobile">
+				<button id="boardsBtn" type="button" class="btn btn-text header__btn    ion-ios-paper">
+					<span class="btn__content">boards</span>
+				</button>
+				<ul id="boardsList" class="lists-notype header__listsName h-0">
+				</ul>
+			</div>
 		</nav>
 		<!-- addList -->
 
@@ -47,6 +45,7 @@
 		<div class="header__logo">
 			<h1 class="header__appName">ToDo List vanilla.js</h1>
 			<p class="header__logoText">with localStorage</p>
+			
 		</div>
 	</header>
 	<main class="page__main">
