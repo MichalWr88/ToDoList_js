@@ -1,13 +1,12 @@
-# JavaScript Lista ToDo
+# JavaScript list ToDo
+## localStorage
 
-## pure HTML,css, js
-## OOP
-## webpack
+## Used
+* HTML
+* CSS
+* JS
+* WEBPACK
+* OOP
+* variables CSS
 
-
-
-
-=======
-[ONLINE](https://michalwr88.github.io/ToDoList_js/)
-
-
+## [ONLINE](https://michalwr88.github.io/ToDoList_js/)
