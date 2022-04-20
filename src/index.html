@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>ToDo Lists</title>
+		<meta charset="utf-8" />
+		<!-- RWD-->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<link href="https://fonts.googleapis.com/css?family=Catamaran" rel="stylesheet" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
+	</head>
+
+	<body>
+		<!-- header -->
+		<header class="page__header" id="header">
+			<!-- dashbord -->
+			<nav class="header__nav">
+				<button class="nav__hamburger" id="menuBtn">
+					<span class="line"></span>
+				</button>
+				<div class="nav__mobile">
+					<button id="boardsBtn" type="button" class="btn btn-text header__btn ion-ios-paper">
+						<span class="btn__content">boards</span>
+					</button>
+					<ul id="boardsList" class="lists-notype header__listsName h-0"></ul>
+				</div>
+			</nav>
+			<!-- addList -->
+
+			<div class="header__addListBox">
+				<label for="addList" class="addList__label">
+					<p>Add new list</p>
+					<p class="error" aria-live="polite">Pole wymagane, nie może zaczynać się od znaków specjalnych</p>
+				</label>
+				<input
+					id="listName"
+					class="input addList__input"
+					id="addList"
+					type="text"
+					placeholder="Name list"
+					required
+					maxlength="50"
+				/>
+				<button
+					id="addNewList"
+					class="btn btn-add ion-plus-round"
+					type="button"
+					title="Add new list"
+					id="btnAddList"
+				></button>
+				<button
+					id="clearListName"
+					class="btn btn-close ion-close-round d_none"
+					type="button"
+					id="btnCancelAList"
+				></button>
+			</div>
+
+			<div class="header__logo">
+				<h1 class="header__appName">ToDo List vanilla.js</h1>
+				<p class="header__logoText">with localStorage</p>
+			</div>
+		</header>
+		<main class="page__main">
+			<!-- lists with todoList -->
+			<ul class="lists-notype list__tasks">
+				<!-- one list -->
+				<li class="list__empty">List is empty</li>
+			</ul>
+		</main>
+		<footer class="page__footer">
+			<small>Michał Maleszewski 2018</small>
+		</footer>
+
+		<script id="list-template" type="text/x-handlebars-template">
+			<!-- header list -->
+			<div class='listToDo__header'>
+				<input class='input listToDo__name' type='text' name='listName' value='{{name}}' required />
+				<!-- count task -->
+				<button class='btn listToDo__del' title='delete list'>
+					<i class='ion-close-round'></i>
+				</button>
+				<div class='row f_jsa'>
+					<div class='row d_columns'>
+						<p class='listToDo__text f_1'>all task
+							<b class='listToDo__allCount'>{{countTask}}</b>
+						</p>
+						<p class='listToDo__text f_1'>checked task
+							<b class='listToDo__chekedCount'>{{countChecked}}</b>
+						</p>
+					</div>
+					<div class='row d_columns'>
+						<p class='listToDo__text f_1'>Created:
+							<b class='listToDo_created'>{{created}}</b>
+						</p>
+						<p class='listToDo__text f_1'>Last Update:
+							<b class='listToDo_updated'>{{updated}}</b>
+						</p>
+					</div>
+				</div>
+				<!-- new task -->
+				<input class='input listToDo__newTask' type='text' placeholder='add your task' />
+				<button class='ion-plus-round btn listToDo__add' title='button add item'></button>
+			</div>
+			<!-- Tasks list -->
+			<ul class='lists-notype listToDo__container'>
+			</ul>
+		</script>
+
+		<script id="task-template" type="text/x-handlebars-template">
+			<button class="btn task__btn task__btn-check" title="check item" data-complete=false>
+			  <i class=" task__complete">
+			  </i>
+			</button>
+			<div class="row f_1">
+
+			  <div contenteditable="true" aria-multiline="true" class="task__name" >{{taskName}}</div contenteditable="true">
+			  <div class="row f_jsa task__details d_columns">
+			    <div class="row d_columns">
+			      <small for="priority-select">Priority:</small>
+			      <select class="task_priority" >
+			        <option value=1>1</option>
+			        <option value=2>2</option>
+			        <option value=3>3</option>
+			        <option value=4>4</option>
+			        <option value=5>5</option>
+			      </select>
+			    </div>
+			  </div>
+			</div>
+			<button class="btn task__btn task__btn-dell" title="button add item">
+			  <i class="ion-close-round"></i>
+			</button>
+		</script>
+	</body>
+</html>
