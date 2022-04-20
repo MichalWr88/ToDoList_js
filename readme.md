@@ -8,5 +8,7 @@
 * WEBPACK
 * OOP
 * variables CSS
+* PWA
+* WORKBOX
 
-## [ONLINE](https://michalwr88.github.io/ToDoList_js/)
+## [ONLINE](https://to-do-list-js-rust.vercel.app/)
