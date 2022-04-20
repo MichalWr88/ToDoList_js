@@ -7,7 +7,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<link href="https://fonts.googleapis.com/css?family=Catamaran" rel="stylesheet" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
-
+		<link rel="manifest" href="./manifest.json" /> 
+		
 	</head>
 
 	<body>
@@ -131,6 +132,13 @@
 			<button class="btn task__btn task__btn-dell" title="button add item">
 			  <i class="ion-close-round"></i>
 			</button>
+		</script>
+		<script>
+			if('serviceWorker'in navigator){
+				window.addEventListener('load',()=>{
+					navigator.serviceWorker.register('./sw.js')
+				})
+			}
 		</script>
 	</body>
 </html>

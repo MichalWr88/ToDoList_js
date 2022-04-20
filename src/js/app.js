@@ -3,6 +3,8 @@ import { ToDoList } from './toDoList';
 import "../css/normalize.css";
 import "../css/style.css";
 import "../index.html";
+// import  "./sw.js"
+// navigator.serviceWorker.register("./sw.js")
 class App extends Global {
 	constructor(id) {
 		super();

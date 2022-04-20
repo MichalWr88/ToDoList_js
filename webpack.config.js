@@ -2,7 +2,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const { GenerateSW } = require('workbox-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 	mode: 'development',
@@ -23,15 +24,21 @@ module.exports = {
 		open: true,
 		hot: true,
 	},
-	// optimization: {
-	// 	minimizer: [
-	// 		// For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
-	// 		// `...`,
-	// 		new CssMinimizerPlugin(),
-	// 	],
-	// 	minimize: true,
-	// },
 	plugins: [
+		new GenerateSW({
+			swDest: 'sw.js',
+		
+			
+		}),
+		new CopyPlugin({
+			patterns: [
+				{ from: './src/manifest.json', to: '' },
+				{ from: './src/icon-192x192.png', to: '' },
+				{ from: './src/icon-256x256.png', to: '' },
+				{ from: './src/icon-384x384.png', to: '' },
+				{ from: './src/icon-512x512.png', to: '' },
+			],
+		}),
 		new CleanWebpackPlugin(),
 		new MiniCssExtractPlugin(),
 		new HtmlWebpackPlugin({
@@ -43,10 +50,10 @@ module.exports = {
 	module: {
 		rules: [
 			// JavaScript
-      {
-        test: /\.html$/,
-        loader: "raw-loader"
-      },
+			{
+				test: /\.html$/,
+				loader: 'raw-loader',
+			},
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
