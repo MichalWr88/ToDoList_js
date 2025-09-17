@@ -20,15 +20,13 @@ module.exports = {
 			directory: path.join(__dirname, './dist'),
 		},
 		compress: true,
-		port: 9000,
+		port: 9001,
 		open: true,
 		hot: true,
 	},
 	plugins: [
 		new GenerateSW({
 			swDest: 'sw.js',
-		
-			
 		}),
 		new CopyPlugin({
 			patterns: [

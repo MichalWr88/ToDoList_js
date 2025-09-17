@@ -1,8 +1,8 @@
 import { Global } from './global';
 import { ToDoList } from './toDoList';
-import "../css/normalize.css";
-import "../css/style.css";
-import "../index.html";
+import '../css/normalize.css';
+import '../css/style.css';
+import '../index.html';
 // import  "./sw.js"
 // navigator.serviceWorker.register("./sw.js")
 class App extends Global {
@@ -28,7 +28,11 @@ class App extends Global {
 			this.index = 1;
 		} else {
 			this.listArray = JSON.parse(localStorage.getItem('app'));
-			this.index = Math.max.apply(Math, this.listArray.map((o) => o.id)) + 1;
+			this.index =
+				Math.max.apply(
+					Math,
+					this.listArray.map((o) => o.id)
+				) + 1;
 			this.listArray.forEach((elem, index) => {
 				const { name, id, created, updated, tasks } = elem;
 				this.createDomLik(name, id, created, updated, tasks);
@@ -111,10 +115,10 @@ class App extends Global {
 		const boardsLi = this.createElement('button', `b${id}`, 'listsName__elem', name);
 
 		this.boardsList.appendChild(boardsLi);
-		boardsLi.addEventListener('click',()=>{
+		boardsLi.addEventListener('click', () => {
 			const target = this.listTasksDom.querySelector(`#l${id}`);
-			this.listTasksDom.scrollTo(0,target.offsetTop-110)
-		})
+			this.listTasksDom.scrollTo(0, target.offsetTop - 110);
+		});
 
 		const list = new ToDoList(name, id, this, created, updated, tasks);
 		this.listTasksDom.appendChild(list.domElem.box);
